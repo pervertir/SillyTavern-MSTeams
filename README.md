@@ -14,22 +14,22 @@ A SillyTavern extension that makes the whole app look and work like Microsoft Te
 ## What it changes
 
 - **Title bar.** The button at the far left hides or shows the app rail, and the arrows go back and forward between the chats you've opened, as in Teams. Search filters the chat list by name or message. On the right, your persona shows with its picture (or a Teams monogram of its name when it has none, or if you turn that on) and opens Persona Management.
-- **App rail.** The Teams rail, with Teams' icons on SillyTavern's menus in SillyTavern's own order:
+- **App rail.** The Teams rail, with Teams' icons on SillyTavern's menus in SillyTavern's own order, each under its SillyTavern name:
 
-  | Rail icon | Opens |
-  |---|---|
-  | Activity (bell) | AI Response Configuration |
-  | Chat | The chat list |
-  | Calendar | API Connections |
-  | Calls (phone) | AI Response Formatting |
-  | OneDrive (cloud) | World Info |
-  | Copilot | User Settings |
-  | More (…) | Backgrounds, Persona Management and Character Management |
-  | Apps (+ in a box), at the bottom | Extensions |
+  | Rail icon | App name | Opens |
+  |---|---|---|
+  | Bell | AI Config | AI Response Configuration |
+  | Chat | Chat | The chat list |
+  | Calendar | API | API Connections |
+  | Phone | Formatting | AI Response Formatting |
+  | Cloud | World Info | World Info |
+  | Copilot | Settings | User Settings |
+  | … | More | Characters, Personas and Backgrounds |
+  | + in a box, at the bottom | Extensions | Extensions |
 
-  Tooltips give the Teams name and shortcut, so the table above is the key to what each icon opens. App names under the icons are off by default, as in Teams, and can be turned on in the settings.
+  Tooltips give the full name and shortcut. App names under the icons are off by default, as in Teams, and can be turned on in the settings.
 
-  Each app looks like its Teams screen while doing its own job:
+  Each app looks like a Teams screen while doing its own job (named after the Teams app it looks like):
   - **Activity** is a pane beside the open chat, like Teams' feed.
   - **Calendar** shows a busy-looking work week (standups, reviews, focus time, lunch) with the red line at the current time, moving every minute; your API connection is today's meeting (red when disconnected), and the connection settings sit on the right like the meeting's details. Today and the arrows move the week.
   - **Calls** has Teams' dial pad and speed dial on the left, with the formatting settings beside it.
@@ -43,7 +43,7 @@ A SillyTavern extension that makes the whole app look and work like Microsoft Te
 - **Compose box.** "Type a message" with Teams' emoji (extensions menu) and + (chat options) buttons and the send arrow on the right.
 - **Monograms.** Anyone without a picture of their own (SillyTavern's default character or persona picture) gets a Teams monogram of their initials, in the chat list, chat header, messages, People and Profiles.
 - **Controls.** Buttons, fields, checkboxes, sliders, menus, dialogs and toasts follow Fluent 2, and SillyTavern's Font Awesome icons in menus, dialogs and message actions are swapped for Fluent-style ones.
-- **Phones.** Like Teams mobile: one pane at a time, five tabs along the bottom (Activity, Chat, Calendar, Calls, More, with OneDrive, Copilot, Apps, People, Profiles and Background effects under More), your picture at the top of the chat list, a long press for a chat's menu, and a rounded message box.
+- **Phones.** Like Teams mobile: one pane at a time, five tabs along the bottom (AI Config, Chat, API, Formatting, More, with World Info, Settings, Extensions, Characters, Personas and Backgrounds under More), your picture at the top of the chat list, a long press for a chat's menu, and a rounded message box.
 
 - **Keyboard shortcuts.** Teams' web shortcuts work and show in tooltips the way your OS writes them (`⌘⇧2` on a Mac, `Ctrl+Shift+2` on Windows): `Mod+Shift+1`…`8` open the rail apps top to bottom, `Mod+Alt+E` goes to Search, `Mod+Alt+N` starts a new chat, `Alt+←`/`Alt+→` go back and forward, and `Mod+.` shows the full list, as does **…** → Keyboard shortcuts in the title bar.
 - **No trace of SillyTavern.** While the theme is on, the browser tab reads like a Teams tab (`Chat | Name | Microsoft Teams`) with Teams' own icon (linked from teams.microsoft.com, not copied into the theme), the message box says "Type a message", the welcome screen gives way to a Teams-style empty pane, and the version number is hidden. Turning the theme off puts all of it back. The loading screen is Teams' logo zooming on a plain page (SillyTavern's own splash can still flash for a split second before extensions load), and smaller loads use Fluent's spinner. Some of SillyTavern's own menus still mention it by name.

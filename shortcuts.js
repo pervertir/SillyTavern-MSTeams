@@ -10,14 +10,14 @@ const PC_KEYS = { Mod: 'Ctrl', Shift: 'Shift', Alt: 'Alt', Ctrl: 'Ctrl', Enter: 
 
 /** Rail apps from top to bottom, opened with Mod+Shift+1 … 8 */
 export const RAIL_SHORTCUTS = [
-    { id: 'ai-config-button', label: 'Activity' },
+    { id: 'ai-config-button', label: 'AI Response Configuration' },
     { id: 'mst-app-chat', label: 'Chat' },
-    { id: 'sys-settings-button', label: 'Calendar' },
-    { id: 'advanced-formatting-button', label: 'Calls' },
-    { id: 'WI-SP-button', label: 'OneDrive' },
-    { id: 'user-settings-button', label: 'Copilot' },
-    { id: 'mst-app-more', label: 'More apps' },
-    { id: 'extensions-settings-button', label: 'Apps' },
+    { id: 'sys-settings-button', label: 'API Connections' },
+    { id: 'advanced-formatting-button', label: 'AI Response Formatting' },
+    { id: 'WI-SP-button', label: 'World Info' },
+    { id: 'user-settings-button', label: 'User Settings' },
+    { id: 'mst-app-more', label: 'More' },
+    { id: 'extensions-settings-button', label: 'Extensions' },
 ].map((app, index) => ({ ...app, keys: ['Mod', 'Shift', String(index + 1)] }));
 
 export const SHORTCUTS = {

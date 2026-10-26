@@ -207,7 +207,7 @@ function buildCalendar() {
         drawer.classList.remove('mst-cal-week');
         /** @type {HTMLElement} */ (document.getElementById('main_api'))?.focus();
     }, true);
-    header(drawer, 'Calendar', [view, add], [today, prev, next, month]);
+    header(drawer, 'API', [view, add], [today, prev, next, month]);
     drawer.append(stage);
     render();
 
@@ -300,7 +300,7 @@ function buildCalls() {
     if (!drawer) {
         return;
     }
-    header(drawer, 'Calls', [
+    header(drawer, 'Formatting', [
         toolButton('Import', 'import', () => click('#af_master_import')),
         toolButton('Export', 'share', () => click('#af_master_export')),
     ]);
@@ -435,7 +435,7 @@ function buildOneDrive() {
     const crumbs = el('div', 'mst-crumbs');
     const here = el('span', 'mst-crumb-here', t('Documents'));
     crumbs.append(el('span', '', t('My files')), el('span', 'mst-crumb-sep', '›'), here);
-    header(drawer, 'OneDrive', [
+    header(drawer, 'World Info', [
         toolButton('Add new', 'add', () => click('#world_create_button'), true),
         toolButton('Upload', 'arrow-up', () => click('#world_import_button')),
     ], [crumbs]);
@@ -555,7 +555,7 @@ function buildCopilot() {
             drawer.querySelectorAll('.mst-cp-hidden, .mst-copilot-thread-on').forEach(x => x.classList.remove('mst-cp-hidden', 'mst-copilot-thread-on'));
         }
     };
-    header(drawer, 'Copilot', [toolButton('New chat', 'compose', () => {
+    header(drawer, 'Settings', [toolButton('New chat', 'compose', () => {
         ask('');
         delete drawer.dataset.mstShow;
         drawer.querySelectorAll('.mst-cp-hidden, .mst-copilot-thread-on').forEach(x => x.classList.remove('mst-cp-hidden', 'mst-copilot-thread-on'));
@@ -725,7 +725,7 @@ function buildApps() {
         }
     });
     search.append(input);
-    header(drawer, 'Apps', [], [search]);
+    header(drawer, 'Extensions', [], [search]);
 
     const nav = el('nav', 'mst-stage mst-store-nav');
     const item = (label, icon, onClick, active = false) => {
@@ -736,7 +736,7 @@ function buildApps() {
         return button;
     };
     nav.append(
-        item('Apps', 'apps', () => drawer.scrollTo({ top: 0, behavior: 'smooth' }), true),
+        item('Extensions', 'apps', () => drawer.scrollTo({ top: 0, behavior: 'smooth' }), true),
         item('Manage your apps', 'gear', () => click('#extensions_details')),
         item('Get more apps', 'arrow-down', () => click('#third_party_extension_button')),
     );
@@ -760,7 +760,7 @@ function buildActivity() {
     }
     const feed = toolButton('Feed', 'chevron-down', () => {});
     feed.classList.add('mst-tool-flip');
-    header(drawer, 'Activity', [toolButton('', 'filter', () => {})], [feed]);
+    header(drawer, 'AI Config', [toolButton('', 'filter', () => {})], [feed]);
 }
 
 /* People, Profiles and Background effects (the menus under More) ------------------------- */
@@ -850,7 +850,7 @@ function buildPeople() {
     if (!drawer) {
         return;
     }
-    header(drawer, 'People', [
+    header(drawer, 'Characters', [
         toolButton('', 'person-add', () => click('#rm_button_create')),
         toolButton('', 'arrow-down', () => click('#character_import_button')),
         toolButton('New group', 'people-add', () => click('#rm_button_group_chats'), true),
@@ -867,7 +867,7 @@ function buildProfiles() {
     if (!drawer) {
         return;
     }
-    header(drawer, 'Profiles', [
+    header(drawer, 'Personas', [
         toolButton('Back up', 'arrow-down', () => click('#personas_backup')),
         toolButton('Restore', 'arrow-up', () => click('#personas_restore')),
         toolButton('New profile', 'person-add', () => click('#create_dummy_persona'), true),
@@ -881,7 +881,7 @@ function buildBackgrounds() {
     if (!drawer) {
         return;
     }
-    header(drawer, 'Background effects', [
+    header(drawer, 'Backgrounds', [
         toolButton('Add new', 'add', () => click('#add_background_button_top'), true),
     ], [proxySearch('Search backgrounds', 'bg-filter')]);
 }

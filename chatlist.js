@@ -516,8 +516,8 @@ export function createChatList() {
     const me = document.createElement('button');
     me.type = 'button';
     me.className = 'mst-list-me';
-    me.title = t('Profiles');
-    me.setAttribute('aria-label', t('Profiles'));
+    me.title = t('Personas');
+    me.setAttribute('aria-label', t('Personas'));
     me.addEventListener('click', () => document.getElementById('mst-me')?.click());
     head.append(me, title, actions);
 
