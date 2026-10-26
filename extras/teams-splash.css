@@ -1,0 +1,74 @@
+/* === Microsoft Teams Theme: startup splash ===
+   SillyTavern draws its logo before any extension can load, so the theme can only swap it
+   once it starts. This file goes in SillyTavern's own user stylesheet (data/_css/user.css),
+   which the page loads first of all, so the Teams logo is there from the very first frame.
+   It doesn't depend on the theme being on: remove this block to bring the old splash back. */
+
+#preloader {
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+dialog.popup:has(#loader.splash-screen) {
+    position: fixed;
+    inset: 0;
+    width: 100vw !important;
+    max-width: none !important;
+    height: 100dvh !important;
+    max-height: none !important;
+    margin: 0;
+    padding: 0;
+    border: none !important;
+    border-radius: 0;
+    outline: none;
+    background: #ffffff !important;
+    box-shadow: none;
+}
+
+dialog.popup:has(#loader.splash-screen)::backdrop {
+    background: #ffffff;
+}
+
+dialog.popup:has(#loader.splash-screen) :is(.popup-body, .popup-content) {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    padding: 0;
+}
+
+#loader.splash-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#loader.splash-screen > :is(.splash-logo, .splash-message, #load-spinner) {
+    display: none !important;
+}
+
+#loader.splash-screen::before {
+    content: '';
+    width: 96px;
+    height: 96px;
+    background: url("https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/assets/brand-icons/product/svg/teams_48x1.svg") center / contain no-repeat;
+    animation: mst-splash-zoom 1.6s cubic-bezier(0.33, 0, 0.67, 1) infinite alternate;
+}
+
+@keyframes mst-splash-zoom {
+    from { transform: scale(0.82); opacity: 0.85; }
+    to { transform: scale(1.08); opacity: 1; }
+}
+
+@media (prefers-color-scheme: dark) {
+    #preloader,
+    dialog.popup:has(#loader.splash-screen),
+    dialog.popup:has(#loader.splash-screen)::backdrop {
+        background: #1f1f1f !important;
+    }
+}
+
+/* === end Microsoft Teams Theme: startup splash === */

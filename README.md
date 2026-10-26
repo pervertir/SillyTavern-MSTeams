@@ -56,6 +56,16 @@ SillyTavern's background image is hidden while the theme is on.
 2. Paste `https://github.com/pervertir/SillyTavern-MSTeams` and install.
 3. Turn off any other UI theme extension (such as Moonlit Echoes) so the two don't fight.
 
+## No SillyTavern logo at startup
+
+SillyTavern draws its logo before any extension loads, so the theme alone can only swap it a moment later. To have the Teams logo from the very first frame, add [`extras/teams-splash.css`](extras/teams-splash.css) to SillyTavern's own user stylesheet, which the page loads before anything else:
+
+1. Open `data/_css/user.css` in your SillyTavern folder (create it if it isn't there).
+2. Paste the contents of `extras/teams-splash.css` at the end and save.
+3. Reload SillyTavern.
+
+That stylesheet doesn't know whether the theme is on, so delete the block (it's marked) if you go back to another look.
+
 ## Settings
 
 Find them under **Extensions** → **Microsoft Teams Theme**:
