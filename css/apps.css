@@ -1561,10 +1561,36 @@ body.ms-teams #advanced-formatting-cc-notice {
     color: var(--mst-fg);
 }
 
-/* switched-off groups (e.g. Instruct when it's off) fade like Fluent's disabled state */
+/* Switched-off groups (Instruct or the system prompt while they're off): the card stays solid,
+   as Fluent does, with secondary text and a message bar saying how to turn it on */
 body.ms-teams #AdvancedFormatting .disabled {
-    opacity: 0.55;
+    opacity: 1;
     filter: none;
+}
+
+body.ms-teams #AdvancedFormatting .disabled :is(label, small, span, summary, h4, .checkbox_label) {
+    color: var(--mst-fg-3);
+}
+
+body.ms-teams #AdvancedFormatting :is(#instructSettingsBlock, #SystemPromptBlock).disabled::before {
+    display: block;
+    margin: 4px 0 12px;
+    padding: 8px 12px;
+    border: 1px solid var(--mst-stroke-2);
+    border-radius: var(--mst-radius);
+    border-left: 3px solid var(--mst-brand);
+    background: var(--mst-brand-soft);
+    color: var(--mst-fg-2);
+    font-size: var(--mst-text-sm);
+    line-height: 16px;
+}
+
+body.ms-teams #AdvancedFormatting #instructSettingsBlock.disabled::before {
+    content: 'Instruct mode is off. Turn it on with the power button above to use this template.';
+}
+
+body.ms-teams #AdvancedFormatting #SystemPromptBlock.disabled::before {
+    content: 'The system prompt is off. Turn it on with the power button above to use it.';
 }
 
 /* Speed dial: the formatting groups as contacts */
