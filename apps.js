@@ -218,7 +218,10 @@ function buildCalls() {
     if (!drawer) {
         return;
     }
-    header(drawer, 'Calls', [toolButton('', 'more', () => {})]);
+    header(drawer, 'Calls', [
+        toolButton('Import', 'import', () => click('#af_master_import')),
+        toolButton('Export', 'share', () => click('#af_master_export')),
+    ]);
     const stage = el('div', 'mst-stage mst-dialpad');
     const number = el('input', 'mst-input');
     number.type = 'text';

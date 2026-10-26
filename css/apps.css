@@ -1307,3 +1307,118 @@ body.ms-teams #user-settings-block[data-mst-show] #user-settings-block-content :
     width: 100% !important;
     max-width: none !important;
 }
+
+/* Calls: the formatting settings as Fluent cards, one per group, beside the dial pad */
+body.ms-teams #AdvancedFormatting > .flex-container.alignItemsBaseline:has(#af_master_import) {
+    display: none;
+}
+
+body.ms-teams #AdvancedFormatting > .flex-container.spaceEvenly {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 16px;
+    align-items: start;
+}
+
+body.ms-teams :is(#ContextSettings, #InstructSettingsColumn, #SystemPromptColumn) {
+    min-width: 0;
+    padding: 16px 20px 20px;
+    box-sizing: border-box;
+    border: 1px solid var(--mst-stroke-3);
+    border-radius: var(--mst-radius-xl);
+    background: var(--mst-card);
+    box-shadow: var(--mst-shadow-2);
+}
+
+/* a card's own title bar: the group name with its actions on the right */
+body.ms-teams :is(#ContextSettings, #InstructSettingsColumn, #SystemPromptColumn) .standoutHeader.title_restorable,
+body.ms-teams #ContextSettings > div:first-child > .standoutHeader {
+    margin: -4px 0 12px;
+    padding: 0 0 12px;
+    border: none;
+    border-bottom: 1px solid var(--mst-stroke-3);
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    font-size: var(--mst-text-md);
+    font-weight: 600;
+}
+
+/* the groups inside a card: plain sub-headings over a divider */
+body.ms-teams #AdvancedFormatting .standoutHeader:not(.title_restorable) {
+    margin: 16px 0 8px;
+    padding: 12px 0 0;
+    border: none;
+    border-top: 1px solid var(--mst-stroke-3);
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    font-size: var(--mst-text);
+    font-weight: 600;
+}
+
+body.ms-teams #ContextSettings > div:first-child > .standoutHeader:not(.title_restorable) {
+    margin-top: -4px;
+    padding-top: 0;
+    border-top: none;
+}
+
+/* labels sit above their fields */
+body.ms-teams #AdvancedFormatting :is(#ContextSettings, #InstructSettingsColumn, #SystemPromptColumn) small:not(.checkbox_label small) {
+    display: block;
+    margin: 12px 0 4px;
+    font-size: var(--mst-text-sm);
+    font-weight: 600;
+    color: var(--mst-fg-2);
+    text-align: left;
+}
+
+body.ms-teams #AdvancedFormatting :is(textarea, .text_pole) {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+body.ms-teams #AdvancedFormatting textarea {
+    min-height: 64px;
+    padding: 8px 10px;
+    font-family: var(--mst-font);
+    font-size: var(--mst-text);
+    line-height: 20px;
+}
+
+/* switches as a list with dividers */
+body.ms-teams #AdvancedFormatting .checkbox_label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 36px;
+    margin: 0;
+    padding: 6px 0;
+    box-sizing: border-box;
+    border-bottom: 1px solid var(--mst-stroke-3);
+    color: var(--mst-fg);
+    font-size: var(--mst-text);
+}
+
+body.ms-teams #AdvancedFormatting .checkbox_label :is(span, small) {
+    margin: 0;
+    font-size: var(--mst-text);
+    font-weight: 400;
+    color: var(--mst-fg);
+}
+
+/* the notice about the chat-completion API reads as a Fluent message bar */
+body.ms-teams #advanced-formatting-cc-notice {
+    margin: 0 0 16px;
+    padding: 10px 14px;
+    border: 1px solid color-mix(in srgb, var(--mst-warning) 40%, transparent);
+    border-radius: var(--mst-radius-md);
+    background: color-mix(in srgb, var(--mst-warning) 12%, var(--mst-card));
+    color: var(--mst-fg);
+}
+
+/* switched-off groups (e.g. Instruct when it's off) fade like Fluent's disabled state */
+body.ms-teams #AdvancedFormatting .disabled {
+    opacity: 0.55;
+    filter: none;
+}
