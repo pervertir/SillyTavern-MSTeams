@@ -671,3 +671,12 @@ body.ms-teams .mst-mono > .mst-mono-mark {
     font-weight: 600;
     pointer-events: none;
 }
+
+/* the presence badge stays on top of a monogram */
+body.ms-teams .mst-mono > .mst-mono-mark {
+    z-index: 1;
+}
+
+body.ms-teams .mst-avatar > .mst-presence {
+    z-index: 2;
+}
