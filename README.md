@@ -27,7 +27,7 @@ A SillyTavern extension that makes the whole app look and work like Microsoft Te
   | More (…) | Backgrounds, Persona Management and Character Management |
   | Apps (+ in a box), at the bottom | Extensions |
 
-  Hover an icon to see what it opens. App names under the icons are off by default, as in Teams, and can be turned on in the settings. Each menu opens as a panel in the chat list's place.
+  Tooltips give the Teams name and shortcut, so the table above is the key to what each icon opens. App names under the icons are off by default, as in Teams, and can be turned on in the settings. Each menu opens as a panel in the chat list's place.
 - **Chat list.** Your recent chats, with Pinned and Recent sections like Teams. It uses SillyTavern's own recent chats and pins, so pinning a chat on the welcome screen pins it here too. The pen button starts a new chat from the character list.
 - **Chat header.** The character's picture and name, which open their card, Teams' Chat, Shared and + tabs, and the video, call and … buttons: video starts a new chat, call opens the chat history, and … has those plus View profile and Close chat.
 - **Messages.** Everyone else's messages sit on the left with their picture, name and time. Yours sit on the right in Teams lavender. Times read the Teams way: `10:42 AM`, `Yesterday 10:42 AM` or `10/21 3:15 PM`. Message actions appear as a toolbar when you hover a message, and swipes become a small pager under the last reply.
@@ -35,6 +35,7 @@ A SillyTavern extension that makes the whole app look and work like Microsoft Te
 - **Controls.** Buttons, fields, checkboxes, sliders, menus, dialogs and toasts follow Fluent 2.
 - **Phones.** One pane at a time: the chat list with an app bar along the bottom, or the open chat with a back arrow.
 
+- **Keyboard shortcuts.** Teams' web shortcuts work and show in tooltips the way your OS writes them (`⌘⇧2` on a Mac, `Ctrl+Shift+2` on Windows): `Mod+Shift+1`…`8` open the rail apps top to bottom, `Mod+Alt+E` goes to Search, `Mod+Alt+N` starts a new chat, `Alt+←`/`Alt+→` go back and forward, and `Mod+.` shows the full list, as does **…** → Keyboard shortcuts in the title bar.
 - **No trace of SillyTavern.** While the theme is on, the browser tab reads like a Teams tab (`Chat | Name | Microsoft Teams`) with a plain purple chat icon, the message box says "Type a message", the welcome screen gives way to a Teams-style empty pane, and the version number is hidden. Turning the theme off puts all of it back. SillyTavern's loading screen still shows for a moment before extensions load, and some of its own menus mention it by name.
 
 SillyTavern's background image is hidden while the theme is on.
@@ -64,7 +65,7 @@ Find them under **Extensions** → **Microsoft Teams Theme**:
 
 - Needs SillyTavern 1.19.0 or newer.
 - Every rule is scoped under `body.ms-teams`, so your own Custom CSS can still override it.
-- The font is Segoe UI where it's installed (Windows), falling back to the system font elsewhere.
+- The font is Segoe UI, as in Teams. Windows uses its installed copy; on macOS and elsewhere the theme loads it from Microsoft's font CDN (the same files Fluent UI web apps use), only while the theme is on.
 - This is an unofficial look-alike theme. It isn't made by or affiliated with Microsoft. Microsoft Teams is a trademark of Microsoft.
 
 ## License

@@ -2,6 +2,7 @@
 // SillyTavern's own menu buttons, and the chat header above the messages.
 
 import { canGoBack, canGoForward, filterChatList, travel } from './chatlist.js';
+import { RAIL_SHORTCUTS, SHORTCUTS, showShortcuts, withShortcut } from './shortcuts.js';
 
 const TITLEBAR_ID = 'mst-titlebar';
 const CHAT_APP_ID = 'mst-app-chat';
@@ -88,10 +89,10 @@ function createTitlebar() {
     railToggle.addEventListener('click', () => shellOptions.toggleRail());
     const nav = document.createElement('div');
     nav.className = 'mst-tb-nav';
-    const back = fluentButton('mst-icon-button', t('Back'), 'arrow-left');
+    const back = fluentButton('mst-icon-button', withShortcut(t('Back'), SHORTCUTS.back), 'arrow-left');
     back.id = 'mst-nav-back';
     back.addEventListener('click', () => travel(-1));
-    const forward = fluentButton('mst-icon-button', t('Forward'), 'arrow-right');
+    const forward = fluentButton('mst-icon-button', withShortcut(t('Forward'), SHORTCUTS.forward), 'arrow-right');
     forward.id = 'mst-nav-forward';
     forward.addEventListener('click', () => travel(1));
     nav.append(back, forward);
@@ -104,7 +105,7 @@ function createTitlebar() {
     const input = document.createElement('input');
     input.type = 'search';
     input.id = 'mst-search-input';
-    input.placeholder = t('Search');
+    input.placeholder = withShortcut(t('Search'), SHORTCUTS.search);
     input.autocomplete = 'off';
     input.addEventListener('input', () => {
         filterChatList(input.value);
@@ -124,7 +125,10 @@ function createTitlebar() {
     const right = document.createElement('div');
     right.className = 'mst-tb-right';
     const more = fluentButton('mst-icon-button', t('Settings and more'), 'more');
-    more.addEventListener('click', () => toggleDrawer('user-settings-button'));
+    more.addEventListener('click', () => toggleFlyout(more, [
+        { label: 'Settings', icon: 'fa-solid fa-gear', run: () => toggleDrawer('user-settings-button') },
+        { label: 'Keyboard shortcuts', icon: 'fa-regular fa-keyboard', run: showShortcuts },
+    ], 'below-end'));
     const me = document.createElement('button');
     me.type = 'button';
     me.id = 'mst-me';
@@ -205,7 +209,7 @@ function railApp(id, label, icon, onClick) {
     app.className = 'mst-app';
     app.setAttribute('role', 'button');
     app.tabIndex = 0;
-    app.title = t(label);
+    app.title = railTooltip(id, label);
     app.dataset.mstIcon = icon;
     const glyph = document.createElement('i');
     glyph.className = 'mst-app-icon';
@@ -299,6 +303,27 @@ function toggleFlyout(anchor, items, placement) {
     /** @type {HTMLElement} */ (flyout.querySelector('.mst-more-item'))?.focus();
 }
 
+/** Ctrl+Alt+E / ⌘⌥E: the title bar's search, or the list's filter on phones where the bar is hidden. */
+export function focusSearch() {
+    const search = /** @type {HTMLInputElement} */ (document.getElementById('mst-search-input'));
+    if (search && search.offsetParent) {
+        search.focus();
+        search.select();
+        return;
+    }
+    document.body.classList.remove('mst-m-chat');
+    const filter = document.querySelector('#mst-list .mst-list-filter');
+    if (filter?.hidden) {
+        /** @type {HTMLElement} */ (document.querySelector('#mst-list .mst-list-actions .mst-icon-button'))?.click();
+    } else {
+        /** @type {HTMLInputElement} */ (filter?.querySelector('input'))?.focus();
+    }
+}
+
+export function startNewChat() {
+    clickOption('option_start_new_chat');
+}
+
 function openProfile() {
     const panel = document.getElementById('right-nav-panel');
     if (!panel?.classList.contains('openDrawer')) {
@@ -320,6 +345,45 @@ function toggleMoreMenu() {
             },
         }));
     toggleFlyout(app, items, 'beside');
+}
+
+/** Teams' tooltip for a rail app: its name and shortcut. */
+function railTooltip(id, label) {
+    const shortcut = RAIL_SHORTCUTS.find(x => x.id === id);
+    return shortcut ? withShortcut(t(label), shortcut.keys) : t(label);
+}
+
+/** Gives one of SillyTavern's menu buttons a Teams tooltip, keeping its own for when the theme is off. */
+function nameRailApp(drawer, label) {
+    const tooltip = railTooltip(drawer.id, label);
+    for (const element of drawer.querySelectorAll(':scope > .drawer-toggle, :scope > .drawer-toggle > .drawer-icon')) {
+        if (element.dataset.mstTitle === undefined) {
+            element.dataset.mstTitle = element.getAttribute('title') ?? '';
+        }
+        element.setAttribute('title', tooltip);
+    }
+}
+
+/** Puts SillyTavern's own tooltips back on its menu buttons (theme off), or Teams' (theme on). */
+export function setRailTooltips(teams) {
+    for (const { id, label } of RAIL_APPS) {
+        const drawer = document.getElementById(id);
+        if (!drawer) {
+            continue;
+        }
+        if (teams) {
+            nameRailApp(drawer, label);
+            continue;
+        }
+        for (const element of drawer.querySelectorAll('[data-mst-title]')) {
+            if (element.dataset.mstTitle) {
+                element.setAttribute('title', element.dataset.mstTitle);
+            } else {
+                element.removeAttribute('title');
+            }
+            delete element.dataset.mstTitle;
+        }
+    }
 }
 
 function createRail() {
@@ -346,6 +410,7 @@ function createRail() {
         drawer.style.setProperty('--mst-order', String(order));
         drawer.dataset.mstIcon = icon;
         toggle.dataset.mstLabel = t(label);
+        nameRailApp(drawer, label);
         toggle.addEventListener('click', closeFlyout);
     }
     for (const { id } of MORE_APPS) {
@@ -391,7 +456,7 @@ function createHeader() {
 
     const actions = document.createElement('div');
     actions.className = 'mst-head-actions';
-    const fresh = fluentButton('mst-icon-button', t('New chat'), 'video');
+    const fresh = fluentButton('mst-icon-button', withShortcut(t('New chat'), SHORTCUTS.newChat), 'video');
     fresh.addEventListener('click', () => clickOption('option_start_new_chat'));
     const history = fluentButton('mst-icon-button', t('Chat history'), 'call');
     history.addEventListener('click', () => clickOption('option_select_chat'));

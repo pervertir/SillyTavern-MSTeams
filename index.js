@@ -1,9 +1,10 @@
 // Microsoft Teams theme: toggles the scoped styles in style.css, builds the Teams frame
 // (title bar, app rail, chat list, chat header) and exposes a small settings panel.
 
-import { initChatList, markCurrentChat, scheduleRefresh } from './chatlist.js';
+import { initChatList, markCurrentChat, scheduleRefresh, travel } from './chatlist.js';
 import { setDisguise, refreshTitle } from './disguise.js';
-import { initShell, refreshHeader, refreshNavigation, refreshPersona, refreshRailToggle } from './shell.js';
+import { initShortcuts } from './shortcuts.js';
+import { focusSearch, initShell, refreshHeader, refreshNavigation, refreshPersona, refreshRailToggle, setRailTooltips, startNewChat } from './shell.js';
 import { initTimes, labelMessages } from './times.js';
 
 const MODULE_NAME = 'msTeamsTheme';
@@ -64,6 +65,7 @@ function applySettings() {
     body.classList.toggle('mst-rail-hidden', !!settings.railHidden);
     refreshRailToggle(!!settings.railHidden);
     setDisguise(!!settings.enabled);
+    setRailTooltips(!!settings.enabled);
     body.classList.toggle('mst-persona-picture', !!settings.personaPicture);
     body.classList.toggle('mst-presence-on', !!settings.presence);
     body.classList.toggle('mst-short-times', !!settings.shortTimes);
@@ -147,6 +149,12 @@ async function init() {
     initChatList({ settings: getSettings, opened: showChatOnPhone, historyChanged: refreshNavigation });
     applySettings();
     initTimes();
+    initShortcuts({
+        enabled: () => !!getSettings().enabled,
+        focusSearch,
+        newChat: startNewChat,
+        travel,
+    });
 
     const { eventSource, eventTypes } = SillyTavern.getContext();
     eventSource.on(eventTypes.CHAT_CHANGED, onChatChanged);

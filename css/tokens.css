@@ -1,6 +1,49 @@
 /* Design tokens: the Teams (Fluent 2) palette, type and shapes, plus SillyTavern's own theme
    variables pointed at them. Light is the default; body.mst-dark switches the palette. */
 
+/* Segoe UI, Teams' font, from Microsoft's own font CDN, the same files Fluent UI web apps load.
+   Windows uses its installed copy first; macOS and others get these. Browsers only download a
+   face once text needs it, so nothing loads while the theme is off. */
+@font-face {
+    font-family: "Segoe UI Web (West European)";
+    src: url("https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/assets/fonts/segoeui-westeuropean/segoeui-light.woff2") format("woff2");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Segoe UI Web (West European)";
+    src: url("https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/assets/fonts/segoeui-westeuropean/segoeui-semilight.woff2") format("woff2");
+    font-weight: 350;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Segoe UI Web (West European)";
+    src: url("https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/assets/fonts/segoeui-westeuropean/segoeui-regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Segoe UI Web (West European)";
+    src: url("https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/assets/fonts/segoeui-westeuropean/segoeui-semibold.woff2") format("woff2");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Segoe UI Web (West European)";
+    src: url("https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/assets/fonts/segoeui-westeuropean/segoeui-bold.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
 body.ms-teams {
     /* Brand (Teams purple) */
     --mst-brand: #5b5fc7;

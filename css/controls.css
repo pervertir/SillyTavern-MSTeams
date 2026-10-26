@@ -402,3 +402,44 @@ body.ms-teams #toast-container .toast-title {
 body.ms-teams #version_display {
     display: none;
 }
+
+/* Keyboard shortcuts dialog */
+body.ms-teams .mst-shortcuts {
+    min-width: min(440px, 80vw);
+    text-align: left;
+}
+
+body.ms-teams .mst-shortcuts h3 {
+    margin: 0 0 8px;
+}
+
+body.ms-teams .mst-shortcuts h4 {
+    margin: 16px 0 4px;
+    font-size: var(--mst-text);
+}
+
+body.ms-teams .mst-shortcuts table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+body.ms-teams .mst-shortcuts td {
+    padding: 6px 0;
+    border-bottom: 1px solid var(--mst-stroke-3);
+    font-size: var(--mst-text);
+}
+
+body.ms-teams .mst-shortcuts td:last-child {
+    text-align: right;
+}
+
+body.ms-teams .mst-shortcuts kbd {
+    padding: 2px 6px;
+    border: 1px solid var(--mst-stroke);
+    border-radius: var(--mst-radius);
+    background: var(--mst-list);
+    color: var(--mst-fg-2);
+    font-family: var(--mst-font);
+    font-size: var(--mst-text-sm);
+    box-shadow: none;
+}
