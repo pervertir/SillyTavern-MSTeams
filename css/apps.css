@@ -1233,20 +1233,29 @@ body.ms-teams #rm_extensions_block .extensions_block .inline-drawer > .inline-dr
         padding-left: 12px;
     }
 
-    /* Calendar: Work week shows the schedule in the settings' place */
+    /* Calendar: Work week shows the schedule in the settings' place. It sits in the page's
+       own flow rather than fixed on top: mobile Safari can leave a fixed layer inside a
+       scrolling panel unpainted. */
     body.ms-teams #rm_api_block.mst-cal-week .mst-calendar {
         display: block !important;
-        position: fixed;
-        top: calc(var(--mst-safe-top, 0px) + 56px);
-        left: 0;
-        right: 0;
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
+        bottom: auto;
         width: auto;
-        bottom: var(--mst-tabbar-h);
+        height: calc(100dvh - var(--mst-tabbar-h) - var(--mst-safe-top, 0px) - 64px);
+        margin: -12px -12px 0;
         border-right: none;
+        overflow: auto;
     }
 
     body.ms-teams #rm_api_block.mst-cal-week > :not(.mst-app-header, .mst-calendar) {
-        visibility: hidden;
+        display: none !important;
+    }
+
+    body.ms-teams #rm_api_block.mst-cal-week {
+        overflow: hidden !important;
     }
 
     body.ms-teams #rm_api_block.mst-cal-week .mst-cal-grid {
