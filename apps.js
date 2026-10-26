@@ -5,6 +5,8 @@
 // prompt box that searches the settings, and Apps (extensions) as the app store.
 // Everything added here is hidden by CSS while the theme is off.
 
+import { getInitials, getMonogramColor } from './monograms.js';
+
 function t(text) {
     return SillyTavern.getContext().translate(text);
 }
@@ -245,8 +247,43 @@ function buildCalls() {
         call.disabled = !number.value.trim();
     });
     const speed = el('h3', 'mst-dial-section', t('Speed dial'));
-    const none = el('p', 'mst-dial-empty', t('Add the people you call most often.'));
-    stage.append(el('h3', 'mst-dial-section', t('Make a call')), number, keys, call, speed, none);
+    // speed dial: the three formatting groups, as contacts that take you to their card
+    const dial = el('div', 'mst-speed-dial');
+    const contacts = [
+        ['Context Template', '#ContextSettings'],
+        ['Instruct Template', '#InstructSettingsColumn'],
+        ['System Prompt', '#SystemPromptColumn'],
+    ];
+    for (const [name, selector] of contacts) {
+        const card = /** @type {HTMLElement} */ (drawer.querySelector(selector));
+        if (!card) {
+            continue;
+        }
+        const row = el('button', 'mst-speed-contact');
+        row.type = 'button';
+        const avatar = el('span', 'mst-monogram mst-speed-avatar', getInitials(name));
+        avatar.dataset.mstColor = String(getMonogramColor(name));
+        const text = el('span', 'mst-speed-text');
+        const detail = el('span', 'mst-speed-detail');
+        text.append(el('span', 'mst-speed-name', t(name)), detail);
+        // the preset in use, kept current as it changes
+        const preset = /** @type {HTMLSelectElement} */ (card.querySelector('select'));
+        const showPreset = () => {
+            detail.textContent = preset?.selectedOptions?.[0]?.textContent?.trim() ?? '';
+        };
+        preset?.addEventListener('change', showPreset);
+        showPreset();
+        row.append(avatar, text, fluentIcon('call', 16));
+        row.addEventListener('click', () => {
+            showPreset();
+            card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            card.classList.remove('mst-flash');
+            void card.offsetWidth;
+            card.classList.add('mst-flash');
+        });
+        dial.append(row);
+    }
+    stage.append(el('h3', 'mst-dial-section', t('Make a call')), number, keys, call, speed, dial);
     drawer.append(stage);
 }
 

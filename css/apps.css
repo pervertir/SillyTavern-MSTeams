@@ -1422,3 +1422,74 @@ body.ms-teams #AdvancedFormatting .disabled {
     opacity: 0.55;
     filter: none;
 }
+
+/* Speed dial: the formatting groups as contacts */
+body.ms-teams .mst-speed-dial {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+body.ms-teams .mst-speed-contact {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 52px;
+    padding: 6px 10px;
+    margin: 0;
+    border: none;
+    border-radius: var(--mst-radius-md);
+    background: none;
+    color: var(--mst-fg);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+body.ms-teams .mst-speed-contact:hover {
+    background: var(--mst-hover);
+}
+
+body.ms-teams .mst-speed-contact > .mst-fluent {
+    margin-left: auto;
+    color: var(--mst-fg-3);
+}
+
+body.ms-teams .mst-speed-contact:hover > .mst-fluent {
+    color: var(--mst-brand-fg);
+}
+
+body.ms-teams .mst-monogram.mst-speed-avatar {
+    flex: none;
+    width: 36px;
+    height: 36px;
+    font-size: 13px;
+}
+
+body.ms-teams .mst-speed-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+body.ms-teams .mst-speed-name {
+    font-weight: 600;
+}
+
+body.ms-teams .mst-speed-detail {
+    overflow: hidden;
+    color: var(--mst-fg-3);
+    font-size: var(--mst-text-sm);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* the card a speed dial entry opens gets a brief brand outline */
+@keyframes mst-flash {
+    from { box-shadow: 0 0 0 3px var(--mst-brand), var(--mst-shadow-8); }
+    to { box-shadow: var(--mst-shadow-2); }
+}
+
+body.ms-teams .mst-flash {
+    animation: mst-flash 1.2s var(--mst-ease);
+}
