@@ -210,27 +210,128 @@ function buildCalls() {
 
 /* OneDrive ------------------------------------------------------------------------------ */
 
+const WORLD_SELECT = '#world_editor_select';
+
+/** Opens a lorebook the way SillyTavern's own picker does (it's a select2 box). */
+function openLorebook(value) {
+    const $ = /** @type {any} */ (window).jQuery;
+    if ($) {
+        $(WORLD_SELECT).val(value).trigger('change');
+    }
+}
+
+/** The left column: every lorebook as a Word document, the open one highlighted. */
+function renderDocuments(list, title) {
+    const select = /** @type {HTMLSelectElement} */ (document.querySelector(WORLD_SELECT));
+    if (!select) {
+        return;
+    }
+    const items = [...select.options].filter(option => option.value !== '').map((option) => {
+        const item = el('button', 'mst-doc');
+        item.type = 'button';
+        item.classList.toggle('mst-doc-active', option.selected);
+        const icon = el('span', 'mst-doc-icon', 'W');
+        const text = el('span', 'mst-doc-text');
+        text.append(el('span', 'mst-doc-name', option.textContent.trim()), el('span', 'mst-doc-kind', t('Word document')));
+        item.append(icon, text);
+        item.title = option.textContent.trim();
+        item.addEventListener('click', () => openLorebook(option.value));
+        return item;
+    });
+    if (!items.length) {
+        items.push(el('p', 'mst-dial-empty', t('No documents yet. Use New to create one.')));
+    }
+    list.replaceChildren(...items);
+    const open = select.selectedOptions[0];
+    title.textContent = open && open.value !== '' ? open.textContent.trim() : t('Documents');
+    document.getElementById('WorldInfo')?.classList.toggle('mst-doc-open', !!open && open.value !== '');
+}
+
 function buildOneDrive() {
     const drawer = document.getElementById('WorldInfo');
     if (!drawer) {
         return;
     }
     const crumbs = el('div', 'mst-crumbs');
-    crumbs.append(el('span', '', t('My files')), el('span', 'mst-crumb-sep', '›'), el('span', 'mst-crumb-here', t('Documents')));
+    const here = el('span', 'mst-crumb-here', t('Documents'));
+    crumbs.append(el('span', '', t('My files')), el('span', 'mst-crumb-sep', '›'), here);
     header(drawer, 'OneDrive', [
         toolButton('Add new', 'add', () => click('#world_create_button'), true),
         toolButton('Upload', 'arrow-up', () => click('#world_import_button')),
     ], [crumbs]);
 
-    // OneDrive's file table header over the entries
-    const list = document.getElementById('world_popup_entries_list');
-    if (list) {
-        const columns = el('div', 'mst-file-columns');
-        for (const name of ['Name', 'Modified', 'Modified By', 'File size', 'Sharing']) {
-            columns.append(el('span', '', t(name)));
-        }
-        list.before(columns);
+    // My files: the lorebooks as documents
+    const stage = el('div', 'mst-stage mst-drive');
+    const fresh = el('button', 'mst-tool mst-tool-primary mst-drive-new');
+    fresh.type = 'button';
+    fresh.append(fluentIcon('add', 16), el('span', '', t('New document')));
+    fresh.addEventListener('click', () => click('#world_create_button'));
+    const list = el('div', 'mst-docs');
+    stage.append(el('h3', 'mst-dial-section', t('Documents')), fresh, list);
+    drawer.append(stage);
+
+    // Word: a ribbon of the document's commands over the page
+    const ribbon = el('div', 'mst-ribbon');
+    const tabs = el('div', 'mst-ribbon-tabs');
+    for (const name of ['File', 'Home', 'Insert', 'Layout', 'References', 'Review', 'View']) {
+        tabs.append(el('span', `mst-ribbon-tab${name === 'Home' ? ' mst-ribbon-tab-active' : ''}`, t(name)));
     }
+    const docTitle = el('span', 'mst-ribbon-title');
+    tabs.prepend(docTitle);
+    const commands = el('div', 'mst-ribbon-commands');
+    // Word's ¶ button shows what's normally hidden: here, each entry's matching settings
+    const marks = el('button', 'mst-ribbon-command mst-ribbon-marks');
+    marks.type = 'button';
+    marks.title = t('Show/Hide ¶');
+    marks.append(el('i', 'fa-solid fa-paragraph'), el('span', '', t('Entry settings')));
+    marks.addEventListener('click', () => {
+        const on = drawer.classList.toggle('mst-show-marks');
+        marks.classList.toggle('mst-ribbon-on', on);
+    });
+    const command = (label, icon, selector) => {
+        const button = el('button', 'mst-ribbon-command');
+        button.type = 'button';
+        button.append(el('i', icon), el('span', '', t(label)));
+        button.addEventListener('click', () => click(selector));
+        return button;
+    };
+    commands.append(
+        command('New paragraph', 'fa-solid fa-plus', '#world_popup_new'),
+        command('Expand all', 'fa-solid fa-up-right-and-down-left-from-center', '#OpenAllWIEntries'),
+        command('Collapse all', 'fa-solid fa-down-left-and-up-right-to-center', '#CloseAllWIEntries'),
+        el('span', 'mst-ribbon-sep'),
+        marks,
+        el('span', 'mst-ribbon-sep'),
+        command('Rename', 'fa-solid fa-i-cursor', '#world_popup_name_button'),
+        command('Save a copy', 'fa-regular fa-copy', '#world_duplicate'),
+        command('Download', 'fa-solid fa-download', '#world_popup_export'),
+        command('Delete', 'fa-regular fa-trash-can', '#world_popup_delete'),
+    );
+    ribbon.append(tabs, commands);
+    const entries = document.getElementById('world_popup_entries_list');
+    const pickRow = document.getElementById('world_create_button')?.parentElement;
+    const findRow = document.getElementById('world_info_search')?.parentElement;
+    pickRow?.classList.add('mst-wi-pickrow');
+    findRow?.classList.add('mst-wi-findrow');
+    (findRow ?? entries)?.before(ribbon);
+
+    // a note on the empty page, until a document is open
+    const blank = el('div', 'mst-doc-blank');
+    blank.append(el('span', 'mst-doc-icon mst-doc-icon-big', 'W'), el('h2', '', t('Open a document')), el('p', '', t('Pick one from My files, or create a new one.')));
+    entries?.before(blank);
+
+    const select = document.querySelector(WORLD_SELECT);
+    const render = () => {
+        renderDocuments(list, docTitle);
+        here.textContent = docTitle.textContent;
+    };
+    if (select) {
+        new MutationObserver(render).observe(select, { childList: true });
+        select.addEventListener('change', render);
+        const $ = /** @type {any} */ (window).jQuery;
+        $?.(select).on('change', render);
+    }
+    render();
 }
 
 /* Copilot ------------------------------------------------------------------------------- */

@@ -33,7 +33,7 @@ A SillyTavern extension that makes the whole app look and work like Microsoft Te
   - **Activity** is a pane beside the open chat, like Teams' feed.
   - **Calendar** shows this work week with the current time line; your API connection is today's meeting (red when disconnected), and the connection settings sit on the right like the meeting's details. Today and the arrows move the week.
   - **Calls** has Teams' dial pad and speed dial on the left, with the formatting settings beside it.
-  - **OneDrive** shows My files with Add new (create a lorebook) and Upload (import one), and entries as file rows.
+  - **OneDrive** keeps your lorebooks in My files as Word documents down the left; New document creates one, Upload imports one. The open lorebook is a Word page with a ribbon (New paragraph, Expand/Collapse all, Rename, Save a copy, Download, Delete): each entry reads as a heading with its keywords and text, and the ¶ Entry settings button shows each entry's matching options.
   - **Copilot** greets your persona by name, and its "Message Copilot" box searches the settings.
   - **Apps** is the app store: each extension is a card, the search box filters them, and the side menu opens Manage your apps and Get more apps (install).
 - **Chat list.** Laid out like Teams: **Favorites** (SillyTavern's pinned chats, so pinning a chat on the welcome screen adds it here), **Chats** with your recent one-on-one chats, and **Teams and channels**, where each group chat is a team with a square monogram and each of its chats is a channel under it. Teams collapse and remember it. The pen button starts a new chat.

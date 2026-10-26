@@ -136,7 +136,7 @@ body.ms-teams .mst-tool .mst-fluent {
 /* the menus' own title rows, now in the header */
 body.ms-teams #rm_api_block > #title_api,
 body.ms-teams #rm_extensions_block .extensions_block > .wide100p:first-child > h3,
-body.ms-teams #AdvancedFormatting > .flex-container:first-of-type > h3,
+body.ms-teams #AdvancedFormatting h3:has(> span[data-i18n="Advanced Formatting"]),
 body.ms-teams #user-settings-block [name="userSettingsRowOne"] h3 {
     display: none;
 }
@@ -392,53 +392,367 @@ body.ms-teams .mst-crumb-here {
     font-weight: 600;
 }
 
-body.ms-teams #WorldInfo > .flex-container:first-of-type h3 {
+body.ms-teams #WorldInfo h3:has(> span[data-i18n="Worlds/Lorebooks"]) {
     display: none;
 }
 
-body.ms-teams .mst-file-columns {
+.mst-ribbon,
+.mst-doc-blank {
     display: none;
 }
 
-body.ms-teams #WorldInfo .mst-file-columns {
-    display: grid;
-    grid-template-columns: 2.5fr 1fr 1.2fr 0.8fr 0.8fr;
-    gap: 12px;
-    margin-top: 12px;
-    padding: 8px 12px 8px 44px;
-    border-bottom: 1px solid var(--mst-stroke-2);
-    color: var(--mst-fg-3);
-    font-size: var(--mst-text-sm);
+/* My files on the left, the open document as a Word page on Word's grey canvas */
+body.ms-teams #top-settings-holder #WorldInfo.drawer-content {
+    --mst-pad-l: 304px;
+    --mst-word-canvas: #f3f2f1;
+    --mst-word-page: #ffffff;
+    --mst-word-heading: #0f4761;
+    padding-left: var(--mst-pad-l);
+    background: var(--mst-word-canvas);
 }
 
-body.ms-teams #WorldInfo .mst-file-columns span:first-child::after {
-    content: ' ↑';
+body.ms-teams.mst-dark #top-settings-holder #WorldInfo.drawer-content {
+    --mst-word-canvas: #1b1a19;
+    --mst-word-page: #292929;
+    --mst-word-heading: #8fb4d9;
 }
 
-body.ms-teams #WorldInfo .world_entry {
-    position: relative;
-    padding-left: 32px;
+body.ms-teams #WorldInfo .mst-app-header {
+    background-color: var(--mst-canvas);
+}
+
+body.ms-teams #WorldInfo .mst-drive {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: fixed;
+    top: calc(var(--mst-titlebar-h) + 56px);
+    left: var(--mst-rail-w);
+    width: 280px;
+    bottom: 0;
+    padding: 16px 12px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    border-right: 1px solid var(--mst-stroke-2);
+    background: var(--mst-list);
+}
+
+body.ms-teams .mst-drive-new {
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+body.ms-teams .mst-docs {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+body.ms-teams .mst-doc {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 6px 10px;
+    margin: 0;
     border: none;
-    border-bottom: 1px solid var(--mst-stroke-3);
-    border-radius: 0;
+    border-radius: var(--mst-radius-md);
     background: none;
+    color: var(--mst-fg);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
 }
 
-/* a document icon in front of each entry, like a file row */
-body.ms-teams #WorldInfo .world_entry::before {
+body.ms-teams .mst-doc:hover {
+    background: var(--mst-hover);
+}
+
+body.ms-teams .mst-doc.mst-doc-active {
+    background: var(--mst-selected);
+    box-shadow: var(--mst-shadow-2);
+}
+
+body.ms-teams .mst-doc-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 28px;
+    height: 32px;
+    border-radius: 3px 8px 3px 3px;
+    background: linear-gradient(135deg, #2b7cd3, #185abd);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+body.ms-teams .mst-doc-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+body.ms-teams .mst-doc-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+body.ms-teams .mst-doc-active .mst-doc-name {
+    font-weight: 600;
+}
+
+body.ms-teams .mst-doc-kind {
+    font-size: var(--mst-text-sm);
+    line-height: 16px;
+    color: var(--mst-fg-3);
+}
+
+/* SillyTavern's picker row and command buttons give way to My files and the ribbon */
+body.ms-teams #world_popup > .mst-wi-pickrow,
+body.ms-teams #world_popup > hr,
+body.ms-teams #world_popup > .mst-wi-findrow > .menu_button:not(#world_refresh) {
+    display: none;
+}
+
+body.ms-teams #WorldInfo .mst-ribbon {
+    display: flex;
+    flex-direction: column;
+    margin: 4px 0 8px;
+    border: 1px solid var(--mst-stroke-3);
+    border-radius: var(--mst-radius-lg);
+    background: var(--mst-canvas);
+    box-shadow: var(--mst-shadow-2);
+}
+
+body.ms-teams .mst-ribbon-tabs {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    height: 36px;
+    padding: 0 14px;
+    border-bottom: 1px solid var(--mst-stroke-3);
+    font-size: var(--mst-text);
+    color: var(--mst-fg-2);
+}
+
+body.ms-teams .mst-ribbon-title {
+    margin-right: 8px;
+    padding-right: 14px;
+    border-right: 1px solid var(--mst-stroke-2);
+    font-weight: 600;
+    color: var(--mst-fg);
+}
+
+body.ms-teams .mst-ribbon-tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
+}
+
+body.ms-teams .mst-ribbon-tab-active {
+    color: #185abd;
+    font-weight: 600;
+}
+
+body.ms-teams.mst-dark .mst-ribbon-tab-active {
+    color: #6ca6e6;
+}
+
+body.ms-teams .mst-ribbon-tab-active::after {
     content: '';
     position: absolute;
-    left: 8px;
-    top: 12px;
-    width: 20px;
-    height: 20px;
-    background: var(--mst-brand-fg);
-    -webkit-mask: var(--mst-icon-document) center / 20px 20px no-repeat;
-    mask: var(--mst-icon-document) center / 20px 20px no-repeat;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    border-radius: 2px 2px 0 0;
+    background: currentColor;
 }
 
-body.ms-teams #WorldInfo .world_entry:hover {
-    background: var(--mst-list);
+body.ms-teams .mst-ribbon-commands {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: 4px 8px;
+}
+
+body.ms-teams .mst-ribbon-command {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 10px;
+    margin: 0;
+    border: none;
+    border-radius: var(--mst-radius);
+    background: none;
+    color: var(--mst-fg);
+    font: inherit;
+    font-size: var(--mst-text-sm);
+    cursor: pointer;
+}
+
+body.ms-teams .mst-ribbon-command:hover {
+    background: var(--mst-subtle-hover);
+}
+
+body.ms-teams .mst-ribbon-command i {
+    font-size: 13px;
+    color: #185abd;
+}
+
+body.ms-teams.mst-dark .mst-ribbon-command i {
+    color: #6ca6e6;
+}
+
+body.ms-teams .mst-ribbon-sep {
+    width: 1px;
+    height: 20px;
+    margin: 0 6px;
+    background: var(--mst-stroke-2);
+}
+
+/* the search and sort row reads like Word's find bar */
+body.ms-teams #world_popup > .mst-wi-findrow {
+    justify-content: flex-end;
+    margin-bottom: 8px;
+}
+
+body.ms-teams #world_popup > .mst-wi-findrow #world_info_search {
+    max-width: 280px;
+}
+
+body.ms-teams #world_popup > .mst-wi-findrow #world_info_sort_order {
+    max-width: 180px;
+}
+
+/* No document open: a blank page note */
+body.ms-teams #WorldInfo:not(.mst-doc-open) .mst-doc-blank {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    max-width: 816px;
+    margin: 0 auto;
+    padding: 96px 24px;
+    background: var(--mst-word-page);
+    box-shadow: var(--mst-shadow-4);
+    color: var(--mst-fg-3);
+    text-align: center;
+}
+
+body.ms-teams #WorldInfo:not(.mst-doc-open) :is(.mst-ribbon, #world_popup_entries_list),
+body.ms-teams #WorldInfo:not(.mst-doc-open) #world_popup > .mst-wi-findrow {
+    display: none;
+}
+
+body.ms-teams .mst-doc-blank h2 {
+    margin: 8px 0 0;
+    color: var(--mst-fg);
+}
+
+body.ms-teams .mst-doc-icon.mst-doc-icon-big {
+    width: 48px;
+    height: 56px;
+    font-size: 24px;
+    border-radius: 4px 14px 4px 4px;
+}
+
+/* The page */
+body.ms-teams #WorldInfo #world_popup_entries_list {
+    max-width: 816px;
+    min-height: 70vh;
+    margin: 0 auto 24px;
+    padding: 56px 72px 72px;
+    box-sizing: border-box;
+    background: var(--mst-word-page);
+    box-shadow: var(--mst-shadow-4);
+    font-family: Aptos, Calibri, "Segoe UI Web (West European)", var(--mst-font);
+}
+
+/* Entries are the document's paragraphs: the title as a heading, the text as body copy */
+body.ms-teams #WorldInfo .world_entry {
+    margin: 0 0 18px;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+}
+
+body.ms-teams #WorldInfo .world_entry .inline-drawer,
+body.ms-teams #WorldInfo .world_entry .wi-card-entry {
+    border: none;
+    background: none;
+    box-shadow: none;
+}
+
+body.ms-teams #WorldInfo .world_entry .drag-handle {
+    opacity: 0;
+    transition: opacity var(--mst-fast) var(--mst-ease);
+}
+
+body.ms-teams #WorldInfo .world_entry:hover .drag-handle {
+    opacity: 0.5;
+}
+
+body.ms-teams #WorldInfo .world_entry textarea[name="comment"] {
+    padding: 2px 0;
+    border: none;
+    border-bottom: 1px solid transparent;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    color: var(--mst-word-heading);
+    font-family: inherit;
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 600;
+}
+
+body.ms-teams #WorldInfo .world_entry textarea[name="comment"]:focus {
+    border-bottom-color: var(--mst-stroke);
+}
+
+/* the entry's switches stay quiet until the paragraph is hovered, like Word's margin tools */
+body.ms-teams #WorldInfo .world_entry .WIEnteryHeaderControls,
+body.ms-teams #WorldInfo .world_entry .killSwitch,
+body.ms-teams #WorldInfo .world_entry .inline-drawer-icon {
+    opacity: 0.35;
+    transition: opacity var(--mst-fast) var(--mst-ease);
+}
+
+body.ms-teams #WorldInfo .world_entry:is(:hover, :focus-within) :is(.WIEnteryHeaderControls, .killSwitch, .inline-drawer-icon) {
+    opacity: 1;
+}
+
+body.ms-teams #WorldInfo .world_entry .world_entry_edit textarea[name="content"] {
+    min-height: 120px;
+    padding: 4px 0;
+    border: none;
+    border-left: 2px solid transparent;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    color: var(--mst-fg);
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.6;
+    field-sizing: content;
+    resize: none;
+}
+
+body.ms-teams #WorldInfo .world_entry .world_entry_edit textarea[name="content"]:focus {
+    border-left-color: #185abd;
+    padding-left: 8px;
+}
+
+body.ms-teams #WorldInfo .world_entry .world_entry_edit small {
+    color: var(--mst-fg-3);
 }
 
 /* Copilot: greeting and prompt box, then the settings */
@@ -636,7 +950,7 @@ body.ms-teams #rm_extensions_block .extensions_block .inline-drawer > .inline-dr
         display: none !important;
     }
 
-    body.ms-teams #top-settings-holder :is(#rm_api_block, #AdvancedFormatting, #rm_extensions_block).drawer-content {
+    body.ms-teams #top-settings-holder :is(#rm_api_block, #AdvancedFormatting, #rm_extensions_block, #WorldInfo).drawer-content {
         --mst-pad-l: 12px;
         padding-left: 12px;
     }
@@ -650,4 +964,31 @@ body.ms-teams #rm_extensions_block .extensions_block .inline-drawer > .inline-dr
     body.ms-teams .mst-app-tools:not(.mst-app-tools-end) {
         display: none;
     }
+
+    body.ms-teams #WorldInfo #world_popup_entries_list {
+        padding: 24px 16px;
+    }
+
+    /* phones pick documents with SillyTavern's own picker */
+    body.ms-teams #world_popup > .mst-wi-pickrow {
+        display: flex;
+    }
+}
+
+/* Word view: an entry shows its heading, keywords and text; Entry settings (¶) shows the rest */
+body.ms-teams #WorldInfo:not(.mst-show-marks) .world_entry .WIEnteryHeaderControls,
+body.ms-teams #WorldInfo:not(.mst-show-marks) .world_entry_edit > :not(:first-child),
+body.ms-teams #WorldInfo:not(.mst-show-marks) .world_entry_edit > :first-child > :is([name="perEntryOverridesBlock"], .commentContainer),
+body.ms-teams #WorldInfo:not(.mst-show-marks) .world_entry_edit [name="contentAndCharFilterBlock"] > :not(:has(textarea[name="content"])),
+body.ms-teams #WorldInfo:not(.mst-show-marks) .world_entry_edit label:has(~ textarea[name="content"]),
+body.ms-teams #WorldInfo:not(.mst-show-marks) #WIEntryHeaderTitlesPC {
+    display: none;
+}
+
+body.ms-teams #WorldInfo:not(.mst-show-marks) .world_entry_edit [name="keywordsAndLogicBlock"] {
+    opacity: 0.75;
+}
+
+body.ms-teams .mst-ribbon-command.mst-ribbon-on {
+    background: var(--mst-subtle-pressed);
 }
