@@ -9,23 +9,29 @@ const TITLEBAR_ID = 'mst-titlebar';
 const CHAT_APP_ID = 'mst-app-chat';
 const HEADER_ID = 'mst-chat-head';
 
-/** SillyTavern's menus in their own order, each wearing a Teams app's icon under its own short
-    name (tooltips give the full names, from RAIL_SHORTCUTS). Chat (the chat list) sits second and
-    "More" seventh, as in Teams; Extensions sits at the bottom. */
+/** SillyTavern's menus down the rail, each wearing a Teams-style icon under a short name (tooltips
+    give SillyTavern's full names, from RAIL_SHORTCUTS). Chat (the chat list, order 3) sits between
+    them; Extensions sits at the bottom. */
 const RAIL_APPS = [
-    { id: 'ai-config-button', label: 'AI Response Configuration', icon: 'bell', order: 1 },
-    { id: 'sys-settings-button', label: 'API Connections', icon: 'calendar', order: 3 },
-    { id: 'advanced-formatting-button', label: 'AI Response Formatting', icon: 'call', order: 4 },
+    { id: 'ai-config-button', label: 'AI Config', icon: 'bell', order: 1 },
+    { id: 'sys-settings-button', label: 'API', icon: 'calendar', order: 2 },
+    { id: 'advanced-formatting-button', label: 'Response Format', icon: 'call', order: 4 },
     { id: 'WI-SP-button', label: 'World Info', icon: 'cloud', order: 5 },
     { id: 'user-settings-button', label: 'User Settings', icon: 'copilot', order: 6 },
+    { id: 'backgrounds-button', label: 'Backgrounds', icon: 'image', order: 7 },
+    { id: 'persona-management-button', label: 'Persona', icon: 'person', order: 8 },
+    { id: 'rightNavHolder', label: 'Characters', icon: 'people', order: 9 },
     { id: 'extensions-settings-button', label: 'Extensions', icon: 'apps', order: 20 },
 ];
 
-/** Menus that don't get a rail icon of their own: they're under "More" (…), like Teams' extra apps */
-const MORE_APPS = [
-    { id: 'rightNavHolder', label: 'Character Management', icon: 'fa-regular fa-address-book' },
-    { id: 'persona-management-button', label: 'Persona Management', icon: 'fa-regular fa-id-badge' },
+/** On phones the bottom bar has room for five tabs, as in Teams mobile; these move under More */
+const PHONE_MORE_APPS = [
+    { id: 'WI-SP-button', label: 'World Info', icon: 'fa-solid fa-cloud' },
+    { id: 'user-settings-button', label: 'User Settings', icon: 'fa-regular fa-comment-dots' },
     { id: 'backgrounds-button', label: 'Backgrounds', icon: 'fa-regular fa-image' },
+    { id: 'persona-management-button', label: 'Persona', icon: 'fa-regular fa-id-badge' },
+    { id: 'rightNavHolder', label: 'Characters', icon: 'fa-regular fa-address-book' },
+    { id: 'extensions-settings-button', label: 'Extensions', icon: 'fa-regular fa-square-plus' },
 ];
 
 const MORE_APP_ID = 'mst-app-more';
@@ -109,19 +115,16 @@ function createTitlebar() {
         waffle.append(document.createElement('span'));
     }
     waffle.addEventListener('click', () => toggleFlyout(waffle, [
-        { label: 'AI Response Configuration', icon: 'fa-regular fa-bell', run: () => toggleDrawer('ai-config-button') },
+        { label: 'AI Config', icon: 'fa-regular fa-bell', run: () => toggleDrawer('ai-config-button') },
+        { label: 'API', icon: 'fa-regular fa-calendar', run: () => toggleDrawer('sys-settings-button') },
         {
             label: 'Chat', icon: 'fa-regular fa-comments', run: () => {
                 closeDrawers();
                 document.body.classList.remove('mst-m-chat');
             },
         },
-        { label: 'API Connections', icon: 'fa-regular fa-calendar', run: () => toggleDrawer('sys-settings-button') },
-        { label: 'AI Response Formatting', icon: 'fa-solid fa-phone', run: () => toggleDrawer('advanced-formatting-button') },
-        { label: 'World Info', icon: 'fa-solid fa-cloud', run: () => toggleDrawer('WI-SP-button') },
-        { label: 'User Settings', icon: 'fa-regular fa-comment-dots', run: () => toggleDrawer('user-settings-button') },
-        ...MORE_APPS.map(({ id, label, icon }) => ({ label, icon, run: () => toggleDrawer(id) })),
-        { label: 'Extensions', icon: 'fa-regular fa-square-plus', run: () => toggleDrawer('extensions-settings-button') },
+        { label: 'Response Format', icon: 'fa-solid fa-phone', run: () => toggleDrawer('advanced-formatting-button') },
+        ...PHONE_MORE_APPS.map(({ id, label, icon }) => ({ label, icon, run: () => toggleDrawer(id) })),
     ], 'beside'));
     const leftTools = document.createElement('div');
     leftTools.className = 'mst-tb-launch';
@@ -165,8 +168,8 @@ function createTitlebar() {
     const me = document.createElement('button');
     me.type = 'button';
     me.id = 'mst-me';
-    me.title = t('Persona Management');
-    me.setAttribute('aria-label', t('Persona Management'));
+    me.title = t('Persona');
+    me.setAttribute('aria-label', t('Persona'));
     const meAvatar = document.createElement('span');
     meAvatar.className = 'mst-avatar';
     const meImg = document.createElement('img');
@@ -229,7 +232,7 @@ export function refreshPersona(avatarId) {
         monogram.dataset.mstColor = String(getMonogramColor(name));
     }
     const me = document.getElementById('mst-me');
-    me.title = name ? `${name} (${t('Persona Management')})` : t('Persona Management');
+    me.title = name ? `${name} (${t('Persona')})` : t('Persona');
     const { getThumbnailUrl } = SillyTavern.getContext();
     let src = '';
     if (avatarId) {
@@ -388,17 +391,10 @@ function openProfile() {
     }
 }
 
-/** On phones the bottom bar has room for five tabs, as in Teams mobile; the rest move under More */
-const PHONE_MORE_APPS = [
-    { id: 'WI-SP-button', label: 'World Info', icon: 'fa-solid fa-cloud' },
-    { id: 'user-settings-button', label: 'User Settings', icon: 'fa-regular fa-comment-dots' },
-    { id: 'extensions-settings-button', label: 'Extensions', icon: 'fa-regular fa-square-plus' },
-];
-
+/** More (phones only): the menus that don't fit in the bottom bar */
 function toggleMoreMenu() {
     const app = document.getElementById(MORE_APP_ID);
-    const phone = window.matchMedia('(max-width: 1000px)').matches;
-    const items = [...(phone ? PHONE_MORE_APPS : []), ...MORE_APPS]
+    const items = PHONE_MORE_APPS
         .filter(({ id }) => document.getElementById(id))
         .map(({ id, label, icon }) => ({
             label,
@@ -478,7 +474,7 @@ function createRail() {
         nameRailApp(drawer, label);
         toggle.addEventListener('click', closeFlyout);
     }
-    for (const { id } of MORE_APPS) {
+    for (const { id } of PHONE_MORE_APPS) {
         document.getElementById(id)?.classList.add('mst-more-drawer');
     }
 }

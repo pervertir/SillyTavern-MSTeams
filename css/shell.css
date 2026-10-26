@@ -336,22 +336,17 @@ body.ms-teams #top-settings-holder > .drawer {
     order: var(--mst-order, 20);
 }
 
-body.ms-teams #mst-app-chat { order: 2; }
-body.ms-teams #mst-app-more { order: 7; }
+body.ms-teams #mst-app-chat { order: 3; }
+body.ms-teams #mst-app-more { order: 10; }
+
+/* More is for phones, where the bottom bar runs out of room */
+body.ms-teams #top-settings-holder > #mst-app-more {
+    display: none;
+}
 
 /* Apps sits at the bottom of the rail */
 body.ms-teams #extensions-settings-button {
     margin-top: auto;
-}
-
-/* Menus without an icon of their own open from More; their toggles leave the rail */
-body.ms-teams #top-settings-holder > .drawer.mst-more-drawer {
-    order: 30;
-    height: 0;
-}
-
-body.ms-teams #top-settings-holder > .drawer.mst-more-drawer > .drawer-toggle {
-    display: none;
 }
 
 body.ms-teams #top-settings-holder > .drawer > .drawer-toggle,
@@ -464,6 +459,9 @@ body.ms-teams [data-mst-icon="call"] { --mst-rail-icon: var(--mst-icon-call); --
 body.ms-teams [data-mst-icon="cloud"] { --mst-rail-icon: var(--mst-icon-cloud); --mst-rail-icon-on: var(--mst-icon-cloud-on); }
 body.ms-teams [data-mst-icon="copilot"] { --mst-rail-icon: var(--mst-icon-copilot); --mst-rail-icon-on: var(--mst-icon-copilot); }
 body.ms-teams [data-mst-icon="more"] { --mst-rail-icon: var(--mst-icon-more); --mst-rail-icon-on: var(--mst-icon-more); }
+body.ms-teams [data-mst-icon="image"] { --mst-rail-icon: var(--mst-icon-image); --mst-rail-icon-on: var(--mst-icon-image); }
+body.ms-teams [data-mst-icon="person"] { --mst-rail-icon: var(--mst-icon-person); --mst-rail-icon-on: var(--mst-icon-person); }
+body.ms-teams [data-mst-icon="people"] { --mst-rail-icon: var(--mst-icon-people); --mst-rail-icon-on: var(--mst-icon-people); }
 body.ms-teams [data-mst-icon="apps"] { --mst-rail-icon: var(--mst-icon-apps); --mst-rail-icon-on: var(--mst-icon-apps); }
 
 /* no API connection: a red badge on its icon, as Teams marks a problem */

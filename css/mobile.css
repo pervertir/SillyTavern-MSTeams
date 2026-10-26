@@ -74,10 +74,14 @@
         display: -webkit-box;
     }
 
-    body.ms-teams #top-settings-holder > .drawer.mst-more-drawer {
+    body.ms-teams #top-settings-holder > :is(#backgrounds-button, #persona-management-button, #rightNavHolder) {
         flex: 0 0 0;
         min-width: 0;
         width: 0;
+    }
+
+    body.ms-teams #top-settings-holder > :is(#backgrounds-button, #persona-management-button, #rightNavHolder) > .drawer-toggle {
+        display: none;
     }
 
     /* More opens a sheet above the app bar */
@@ -241,15 +245,19 @@
 
     /* ---- Teams mobile ---- */
 
-    /* five tabs, as in Teams mobile: OneDrive, Copilot and Apps live under More */
-    body.ms-teams #top-settings-holder > :is(#WI-SP-button, #user-settings-button, #extensions-settings-button):not(:has(.drawer-content.openDrawer)) {
+    body.ms-teams #top-settings-holder > #mst-app-more {
+        display: flex;
+    }
+
+    /* five tabs, as in Teams mobile: the rest live under More */
+    body.ms-teams #top-settings-holder > .mst-more-drawer:not(:has(.drawer-content.openDrawer)) {
         flex: 0 0 0;
         min-width: 0;
         width: 0;
         overflow: hidden;
     }
 
-    body.ms-teams #top-settings-holder > :is(#WI-SP-button, #user-settings-button, #extensions-settings-button):not(:has(.drawer-content.openDrawer)) > .drawer-toggle {
+    body.ms-teams #top-settings-holder > .mst-more-drawer:not(:has(.drawer-content.openDrawer)) > .drawer-toggle {
         visibility: hidden;
     }
 
