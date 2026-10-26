@@ -524,8 +524,65 @@ function buildActivity() {
     header(drawer, 'Activity', [toolButton('', 'filter', () => {})], [feed]);
 }
 
+/* People, Profiles and Background effects (the menus under More) ------------------------- */
+
+/** A search box in the app header that types into one of SillyTavern's own search fields. */
+function proxySearch(placeholder, targetId) {
+    const search = el('label', 'mst-search mst-app-search');
+    search.append(fluentIcon('search', 16));
+    const input = el('input');
+    input.type = 'search';
+    input.placeholder = t(placeholder);
+    input.addEventListener('input', () => {
+        const target = /** @type {HTMLInputElement} */ (document.getElementById(targetId));
+        if (target) {
+            target.value = input.value;
+            target.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+    });
+    search.append(input);
+    return search;
+}
+
+function buildPeople() {
+    const drawer = document.getElementById('right-nav-panel');
+    if (!drawer) {
+        return;
+    }
+    header(drawer, 'People', [
+        toolButton('', 'person-add', () => click('#rm_button_create')),
+        toolButton('', 'arrow-down', () => click('#character_import_button')),
+        toolButton('New group', 'people-add', () => click('#rm_button_group_chats'), true),
+    ], [proxySearch('Search people', 'character_search_bar')]);
+    const [add, importer] = drawer.querySelectorAll('.mst-app-header .mst-tool-icon');
+    add.title = t('Add contact');
+    importer.title = t('Import contact');
+}
+
+function buildProfiles() {
+    const drawer = document.getElementById('PersonaManagement');
+    if (!drawer) {
+        return;
+    }
+    header(drawer, 'Profiles', [
+        toolButton('Back up', 'arrow-down', () => click('#personas_backup')),
+        toolButton('Restore', 'arrow-up', () => click('#personas_restore')),
+        toolButton('New profile', 'person-add', () => click('#create_dummy_persona'), true),
+    ], [proxySearch('Search profiles', 'persona_search_bar')]);
+}
+
+function buildBackgrounds() {
+    const drawer = document.getElementById('Backgrounds');
+    if (!drawer) {
+        return;
+    }
+    header(drawer, 'Background effects', [
+        toolButton('Add new', 'add', () => click('#add_background_button_top'), true),
+    ], [proxySearch('Search backgrounds', 'bg-filter')]);
+}
+
 export function initApps() {
-    for (const build of [buildActivity, buildCalendar, buildCalls, buildOneDrive, buildCopilot, buildApps]) {
+    for (const build of [buildActivity, buildCalendar, buildCalls, buildOneDrive, buildCopilot, buildApps, buildPeople, buildProfiles, buildBackgrounds]) {
         try {
             build();
         } catch (error) {

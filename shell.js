@@ -21,9 +21,9 @@ const RAIL_APPS = [
 
 /** Menus that don't get a rail icon of their own: they're under "More" (…), like Teams' extra apps */
 const MORE_APPS = [
-    { id: 'backgrounds-button', label: 'Backgrounds', icon: 'fa-solid fa-panorama' },
-    { id: 'persona-management-button', label: 'Persona Management', icon: 'fa-solid fa-face-smile' },
-    { id: 'rightNavHolder', label: 'Character Management', icon: 'fa-solid fa-address-card' },
+    { id: 'rightNavHolder', label: 'People', icon: 'fa-regular fa-address-book' },
+    { id: 'persona-management-button', label: 'Profiles', icon: 'fa-regular fa-id-badge' },
+    { id: 'backgrounds-button', label: 'Background effects', icon: 'fa-regular fa-image' },
 ];
 
 const MORE_APP_ID = 'mst-app-more';

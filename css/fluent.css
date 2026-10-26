@@ -1,0 +1,492 @@
+/* Teams everywhere: SillyTavern's own building blocks (section headers, icon buttons, help
+   links, dropdowns, pagers, tags) drawn as Fluent 2 controls, plus the People, Profiles and
+   Background effects screens. */
+
+/* Icon-only buttons are Teams' subtle buttons: no box, just the icon */
+body.ms-teams #top-settings-holder .drawer-content .menu_button:is(.fa-solid, .fa-regular, .fa-brands):not(.redWarningBG, .red_button, .toggleEnabled, .active),
+body.ms-teams dialog.popup .menu_button:is(.fa-solid, .fa-regular):not(.popup-button-ok, .redWarningBG) {
+    min-width: 32px;
+    width: 32px;
+    height: 32px;
+    min-height: 32px;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+    color: var(--mst-fg-2);
+    font-size: 15px;
+}
+
+body.ms-teams #top-settings-holder .drawer-content .menu_button:is(.fa-solid, .fa-regular, .fa-brands):not(.redWarningBG, .red_button, .toggleEnabled, .active):hover,
+body.ms-teams dialog.popup .menu_button:is(.fa-solid, .fa-regular):not(.popup-button-ok, .redWarningBG):hover {
+    background: var(--mst-subtle-hover);
+    color: var(--mst-brand-fg);
+}
+
+body.ms-teams .drawer-content :is(.menu_button.redWarningBG, .menu_button.red_button) {
+    border-color: transparent;
+    background: transparent;
+    color: var(--mst-danger);
+}
+
+/* Section headers: Fluent accordions with a plain chevron */
+body.ms-teams .inline-drawer-icon.fa-circle-chevron-down,
+body.ms-teams .inline-drawer-icon.fa-circle-chevron-up {
+    font-size: 11px;
+    color: var(--mst-fg-3);
+    background: none;
+    filter: none;
+}
+
+body.ms-teams .inline-drawer-icon.fa-circle-chevron-down::before {
+    content: "\f078";
+}
+
+body.ms-teams .inline-drawer-icon.fa-circle-chevron-up::before,
+body.ms-teams .inline-drawer-icon.up::before {
+    content: "\f077";
+}
+
+body.ms-teams .drawer-content .inline-drawer-header {
+    min-height: 36px;
+    padding: 6px 10px;
+    border-radius: var(--mst-radius-md);
+    font-size: var(--mst-text);
+    font-weight: 600;
+}
+
+body.ms-teams .drawer-content .inline-drawer-header:hover {
+    background: var(--mst-subtle-hover);
+}
+
+/* Help links point at the app's own docs: Teams has none */
+body.ms-teams :is(.notes-link, .note-link-span, a[href*="docs.sillytavern.app"]) {
+    display: none !important;
+}
+
+/* Field labels like Fluent's: small, medium weight */
+body.ms-teams .drawer-content :is(small, .range-block-title, label > span):not(.mst-doc-kind) {
+    color: var(--mst-fg-2);
+}
+
+body.ms-teams .drawer-content .range-block-title,
+body.ms-teams .drawer-content h4 {
+    font-size: var(--mst-text);
+    font-weight: 600;
+}
+
+/* Dropdowns (select2) as Fluent dropdowns */
+body.ms-teams .select2-container .select2-selection {
+    min-height: 32px;
+    border: 1px solid var(--mst-stroke);
+    border-bottom-color: var(--mst-stroke-accessible);
+    border-radius: var(--mst-radius);
+    background: var(--mst-input);
+    color: var(--mst-fg);
+}
+
+body.ms-teams .select2-container .select2-selection__rendered,
+body.ms-teams .select2-container .select2-selection__placeholder {
+    color: var(--mst-fg);
+    line-height: 30px;
+}
+
+body.ms-teams .select2-container .select2-selection__choice {
+    border: none;
+    border-radius: var(--mst-radius);
+    background: var(--mst-brand-soft);
+    color: var(--mst-fg);
+}
+
+body.ms-teams .select2-dropdown {
+    border: 1px solid var(--mst-stroke-3);
+    border-radius: var(--mst-radius-md);
+    background: var(--mst-raised);
+    color: var(--mst-fg);
+    box-shadow: var(--mst-shadow-16);
+    overflow: hidden;
+}
+
+body.ms-teams .select2-results__option {
+    padding: 6px 10px;
+}
+
+body.ms-teams .select2-results__option--highlighted {
+    background: var(--mst-subtle-hover) !important;
+    color: var(--mst-fg) !important;
+}
+
+/* Pagers */
+body.ms-teams .paginationjs-pages li > a,
+body.ms-teams .paginationjs-nav {
+    border-radius: var(--mst-radius);
+    color: var(--mst-fg-2);
+    font-size: var(--mst-text-sm);
+}
+
+body.ms-teams .paginationjs-pages li > a:hover {
+    background: var(--mst-subtle-hover);
+}
+
+/* Tags as Fluent pills */
+body.ms-teams .tag {
+    padding: 2px 8px;
+    border: 1px solid var(--mst-stroke-2);
+    border-radius: 999px;
+    background: var(--mst-card);
+    color: var(--mst-fg-2);
+    font-size: var(--mst-text-sm);
+}
+
+/* Dialog headings and lists */
+body.ms-teams dialog.popup :is(h2, h3) {
+    font-weight: 600;
+}
+
+body.ms-teams #select_chat_popup .select_chat_block,
+body.ms-teams dialog.popup .select_chat_block {
+    border: 1px solid var(--mst-stroke-3);
+    border-radius: var(--mst-radius-md);
+    background: var(--mst-card);
+    box-shadow: none;
+}
+
+body.ms-teams dialog.popup .select_chat_block:hover {
+    background: var(--mst-list);
+}
+
+body.ms-teams dialog.popup .select_chat_block[highlight="true"] {
+    border-color: var(--mst-brand);
+    box-shadow: inset 3px 0 0 var(--mst-brand);
+}
+
+/* People: Teams' contact list, a pane beside the chat */
+body.ms-teams #top-settings-holder #right-nav-panel.drawer-content {
+    --mst-panel-w: 440px;
+    --mst-app-bg: var(--mst-list);
+    box-shadow: none;
+    border-right: 1px solid var(--mst-stroke-2);
+}
+
+body.ms-teams #right-nav-panel .mst-app-header {
+    gap: 8px;
+}
+
+body.ms-teams #right-nav-panel .mst-app-header .mst-app-search {
+    width: auto;
+    flex: 1;
+}
+
+body.ms-teams #right-nav-panel .mst-app-tools:not(.mst-app-tools-end) {
+    flex: 1;
+}
+
+body.ms-teams #right-nav-panel .mst-app-header .mst-tool-primary span {
+    display: none;
+}
+
+body.ms-teams #right-nav-panel .mst-app-header .mst-tool-primary {
+    width: 32px;
+    padding: 0;
+    justify-content: center;
+}
+
+/* SillyTavern's own top rows give way to the header */
+body.ms-teams #CharListButtonAndHotSwaps,
+body.ms-teams #rm_button_bar,
+body.ms-teams #form_character_search_form,
+body.ms-teams #charListGridToggle,
+body.ms-teams #charListFixedTop .rm_tag_controls,
+body.ms-teams #rm_print_characters_block .ch_additional_info:not(.group_select_counter),
+body.ms-teams #rm_print_characters_block .tags_inline {
+    display: none !important;
+}
+
+/* SillyTavern's grid view stacks cards; Teams lists people in rows */
+body.ms-teams #rm_print_characters_block :is(.character_select, .group_select, .bogus_folder_select) .character_select_container,
+body.ms-teams #rm_print_characters_block .group_select_container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    width: auto;
+    gap: 0;
+    align-items: flex-start;
+    text-align: left;
+}
+
+body.ms-teams.charListGrid #rm_print_characters_block :is(.character_select, .group_select, .bogus_folder_select) {
+    flex-direction: row !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    align-items: center !important;
+}
+
+body.ms-teams.charListGrid #rm_print_characters_block .character_name_block,
+body.ms-teams.charListGrid #rm_print_characters_block .ch_description {
+    display: block !important;
+    width: 100%;
+    text-align: left !important;
+}
+
+body.ms-teams #rm_print_characters_pagination {
+    justify-content: flex-end;
+    gap: 4px;
+    margin: 4px 0 8px;
+}
+
+/* contacts as rows even when the grid view is on */
+body.ms-teams #rm_print_characters_block {
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;
+    align-content: stretch !important;
+    gap: 2px;
+}
+
+body.ms-teams #rm_print_characters_block :is(.character_select, .group_select, .bogus_folder_select) {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 56px;
+    padding: 8px 12px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: var(--mst-radius-md);
+    background: none;
+    text-align: left;
+}
+
+body.ms-teams #rm_print_characters_block :is(.character_select, .group_select, .bogus_folder_select):hover {
+    background: var(--mst-hover);
+}
+
+body.ms-teams #rm_print_characters_block :is(.character_select, .group_select, .bogus_folder_select) .avatar {
+    flex: none;
+    width: 40px;
+    height: 40px;
+    margin: 0;
+}
+
+body.ms-teams #rm_print_characters_block :is(.character_select, .group_select) .avatar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top center;
+    border: none;
+    box-shadow: none;
+}
+
+body.ms-teams #rm_print_characters_block .character_name_block {
+    margin: 0;
+}
+
+body.ms-teams #rm_print_characters_block .ch_name {
+    font-size: var(--mst-text);
+    font-weight: 600;
+    color: var(--mst-fg);
+}
+
+body.ms-teams #rm_print_characters_block :is(.ch_description, .ch_additional_info, .character_name_block_sub_line) {
+    display: block;
+    overflow: hidden;
+    color: var(--mst-fg-3);
+    font-size: var(--mst-text-sm);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+body.ms-teams #rm_print_characters_block .ch_fav_icon,
+body.ms-teams #rm_print_characters_block .group_fav_icon {
+    color: #c19c00;
+}
+
+/* A contact's card (the character editor): Teams' profile header */
+body.ms-teams #rm_button_selected_ch h2 {
+    margin: 4px 0 8px;
+    font-size: var(--mst-text-lg);
+    font-weight: 700;
+}
+
+body.ms-teams #avatar-and-name-block {
+    gap: 12px;
+}
+
+body.ms-teams #avatar_div_div,
+body.ms-teams #avatar_div_div img {
+    border-radius: 50%;
+    border: none;
+    box-shadow: none;
+}
+
+/* Profiles: the personas as Teams profile cards */
+body.ms-teams #top-settings-holder #PersonaManagement.drawer-content {
+    --mst-panel-w: calc(100vw - var(--mst-rail-w));
+    --mst-panel-max: calc(100vw - var(--mst-rail-w));
+    background: var(--mst-canvas);
+    box-shadow: none;
+}
+
+body.ms-teams #PersonaManagement h3:has(> span[data-i18n="Persona Management"]),
+body.ms-teams #PersonaManagement :is(.user_stats_button, #personas_backup, #personas_restore, #create_dummy_persona, #persona_search_bar) {
+    display: none;
+}
+
+body.ms-teams #user_avatar_block .avatar-container {
+    margin: 0 0 8px;
+    padding: 12px;
+    border: 1px solid var(--mst-stroke-3);
+    border-radius: var(--mst-radius-lg);
+    background: var(--mst-card);
+    box-shadow: var(--mst-shadow-2);
+}
+
+body.ms-teams #user_avatar_block .avatar-container:hover {
+    box-shadow: var(--mst-shadow-8);
+}
+
+body.ms-teams #user_avatar_block .avatar-container.selected {
+    border-color: var(--mst-brand);
+    box-shadow: inset 3px 0 0 var(--mst-brand), var(--mst-shadow-2);
+}
+
+body.ms-teams #user_avatar_block .avatar-container .avatar,
+body.ms-teams #user_avatar_block .avatar-container .avatar img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    box-shadow: none;
+}
+
+body.ms-teams #user_avatar_block .ch_name {
+    font-weight: 600;
+}
+
+/* Background effects: Teams' picker grid of rounded tiles */
+body.ms-teams #Backgrounds .mst-app-header .mst-app-tools:not(.mst-app-tools-end) {
+    flex: 1;
+}
+
+body.ms-teams #Backgrounds .mst-app-header .mst-app-search {
+    width: auto;
+    flex: 1;
+}
+
+body.ms-teams #top-settings-holder #Backgrounds.drawer-content {
+    --mst-panel-w: 520px;
+    --mst-app-bg: var(--mst-list);
+    box-shadow: none;
+    border-right: 1px solid var(--mst-stroke-2);
+}
+
+body.ms-teams #Backgrounds #bg-header-fixed h3,
+body.ms-teams #Backgrounds #add_background_button_top,
+body.ms-teams #Backgrounds #bg-filter {
+    display: none;
+}
+
+body.ms-teams #Backgrounds .bg_list {
+    gap: 8px;
+}
+
+body.ms-teams #Backgrounds .bg_example {
+    border: 2px solid transparent;
+    border-radius: var(--mst-radius-lg);
+    box-shadow: none;
+    overflow: hidden;
+}
+
+body.ms-teams #Backgrounds .bg_example:hover {
+    border-color: var(--mst-stroke-accessible);
+}
+
+body.ms-teams #Backgrounds .bg_example.selected,
+body.ms-teams #Backgrounds .bg_example[aria-selected="true"] {
+    border-color: var(--mst-brand);
+    box-shadow: 0 0 0 2px var(--mst-canvas) inset;
+}
+
+/* Global / Chat as Fluent tabs */
+body.ms-teams #bg_tabs,
+body.ms-teams #bg_tabs .ui-tabs-nav,
+body.ms-teams #bg_tabs .ui-tabs-panel {
+    border: none;
+    border-radius: 0;
+    background: none;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+body.ms-teams #bg_tabs .bg_tab_button {
+    margin: 0 16px 0 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+}
+
+body.ms-teams #bg_tabs .bg_tab_button a {
+    display: inline-block;
+    padding: 8px 2px;
+    color: var(--mst-fg-3);
+    font-weight: 400;
+}
+
+body.ms-teams #bg_tabs .bg_tab_button.ui-tabs-active a {
+    color: var(--mst-fg);
+    font-weight: 600;
+    box-shadow: inset 0 -3px 0 var(--mst-brand-fg);
+}
+
+/* undo the grid view's narrow card sizes */
+body.ms-teams #rm_print_characters_block :is(.character_select_container, .group_select_container, .character_name_block, .group_name_block, .ch_name, .ch_description) {
+    max-width: none !important;
+    text-align: left !important;
+    justify-content: flex-start !important;
+}
+
+body.ms-teams #rm_print_characters_block .character_select_container,
+body.ms-teams #rm_print_characters_block .group_select_container {
+    width: auto !important;
+    flex: 1 1 auto !important;
+}
+
+body.ms-teams #rm_print_characters_block .ch_name {
+    font-size: var(--mst-text) !important;
+}
+
+body.ms-teams #rm_print_characters_block .character_name_block_sub_line,
+body.ms-teams #rm_print_characters_block .group_select .ch_additional_info:not(.group_select_counter) {
+    display: none !important;
+}
+
+body.ms-teams #rm_print_characters_block .group_select .group_select_block_list {
+    display: block !important;
+}
+
+body.ms-teams #rm_print_characters_block :is(.character_select, .group_select, .bogus_folder_select) {
+    flex-wrap: nowrap !important;
+}
+
+body.ms-teams #rm_print_characters_block :is(.character_select_container, .group_select_container) {
+    min-width: 0 !important;
+    flex-wrap: nowrap !important;
+}
+
+body.ms-teams #rm_print_characters_block :is(.ch_description, .group_select_block_list) {
+    width: 100%;
+    overflow: hidden;
+    color: var(--mst-fg-3);
+    font-size: var(--mst-text-sm);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
