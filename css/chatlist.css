@@ -216,13 +216,15 @@ body.ms-teams .mst-monogram.mst-team-avatar {
     font-size: 11px;
 }
 
+/* regular weight, a point above the channels, as in Teams */
 body.ms-teams .mst-team-name {
     flex: 1;
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 400;
 }
 
 body.ms-teams .mst-team-collapsed .mst-channels {
