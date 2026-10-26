@@ -524,3 +524,22 @@ body.ms-teams #persona-management-block > .persona_management_right_column {
     min-width: 0;
     max-width: 640px;
 }
+
+/* Room between dropdowns, as Fluent forms space their fields */
+body.ms-teams :is(.drawer-content, dialog.popup) select:not([multiple]),
+body.ms-teams :is(.drawer-content, dialog.popup) .select2-container {
+    margin-top: 4px;
+    margin-bottom: 12px;
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup) .flex-container:has(> :is(span, label, small) + select) {
+    margin-bottom: 12px;
+    row-gap: 4px;
+    column-gap: 12px;
+    align-items: center;
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup) .flex-container:has(> :is(span, label, small) + select) > select {
+    margin-top: 0;
+    margin-bottom: 0;
+}
