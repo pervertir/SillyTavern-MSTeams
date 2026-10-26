@@ -255,3 +255,59 @@ body.ms-teams .mst-channel.mst-chat-active {
     color: var(--mst-fg);
     font-weight: 600;
 }
+
+/* A row's … menu (Favorite, Open): shows on hover in place of the time, as in Teams */
+body.ms-teams .mst-chat,
+body.ms-teams .mst-channel {
+    position: relative;
+}
+
+body.ms-teams .mst-chat-more {
+    display: none;
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    width: 28px;
+    height: 28px;
+    margin: -14px 0 0;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: var(--mst-radius);
+    background: none;
+    color: var(--mst-fg-2);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+body.ms-teams .mst-chat-more:hover {
+    background: var(--mst-subtle-hover);
+    color: var(--mst-brand-fg);
+}
+
+body.ms-teams :is(.mst-chat, .mst-channel):is(:hover, :focus-within) .mst-chat-more,
+body.ms-teams .mst-chat-more.mst-app-open {
+    display: inline-flex;
+}
+
+body.ms-teams .mst-chat:is(:hover, :focus-within) .mst-chat-time,
+body.ms-teams .mst-chat:has(.mst-chat-more.mst-app-open) .mst-chat-time {
+    visibility: hidden;
+}
+
+body.ms-teams .mst-list-hint {
+    padding: 4px 12px 8px 32px;
+    color: var(--mst-fg-3);
+    font-size: var(--mst-text-sm);
+}
+
+@media (hover: none) {
+    body.ms-teams .mst-chat-more {
+        display: inline-flex;
+    }
+
+    body.ms-teams .mst-chat .mst-chat-time {
+        margin-right: 28px;
+    }
+}

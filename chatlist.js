@@ -1,6 +1,7 @@
 // The Teams chat list: SillyTavern's recent chats (the same list as its welcome screen),
 // split into Pinned and Recent, with the open chat highlighted.
 
+import { toggleFlyout } from './shell.js';
 import { formatListTime } from './times.js';
 
 const LIST_ID = 'mst-list';
@@ -28,6 +29,57 @@ function getPinned() {
     } catch {
         return [];
     }
+}
+
+/** SillyTavern's key for a pinned chat (welcome-screen.js), so its pins and these favorites are one list */
+function pinKey({ group, avatar, fileName }) {
+    return `${group ? 'group_' + group : ''}${avatar ? 'char_' + avatar : ''}_${fileName}`;
+}
+
+function getPinState() {
+    try {
+        return JSON.parse(SillyTavern.getContext().accountStorage.getItem(PINNED_KEY) || '{}') || {};
+    } catch {
+        return {};
+    }
+}
+
+function isFavorite(place) {
+    return Object.hasOwn(getPinState(), pinKey(place));
+}
+
+/** Adds a chat to Favorites, or takes it off. */
+function toggleFavorite(place) {
+    const state = getPinState();
+    const key = pinKey(place);
+    if (Object.hasOwn(state, key)) {
+        delete state[key];
+    } else {
+        state[key] = { group: place.group || undefined, avatar: place.avatar || undefined, file_name: place.fileName };
+    }
+    SillyTavern.getContext().accountStorage.setItem(PINNED_KEY, JSON.stringify(state));
+    refreshChatList();
+}
+
+/** The … menu of a chat or channel (also its right-click menu). */
+function openItemMenu(anchor, place) {
+    const favorite = isFavorite(place);
+    toggleFlyout(anchor, [
+        { label: 'Open', icon: 'fa-regular fa-comment', run: () => openEntry(place) },
+        favorite
+            ? { label: 'Remove from favorites', icon: 'fa-solid fa-star', run: () => toggleFavorite(place) }
+            : { label: 'Favorite', icon: 'fa-regular fa-star', run: () => toggleFavorite(place) },
+    ], 'below-end');
+}
+
+function moreButton() {
+    const more = document.createElement('button');
+    more.type = 'button';
+    more.className = 'mst-chat-more';
+    more.title = t('More options');
+    more.setAttribute('aria-label', t('More options'));
+    more.innerHTML = '<i class="fa-solid fa-ellipsis"></i>';
+    return more;
 }
 
 function getCollapsed(key = COLLAPSED_KEY) {
@@ -84,10 +136,8 @@ function buildItem(entry) {
     const avatar = document.createElement('span');
     avatar.className = 'mst-avatar';
     if (entry.group) {
-        avatar.classList.add('mst-avatar-group');
-        const icon = document.createElement('i');
-        icon.className = 'fa-solid fa-users';
-        avatar.append(icon);
+        avatar.style.background = 'none';
+        avatar.append(buildTeamAvatar(entry.team));
     } else {
         const img = document.createElement('img');
         img.src = entry.thumb;
@@ -116,7 +166,7 @@ function buildItem(entry) {
     preview.textContent = entry.preview;
     text.append(top, preview);
 
-    item.append(avatar, text);
+    item.append(avatar, text, moreButton());
     return item;
 }
 
@@ -183,7 +233,7 @@ function buildTeams(needle) {
             channel.dataset.group = id;
             channel.dataset.file = chatId;
             channel.title = chatId;
-            channel.textContent = channelName(group, chatId);
+            channel.append(document.createTextNode(channelName(group, chatId)), moreButton());
             list.append(channel);
         }
         team.append(head, list);
@@ -231,9 +281,11 @@ function render() {
     const chats = visible.filter(entry => !entry.pinned && !entry.group);
     const teams = buildTeams(needle);
     const sections = [];
-    if (favorites.length) {
-        sections.push(buildSection('pinned', t('Favorites'), favorites));
-    }
+    // Favorites is always there, as in Teams
+    const hint = document.createElement('div');
+    hint.className = 'mst-list-hint';
+    hint.textContent = t('Use … on a chat to add it to Favorites.');
+    sections.push(buildSection('pinned', t('Favorites'), favorites, favorites.length ? undefined : [hint]));
     sections.push(buildSection('recent', t('Chats'), chats));
     if (teams.length) {
         sections.push(buildSection('teams', t('Teams and channels'), [], teams));
@@ -306,12 +358,15 @@ export async function refreshChatList() {
         const isPinned = pinned.some(p => p.file_name === chat.file_name && (p.avatar === chat.avatar || (p.group && p.group === chat.group)));
         return {
             key: `${chat.group ? 'g_' + chat.group : 'c_' + chat.avatar}_${fileId}`,
-            name: character?.name || group?.name || '',
+            // a group chat is a channel: its name, with its team's picture
+            name: character?.name || (group ? channelName(group, fileId) : ''),
+            team: group?.name || '',
             title: `${character?.name || group?.name || ''}: ${fileId}`,
             avatar: chat.avatar || '',
             group: chat.group || '',
             thumb: character ? context.getThumbnailUrl('avatar', character.avatar) : '',
             fileId,
+            fileName: chat.file_name,
             preview: toPreview(chat.mes),
             lastMes: Number(chat.last_mes) || 0,
             time: formatListTime(chat.last_mes),
@@ -331,6 +386,15 @@ export function scheduleRefresh(delay = 600) {
 export function filterChatList(text) {
     filterText = String(text ?? '');
     render();
+}
+
+/** Where a chat list row leads: { group, avatar, fileId, fileName } */
+function placeOf(row) {
+    if (row?.classList.contains('mst-channel')) {
+        return { group: row.dataset.group, avatar: '', fileId: row.dataset.file, fileName: `${row.dataset.file}.jsonl` };
+    }
+    const entry = row && entries.find(x => x.key === row.dataset.key);
+    return entry ? { group: entry.group, avatar: entry.avatar, fileId: entry.fileId, fileName: entry.fileName } : null;
 }
 
 export async function openEntry(entry) {
@@ -454,6 +518,14 @@ export function createChatList() {
             setCollapsed([...ids]);
             return;
         }
+        const more = /** @type {HTMLElement} */ (target.closest('.mst-chat-more'));
+        if (more) {
+            const place = placeOf(more.parentElement);
+            if (place) {
+                openItemMenu(more, place);
+            }
+            return;
+        }
         const teamHead = /** @type {HTMLElement} */ (target.closest('.mst-team-head'));
         if (teamHead) {
             const team = /** @type {HTMLElement} */ (teamHead.closest('.mst-team'));
@@ -473,6 +545,14 @@ export function createChatList() {
         const entry = item && entries.find(x => x.key === item.dataset.key);
         if (entry) {
             openEntry(entry);
+        }
+    });
+    body.addEventListener('contextmenu', (event) => {
+        const row = /** @type {HTMLElement} */ (event.target).closest?.('.mst-chat, .mst-channel');
+        const place = row && placeOf(row);
+        if (place) {
+            event.preventDefault();
+            openItemMenu(row.querySelector('.mst-chat-more') ?? row, place);
         }
     });
     body.addEventListener('keydown', (event) => {

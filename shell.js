@@ -282,7 +282,7 @@ function getFlyout() {
  * @param {{label: string, icon: string, run: () => void}[]} items
  * @param {'beside'|'below-end'} placement
  */
-function toggleFlyout(anchor, items, placement) {
+export function toggleFlyout(anchor, items, placement) {
     const flyout = getFlyout();
     if (!flyout.hidden && flyoutAnchor === anchor) {
         closeFlyout();
