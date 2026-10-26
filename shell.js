@@ -152,6 +152,15 @@ function createTitlebar() {
     document.body.append(bar);
 }
 
+/** Teams' square team picture with the team's initials */
+function buildTeamMonogram(name) {
+    const monogram = document.createElement('span');
+    monogram.className = 'mst-monogram mst-team-avatar';
+    monogram.textContent = getInitials(name);
+    monogram.dataset.mstColor = String(getMonogramColor(name));
+    return monogram;
+}
+
 /** Teams' colorful avatar palette; a name always gets the same color */
 const MONOGRAM_COLORS = 10;
 
@@ -495,12 +504,18 @@ export function refreshHeader() {
     const hasChat = !!(group || character);
     document.body.classList.toggle('mst-no-chat', !hasChat);
 
+    head.classList.toggle('mst-head-channel', !!group);
     if (group) {
-        avatar.classList.add('mst-avatar-group');
-        const icon = document.createElement('i');
-        icon.className = 'fa-solid fa-users';
-        avatar.append(icon);
-        name.textContent = group.name;
+        // a group is a team and its chat a channel: the team's square picture, then "Team › Channel"
+        avatar.append(buildTeamMonogram(group.name));
+        const chatId = context.getCurrentChatId() ?? '';
+        const prefix = `${group.name} - `;
+        const team = document.createElement('span');
+        team.className = 'mst-head-team';
+        team.textContent = group.name;
+        const channel = document.createElement('span');
+        channel.textContent = chatId.startsWith(prefix) ? chatId.slice(prefix.length) : chatId;
+        name.replaceChildren(team, channel);
     } else if (character) {
         const img = document.createElement('img');
         img.alt = '';

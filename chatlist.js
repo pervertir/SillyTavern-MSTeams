@@ -7,6 +7,7 @@ const LIST_ID = 'mst-list';
 /** SillyTavern's own pinned chats, kept in account storage by welcome-screen.js */
 const PINNED_KEY = 'pinnedChats';
 const COLLAPSED_KEY = 'mst-collapsed-sections';
+const COLLAPSED_TEAMS_KEY = 'mst-collapsed-teams';
 
 let getSettings = () => ({ recentMax: 50 });
 /** @type {Array<object>} */
@@ -29,17 +30,17 @@ function getPinned() {
     }
 }
 
-function getCollapsed() {
+function getCollapsed(key = COLLAPSED_KEY) {
     try {
-        return JSON.parse(localStorage.getItem(COLLAPSED_KEY) || '[]');
+        return JSON.parse(localStorage.getItem(key) || '[]');
     } catch {
         return [];
     }
 }
 
-function setCollapsed(list) {
+function setCollapsed(list, key = COLLAPSED_KEY) {
     try {
-        localStorage.setItem(COLLAPSED_KEY, JSON.stringify(list));
+        localStorage.setItem(key, JSON.stringify(list));
     } catch {
         // private windows can refuse storage; the section just won't remember
     }
@@ -119,7 +120,79 @@ function buildItem(entry) {
     return item;
 }
 
-function buildSection(id, label, items) {
+/** Teams' square team picture: the group's initials on a color picked from its name */
+function buildTeamAvatar(name) {
+    const avatar = document.createElement('span');
+    avatar.className = 'mst-team-avatar mst-monogram';
+    const words = String(name).trim().split(/\s+/).filter(Boolean);
+    avatar.textContent = ((words[0]?.[0] ?? '?') + (words.length > 1 ? words[words.length - 1][0] : '')).toUpperCase();
+    let hash = 0;
+    for (const char of String(name)) {
+        hash = (hash * 31 + char.codePointAt(0)) >>> 0;
+    }
+    avatar.dataset.mstColor = String(hash % 10);
+    return avatar;
+}
+
+/** A channel's name: SillyTavern names a group's chats "<group> - <date>", so the group part goes. */
+function channelName(group, chatId) {
+    const prefix = `${group.name} - `;
+    return chatId.startsWith(prefix) ? chatId.slice(prefix.length) : chatId;
+}
+
+/** Each group is a team, and each of its chats a channel under it. */
+function buildTeams(needle) {
+    const context = SillyTavern.getContext();
+    const collapsed = new Set(getCollapsed(COLLAPSED_TEAMS_KEY));
+    const groups = [...context.groups].sort((a, b) => (Number(b.date_last_chat) || 0) - (Number(a.date_last_chat) || 0));
+    const teams = [];
+    for (const group of groups) {
+        const chats = Array.isArray(group.chats) ? group.chats : [];
+        const teamMatches = !needle || group.name.toLowerCase().includes(needle);
+        const channels = chats.filter(chatId => teamMatches || channelName(group, chatId).toLowerCase().includes(needle));
+        if (!teamMatches && !channels.length) {
+            continue;
+        }
+        const id = String(group.id);
+        const team = document.createElement('div');
+        team.className = 'mst-team';
+        team.dataset.group = id;
+        const isCollapsed = collapsed.has(id) && !needle;
+        team.classList.toggle('mst-team-collapsed', isCollapsed);
+
+        const head = document.createElement('div');
+        head.className = 'mst-team-head';
+        head.setAttribute('role', 'button');
+        head.tabIndex = 0;
+        head.setAttribute('aria-expanded', String(!isCollapsed));
+        head.title = group.name;
+        const chevron = document.createElement('i');
+        chevron.className = 'fa-solid fa-chevron-down mst-team-chevron';
+        const name = document.createElement('span');
+        name.className = 'mst-team-name';
+        name.textContent = group.name;
+        head.append(chevron, buildTeamAvatar(group.name), name);
+
+        const list = document.createElement('div');
+        list.className = 'mst-channels';
+        for (const chatId of channels) {
+            const channel = document.createElement('div');
+            channel.className = 'mst-channel';
+            channel.setAttribute('role', 'button');
+            channel.tabIndex = 0;
+            channel.dataset.group = id;
+            channel.dataset.file = chatId;
+            channel.title = chatId;
+            channel.textContent = channelName(group, chatId);
+            list.append(channel);
+        }
+        team.append(head, list);
+        teams.push(team);
+    }
+    return teams;
+}
+
+function buildSection(id, label, items, children) {
     const collapsed = getCollapsed().includes(id);
     const section = document.createElement('section');
     section.className = 'mst-section';
@@ -138,7 +211,7 @@ function buildSection(id, label, items) {
 
     const body = document.createElement('div');
     body.className = 'mst-section-items';
-    body.append(...items.map(buildItem));
+    body.append(...(children ?? items.map(buildItem)));
     section.append(head, body);
     return section;
 }
@@ -153,21 +226,27 @@ function render() {
         ? entries.filter(entry => entry.name.toLowerCase().includes(needle) || entry.preview.toLowerCase().includes(needle) || entry.fileId.toLowerCase().includes(needle))
         : entries;
 
-    const pinned = visible.filter(entry => entry.pinned);
-    const recent = visible.filter(entry => !entry.pinned);
+    // Favorites are SillyTavern's pinned chats; group chats otherwise live under their team
+    const favorites = visible.filter(entry => entry.pinned);
+    const chats = visible.filter(entry => !entry.pinned && !entry.group);
+    const teams = buildTeams(needle);
     const sections = [];
-    if (pinned.length) {
-        sections.push(buildSection('pinned', t('Pinned'), pinned));
+    if (favorites.length) {
+        sections.push(buildSection('pinned', t('Favorites'), favorites));
     }
-    sections.push(buildSection('recent', t('Recent'), recent));
+    sections.push(buildSection('recent', t('Chats'), chats));
+    if (teams.length) {
+        sections.push(buildSection('teams', t('Teams and channels'), [], teams));
+    }
     body.replaceChildren(...sections);
 
-    if (!visible.length) {
+    if (!visible.length && !teams.length) {
         const empty = document.createElement('div');
         empty.className = 'mst-list-empty';
-        empty.textContent = needle ? t('No chats match your search') : t('No chats yet. Pick someone from Characters to start one.');
+        empty.textContent = needle ? t('No chats match your search') : t('No chats yet. Start one with the pen button above.');
         body.append(empty);
     }
+    markCurrentChat();
 }
 
 /** Moves the highlight to the open chat without fetching the list again. */
@@ -175,6 +254,12 @@ export function markCurrentChat() {
     const list = document.getElementById(LIST_ID);
     if (!list) {
         return;
+    }
+    const context = SillyTavern.getContext();
+    for (const channel of list.querySelectorAll('.mst-channel')) {
+        const current = String(context.groupId) === channel.dataset.group && context.getCurrentChatId() === channel.dataset.file;
+        channel.classList.toggle('mst-chat-active', current);
+        channel.toggleAttribute('aria-current', current);
     }
     for (const item of list.querySelectorAll('.mst-chat')) {
         const entry = entries.find(x => x.key === item.dataset.key);
@@ -369,6 +454,21 @@ export function createChatList() {
             setCollapsed([...ids]);
             return;
         }
+        const teamHead = /** @type {HTMLElement} */ (target.closest('.mst-team-head'));
+        if (teamHead) {
+            const team = /** @type {HTMLElement} */ (teamHead.closest('.mst-team'));
+            const collapsed = team.classList.toggle('mst-team-collapsed');
+            teamHead.setAttribute('aria-expanded', String(!collapsed));
+            const ids = new Set(getCollapsed(COLLAPSED_TEAMS_KEY));
+            collapsed ? ids.add(team.dataset.group) : ids.delete(team.dataset.group);
+            setCollapsed([...ids], COLLAPSED_TEAMS_KEY);
+            return;
+        }
+        const channel = /** @type {HTMLElement} */ (target.closest('.mst-channel'));
+        if (channel) {
+            openEntry({ group: channel.dataset.group, avatar: '', fileId: channel.dataset.file });
+            return;
+        }
         const item = target.closest('.mst-chat');
         const entry = item && entries.find(x => x.key === item.dataset.key);
         if (entry) {
@@ -376,7 +476,7 @@ export function createChatList() {
         }
     });
     body.addEventListener('keydown', (event) => {
-        const item = /** @type {HTMLElement} */ (event.target).closest?.('.mst-chat');
+        const item = /** @type {HTMLElement} */ (event.target).closest?.('.mst-chat, .mst-channel, .mst-team-head');
         if (item && (event.key === 'Enter' || event.key === ' ')) {
             event.preventDefault();
             item.click();

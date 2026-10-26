@@ -41,8 +41,15 @@ export function refreshTitle() {
     const context = SillyTavern.getContext();
     const group = context.groupId ? context.groups.find(x => String(x.id) === String(context.groupId)) : null;
     const character = !group && context.characterId !== undefined ? context.characters[context.characterId] : null;
-    const name = group?.name || character?.name;
-    document.title = [t('Chat'), name, TITLE_SUFFIX].filter(Boolean).join(' | ');
+    if (group) {
+        // a group is a team and its chat a channel, titled like a Teams channel tab
+        const chatId = context.getCurrentChatId() ?? '';
+        const prefix = `${group.name} - `;
+        const channel = chatId.startsWith(prefix) ? chatId.slice(prefix.length) : chatId;
+        document.title = [channel, group.name, TITLE_SUFFIX].filter(Boolean).join(' | ');
+        return;
+    }
+    document.title = [t('Chat'), character?.name, TITLE_SUFFIX].filter(Boolean).join(' | ');
 }
 
 function applyPlaceholder(textarea) {

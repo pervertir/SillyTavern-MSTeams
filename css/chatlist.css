@@ -178,3 +178,80 @@ body.ms-teams .mst-list-empty {
     font-size: var(--mst-text-sm);
     text-align: center;
 }
+
+/* Teams and channels: each group is a team, its chats are channels */
+body.ms-teams .mst-team-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 4px 12px 4px 8px;
+    box-sizing: border-box;
+    border-radius: var(--mst-radius-md);
+    color: var(--mst-fg);
+    cursor: pointer;
+    transition: background-color var(--mst-fast) var(--mst-ease);
+}
+
+body.ms-teams .mst-team-head:hover {
+    background: var(--mst-hover);
+}
+
+body.ms-teams .mst-team-chevron {
+    width: 12px;
+    font-size: 10px;
+    color: var(--mst-fg-3);
+    transition: transform var(--mst-normal) var(--mst-ease);
+}
+
+body.ms-teams .mst-team-collapsed .mst-team-chevron {
+    transform: rotate(-90deg);
+}
+
+body.ms-teams .mst-monogram.mst-team-avatar {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--mst-radius-md);
+    font-size: 11px;
+}
+
+body.ms-teams .mst-team-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+body.ms-teams .mst-team-collapsed .mst-channels {
+    display: none;
+}
+
+body.ms-teams .mst-channel {
+    display: block;
+    min-height: 32px;
+    padding: 6px 12px 6px 64px;
+    box-sizing: border-box;
+    overflow: hidden;
+    border-radius: var(--mst-radius-md);
+    color: var(--mst-fg-2);
+    font-size: var(--mst-text);
+    line-height: 20px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color var(--mst-fast) var(--mst-ease);
+}
+
+body.ms-teams .mst-channel:hover {
+    background: var(--mst-hover);
+}
+
+body.ms-teams .mst-channel.mst-chat-active {
+    background: var(--mst-selected);
+    box-shadow: var(--mst-shadow-2);
+    color: var(--mst-fg);
+    font-weight: 600;
+}

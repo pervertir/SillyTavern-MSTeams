@@ -643,3 +643,24 @@ body.ms-teams.documentstyle #chat .mes {
 body.ms-teams.documentstyle #chat .mes .mes_text {
     padding: 0;
 }
+
+/* A channel's header: the team's square picture and "Team › Channel" */
+body.ms-teams #mst-chat-head .mst-avatar:has(.mst-team-avatar) {
+    background: none;
+}
+
+body.ms-teams #mst-chat-head .mst-team-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+}
+
+body.ms-teams .mst-head-team {
+    color: var(--mst-fg-3);
+    font-weight: 400;
+}
+
+body.ms-teams .mst-head-team::after {
+    content: '›';
+    margin: 0 6px;
+}

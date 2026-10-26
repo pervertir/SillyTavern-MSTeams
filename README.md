@@ -28,7 +28,7 @@ A SillyTavern extension that makes the whole app look and work like Microsoft Te
   | Apps (+ in a box), at the bottom | Extensions |
 
   Tooltips give the Teams name and shortcut, so the table above is the key to what each icon opens. App names under the icons are off by default, as in Teams, and can be turned on in the settings. Each menu opens as a panel in the chat list's place.
-- **Chat list.** Your recent chats, with Pinned and Recent sections like Teams. It uses SillyTavern's own recent chats and pins, so pinning a chat on the welcome screen pins it here too. The pen button starts a new chat from the character list.
+- **Chat list.** Laid out like Teams: **Favorites** (SillyTavern's pinned chats, so pinning a chat on the welcome screen adds it here), **Chats** with your recent one-on-one chats, and **Teams and channels**, where each group chat is a team with a square monogram and each of its chats is a channel under it. Teams collapse and remember it. The pen button starts a new chat.
 - **Chat header.** The character's picture and name, which open their card, Teams' Chat, Shared and + tabs, and the video, call and … buttons: video starts a new chat, call opens the chat history, and … has those plus View profile and Close chat.
 - **Messages.** Everyone else's messages sit on the left with their picture, name and time. Yours sit on the right in Teams lavender. Times read the Teams way: `10:42 AM`, `Yesterday 10:42 AM` or `10/21 3:15 PM`. Message actions appear as a toolbar when you hover a message, and swipes become a small pager under the last reply.
 - **Compose box.** "Type a message" with Teams' emoji (extensions menu) and + (chat options) buttons and the send arrow on the right.
