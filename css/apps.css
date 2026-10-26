@@ -512,13 +512,14 @@ body.ms-teams .mst-doc-icon {
     align-items: center;
     justify-content: center;
     flex: none;
-    width: 28px;
+    width: 32px;
     height: 32px;
-    border-radius: 3px 8px 3px 3px;
-    background: linear-gradient(135deg, #2b7cd3, #185abd);
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 700;
+}
+
+body.ms-teams .mst-doc-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 body.ms-teams .mst-doc-text {
@@ -690,10 +691,8 @@ body.ms-teams .mst-doc-blank h2 {
 }
 
 body.ms-teams .mst-doc-icon.mst-doc-icon-big {
-    width: 48px;
-    height: 56px;
-    font-size: 24px;
-    border-radius: 4px 14px 4px 4px;
+    width: 64px;
+    height: 64px;
 }
 
 /* The page */

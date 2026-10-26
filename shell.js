@@ -98,7 +98,34 @@ function createTitlebar() {
     forward.id = 'mst-nav-forward';
     forward.addEventListener('click', () => travel(1));
     nav.append(back, forward);
-    left.append(railToggle, nav);
+    // Microsoft's app launcher: every app, rail or not
+    const waffle = document.createElement('button');
+    waffle.type = 'button';
+    waffle.className = 'mst-icon-button mst-waffle';
+    waffle.title = t('App launcher');
+    waffle.setAttribute('aria-label', t('App launcher'));
+    for (let i = 0; i < 9; i++) {
+        waffle.append(document.createElement('span'));
+    }
+    waffle.addEventListener('click', () => toggleFlyout(waffle, [
+        { label: 'Activity', icon: 'fa-regular fa-bell', run: () => toggleDrawer('ai-config-button') },
+        {
+            label: 'Chat', icon: 'fa-regular fa-comments', run: () => {
+                closeDrawers();
+                document.body.classList.remove('mst-m-chat');
+            },
+        },
+        { label: 'Calendar', icon: 'fa-regular fa-calendar', run: () => toggleDrawer('sys-settings-button') },
+        { label: 'Calls', icon: 'fa-solid fa-phone', run: () => toggleDrawer('advanced-formatting-button') },
+        { label: 'OneDrive', icon: 'fa-solid fa-cloud', run: () => toggleDrawer('WI-SP-button') },
+        { label: 'Copilot', icon: 'fa-regular fa-comment-dots', run: () => toggleDrawer('user-settings-button') },
+        ...MORE_APPS.map(({ id, label, icon }) => ({ label, icon, run: () => toggleDrawer(id) })),
+        { label: 'Apps', icon: 'fa-regular fa-square-plus', run: () => toggleDrawer('extensions-settings-button') },
+    ], 'beside'));
+    const leftTools = document.createElement('div');
+    leftTools.className = 'mst-tb-launch';
+    leftTools.append(waffle, railToggle);
+    left.append(leftTools, nav);
 
     const search = document.createElement('label');
     search.className = 'mst-search';

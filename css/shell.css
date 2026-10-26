@@ -34,7 +34,7 @@ body.ms-teams.mst-rail-hidden #top-settings-holder {
     visibility: hidden;
 }
 
-body.ms-teams.mst-rail-hidden .mst-tb-rail {
+body.ms-teams.mst-rail-hidden .mst-tb-launch {
     margin-left: 0;
 }
 
@@ -143,9 +143,28 @@ body.ms-teams .mst-tb-left {
     min-width: 0;
 }
 
-/* the rail button sits over the rail, the arrows by the search box, as in Teams */
-body.ms-teams .mst-tb-rail {
+/* the waffle sits over the rail with the rail button beside it, the arrows by the search box */
+body.ms-teams .mst-tb-launch {
+    display: flex;
+    align-items: center;
+    gap: 4px;
     margin-left: calc((var(--mst-rail-w) - 32px) / 2 - 12px);
+}
+
+body.ms-teams button.mst-waffle {
+    display: grid;
+    grid-template-columns: repeat(3, 4px);
+    gap: 3px;
+    place-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+body.ms-teams button.mst-waffle span {
+    width: 4px;
+    height: 4px;
+    border-radius: 1px;
+    background: currentColor;
 }
 
 body.ms-teams .mst-tb-nav {

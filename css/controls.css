@@ -448,3 +448,35 @@ body.ms-teams .mst-shortcuts kbd {
 body.ms-teams :is(#lm_button_panel_pin_div, #WI_panel_pin_div, #rm_button_panel_pin_div) {
     display: none;
 }
+
+/* select2's typing box sits inside the dropdown's own field: no second box around it */
+body.ms-teams .select2-container .select2-search__field,
+body.ms-teams .select2-container .select2-search__field:focus {
+    height: 22px;
+    min-height: 0;
+    margin: 4px 0 0;
+    padding: 0 4px;
+    border: none !important;
+    border-radius: 0;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: var(--mst-fg);
+    font-family: var(--mst-font);
+    font-size: var(--mst-text);
+    line-height: 22px;
+    resize: none;
+}
+
+body.ms-teams .select2-container .select2-selection--multiple {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    min-height: 32px;
+    padding: 2px 6px;
+}
+
+body.ms-teams .select2-container--focus .select2-selection--multiple,
+body.ms-teams .select2-container--open .select2-selection--multiple {
+    border-bottom-color: var(--mst-brand);
+    box-shadow: inset 0 -1px 0 var(--mst-brand);
+}

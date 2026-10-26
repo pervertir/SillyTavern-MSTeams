@@ -250,6 +250,18 @@ function buildCalls() {
 /* OneDrive ------------------------------------------------------------------------------ */
 
 const WORLD_SELECT = '#world_editor_select';
+/** Word's own document icon, linked from Microsoft's icon CDN (the one Fluent UI apps use) */
+const WORD_ICON = 'https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/assets/brand-icons/product/svg/word_48x1.svg';
+
+function wordIcon(className = 'mst-doc-icon') {
+    const icon = el('span', className);
+    const img = el('img');
+    img.src = WORD_ICON;
+    img.alt = '';
+    img.decoding = 'async';
+    icon.append(img);
+    return icon;
+}
 
 /** Opens a lorebook the way SillyTavern's own picker does (it's a select2 box). */
 function openLorebook(value) {
@@ -269,7 +281,7 @@ function renderDocuments(list, title) {
         const item = el('button', 'mst-doc');
         item.type = 'button';
         item.classList.toggle('mst-doc-active', option.selected);
-        const icon = el('span', 'mst-doc-icon', 'W');
+        const icon = wordIcon();
         const text = el('span', 'mst-doc-text');
         text.append(el('span', 'mst-doc-name', option.textContent.trim()), el('span', 'mst-doc-kind', t('Word document')));
         item.append(icon, text);
@@ -356,7 +368,7 @@ function buildOneDrive() {
 
     // a note on the empty page, until a document is open
     const blank = el('div', 'mst-doc-blank');
-    blank.append(el('span', 'mst-doc-icon mst-doc-icon-big', 'W'), el('h2', '', t('Open a document')), el('p', '', t('Pick one from My files, or create a new one.')));
+    blank.append(wordIcon('mst-doc-icon mst-doc-icon-big'), el('h2', '', t('Open a document')), el('p', '', t('Pick one from My files, or create a new one.')));
     entries?.before(blank);
 
     const select = document.querySelector(WORLD_SELECT);
