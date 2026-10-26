@@ -56,11 +56,12 @@ function toggleDrawer(drawerId) {
     document.querySelector(`#${drawerId} > .drawer-toggle`)?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 }
 
-/** Closes every open drawer that isn't pinned open. */
+/** Closes every open drawer. */
 export function closeDrawers() {
     for (const content of document.querySelectorAll('#top-settings-holder .drawer-content.openDrawer')) {
         if (content.classList.contains('pinnedOpen')) {
-            continue;
+            // Teams has no pinned panels and the theme hides the pins, so a pinned one gets unpinned
+            /** @type {HTMLInputElement} */ (content.querySelector('input[id$="_panel_pin"]'))?.click();
         }
         const drawer = content.closest('.drawer');
         if (drawer?.id) {

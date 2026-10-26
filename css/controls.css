@@ -80,7 +80,7 @@ body.ms-teams textarea:not(#send_textarea),
 body.ms-teams select,
 body.ms-teams input[type="text"],
 body.ms-teams input[type="number"],
-body.ms-teams input[type="search"]:not(#mst-search-input),
+body.ms-teams input[type="search"]:not(.mst-search input),
 body.ms-teams input[type="password"],
 body.ms-teams input[type="url"] {
     border: 1px solid var(--mst-stroke);
@@ -98,7 +98,7 @@ body.ms-teams textarea:not(#send_textarea):focus,
 body.ms-teams select:focus,
 body.ms-teams input[type="text"]:focus,
 body.ms-teams input[type="number"]:focus,
-body.ms-teams input[type="search"]:not(#mst-search-input):focus,
+body.ms-teams input[type="search"]:not(.mst-search input):focus,
 body.ms-teams input[type="password"]:focus,
 body.ms-teams input[type="url"]:focus {
     border-bottom-color: var(--mst-brand);
@@ -442,4 +442,9 @@ body.ms-teams .mst-shortcuts kbd {
     font-family: var(--mst-font);
     font-size: var(--mst-text-sm);
     box-shadow: none;
+}
+
+/* Panel pins have no Teams equivalent */
+body.ms-teams :is(#lm_button_panel_pin_div, #WI_panel_pin_div, #rm_button_panel_pin_div) {
+    display: none;
 }

@@ -1,0 +1,653 @@
+/* The rail apps as Teams apps (apps.js builds the pieces). Calendar, Calls, OneDrive, Copilot
+   and Apps fill the content area like Teams apps; Activity is a pane beside the chat. */
+
+.mst-app-header,
+.mst-stage,
+.mst-copilot-intro {
+    display: none;
+}
+
+/* Full-screen apps */
+body.ms-teams #top-settings-holder :is(#rm_api_block, #WorldInfo, #user-settings-block, #rm_extensions_block).drawer-content {
+    --mst-panel-w: calc(100vw - var(--mst-rail-w));
+    --mst-panel-max: calc(100vw - var(--mst-rail-w));
+}
+
+body.ms-teams #top-settings-holder :is(#rm_api_block, #AdvancedFormatting, #WorldInfo, #user-settings-block, #rm_extensions_block).drawer-content {
+    background: var(--mst-canvas);
+    box-shadow: none;
+}
+
+/* Activity: the feed pane next to the open chat */
+body.ms-teams #top-settings-holder #left-nav-panel.drawer-content {
+    --mst-panel-w: 400px;
+    box-shadow: none;
+    border-right: 1px solid var(--mst-stroke-2);
+}
+
+/* App header bar */
+body.ms-teams .mst-app-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: -12px;
+    height: 56px;
+    margin: -12px -16px 12px calc(-1 * var(--mst-pad-l, 16px));
+    padding: 0 16px 0 20px;
+    box-sizing: border-box;
+    background: inherit;
+    background-color: var(--mst-app-bg, var(--mst-canvas));
+    border-bottom: 1px solid var(--mst-stroke-2);
+    z-index: 6;
+    flex: none;
+}
+
+body.ms-teams #left-nav-panel {
+    --mst-app-bg: var(--mst-list);
+}
+
+body.ms-teams #left-nav-panel .mst-app-header {
+    border-bottom: none;
+}
+
+body.ms-teams .mst-app-title {
+    margin: 0;
+    font-size: var(--mst-text-lg);
+    line-height: 28px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+body.ms-teams .mst-app-tools {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+body.ms-teams .mst-app-tools-end {
+    margin-left: auto;
+}
+
+body.ms-teams .mst-tool {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 12px;
+    margin: 0;
+    box-sizing: border-box;
+    border: 1px solid var(--mst-stroke);
+    border-radius: var(--mst-radius);
+    background: var(--mst-card);
+    color: var(--mst-fg);
+    font: inherit;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+body.ms-teams .mst-tool:hover {
+    background: var(--mst-list);
+}
+
+body.ms-teams .mst-tool.mst-tool-primary {
+    border-color: transparent;
+    background: var(--mst-brand);
+    color: var(--mst-on-brand);
+}
+
+body.ms-teams .mst-tool.mst-tool-primary:hover {
+    background: var(--mst-brand-hover);
+}
+
+body.ms-teams .mst-tool:disabled {
+    border-color: transparent;
+    background: var(--mst-subtle-pressed);
+    color: var(--mst-fg-disabled);
+    cursor: default;
+}
+
+body.ms-teams .mst-tool.mst-tool-icon {
+    width: 32px;
+    padding: 0;
+    justify-content: center;
+    border-color: transparent;
+    background: none;
+}
+
+body.ms-teams .mst-tool.mst-tool-icon:hover {
+    background: var(--mst-subtle-hover);
+    color: var(--mst-brand-fg);
+}
+
+body.ms-teams .mst-tool.mst-tool-flip {
+    flex-direction: row-reverse;
+    border-color: transparent;
+    background: none;
+    font-weight: 600;
+}
+
+body.ms-teams .mst-tool .mst-fluent {
+    flex: none;
+}
+
+/* the menus' own title rows, now in the header */
+body.ms-teams #rm_api_block > #title_api,
+body.ms-teams #rm_extensions_block .extensions_block > .wide100p:first-child > h3,
+body.ms-teams #AdvancedFormatting > .flex-container:first-of-type > h3,
+body.ms-teams #user-settings-block [name="userSettingsRowOne"] h3 {
+    display: none;
+}
+
+/* Copilot's prompt box is the settings search, so SillyTavern's own box steps aside */
+body.ms-teams #user-settings-block #settingsSearch {
+    display: none;
+}
+
+/* Calendar: a week on the left, the connection settings as the meeting's details on the right */
+body.ms-teams #top-settings-holder #rm_api_block.drawer-content {
+    --mst-details-w: 440px;
+    --mst-pad-l: calc(100vw - var(--mst-rail-w) - var(--mst-details-w) + 20px);
+    padding-left: var(--mst-pad-l);
+}
+
+body.ms-teams #rm_api_block .mst-calendar {
+    display: block;
+    position: fixed;
+    top: calc(var(--mst-titlebar-h) + 56px);
+    left: var(--mst-rail-w);
+    width: calc(100vw - var(--mst-rail-w) - var(--mst-details-w) - 1px);
+    bottom: 0;
+    overflow: auto;
+    border-right: 1px solid var(--mst-stroke-2);
+    background: var(--mst-canvas);
+}
+
+body.ms-teams .mst-cal-month {
+    font-size: var(--mst-text-md);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+body.ms-teams .mst-cal-grid {
+    display: grid;
+    grid-template-columns: 72px repeat(5, minmax(96px, 1fr));
+    grid-template-rows: 64px repeat(10, minmax(52px, 1fr));
+    min-height: 100%;
+    position: relative;
+}
+
+body.ms-teams .mst-cal-corner,
+body.ms-teams .mst-cal-dayhead {
+    position: sticky;
+    top: 0;
+    background: var(--mst-canvas);
+    border-bottom: 1px solid var(--mst-stroke-2);
+    z-index: 2;
+}
+
+body.ms-teams .mst-cal-dayhead {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 12px;
+    border-left: 1px solid var(--mst-stroke-3);
+    color: var(--mst-fg-3);
+}
+
+body.ms-teams .mst-cal-date {
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: 600;
+    color: var(--mst-fg-2);
+}
+
+body.ms-teams .mst-cal-weekday {
+    font-size: var(--mst-text-sm);
+}
+
+body.ms-teams .mst-cal-dayhead.mst-cal-today {
+    box-shadow: inset 0 -3px 0 var(--mst-brand-fg);
+}
+
+body.ms-teams .mst-cal-dayhead.mst-cal-today .mst-cal-date,
+body.ms-teams .mst-cal-dayhead.mst-cal-today .mst-cal-weekday {
+    color: var(--mst-brand-fg);
+}
+
+body.ms-teams .mst-cal-hour {
+    padding: 4px 8px 0 0;
+    font-size: var(--mst-text-sm);
+    color: var(--mst-fg-3);
+    text-align: right;
+}
+
+body.ms-teams .mst-cal-cell {
+    border-left: 1px solid var(--mst-stroke-3);
+    border-top: 1px solid var(--mst-stroke-3);
+}
+
+body.ms-teams .mst-cal-cell.mst-cal-today {
+    background: color-mix(in srgb, var(--mst-brand-soft) 35%, transparent);
+}
+
+body.ms-teams .mst-cal-event {
+    grid-column: var(--mst-col);
+    grid-row: var(--mst-row);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    margin: 2px 4px;
+    padding: 6px 8px;
+    border: none;
+    border-left: 4px solid var(--mst-brand);
+    border-radius: var(--mst-radius);
+    background: var(--mst-brand-soft);
+    color: var(--mst-fg);
+    font: inherit;
+    font-size: var(--mst-text-sm);
+    line-height: 16px;
+    text-align: left;
+    overflow: hidden;
+    cursor: pointer;
+    z-index: 1;
+}
+
+body.ms-teams .mst-cal-event strong {
+    font-weight: 600;
+}
+
+body.ms-teams .mst-cal-event span {
+    color: var(--mst-fg-3);
+}
+
+body.ms-teams .mst-cal-event.mst-cal-event-off {
+    border-left-color: var(--mst-danger);
+    background: var(--mst-danger-soft);
+}
+
+body.ms-teams .mst-cal-now {
+    grid-column: var(--mst-col);
+    grid-row: 2 / -1;
+    position: relative;
+    pointer-events: none;
+    z-index: 3;
+}
+
+body.ms-teams .mst-cal-now::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    right: 0;
+    top: calc(var(--mst-now) * 100%);
+    height: 2px;
+    background: #c4314b;
+}
+
+body.ms-teams .mst-cal-now::after {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: calc(var(--mst-now) * 100% - 4px);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #c4314b;
+}
+
+/* Calls: the dial pad pane on the left */
+body.ms-teams #top-settings-holder #AdvancedFormatting.drawer-content {
+    --mst-pad-l: 344px;
+    padding-left: var(--mst-pad-l);
+}
+
+body.ms-teams #AdvancedFormatting .mst-dialpad {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: fixed;
+    top: calc(var(--mst-titlebar-h) + 56px);
+    left: var(--mst-rail-w);
+    width: 320px;
+    bottom: 0;
+    padding: 16px 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    border-right: 1px solid var(--mst-stroke-2);
+    background: var(--mst-list);
+}
+
+body.ms-teams .mst-dial-section {
+    margin: 4px 0 0;
+    font-size: var(--mst-text);
+    font-weight: 600;
+}
+
+body.ms-teams .mst-dial-keys {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+body.ms-teams .mst-dial-key {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 52px;
+    margin: 0;
+    border: none;
+    border-radius: var(--mst-radius-md);
+    background: var(--mst-card);
+    box-shadow: var(--mst-shadow-2);
+    color: var(--mst-fg);
+    font: inherit;
+    cursor: pointer;
+}
+
+body.ms-teams .mst-dial-key:hover {
+    background: var(--mst-hover);
+    color: var(--mst-brand-fg);
+}
+
+body.ms-teams .mst-dial-digit {
+    font-size: 20px;
+    line-height: 24px;
+}
+
+body.ms-teams .mst-dial-letters {
+    min-height: 12px;
+    font-size: var(--mst-text-xs);
+    line-height: 12px;
+    color: var(--mst-fg-3);
+    letter-spacing: 0.08em;
+}
+
+body.ms-teams .mst-dial-call {
+    justify-content: center;
+    width: 100%;
+}
+
+body.ms-teams .mst-dial-empty {
+    margin: 0;
+    color: var(--mst-fg-3);
+    font-size: var(--mst-text-sm);
+}
+
+/* OneDrive: My files */
+body.ms-teams .mst-crumbs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--mst-text-md);
+    color: var(--mst-fg-3);
+    white-space: nowrap;
+}
+
+body.ms-teams .mst-crumb-here {
+    color: var(--mst-fg);
+    font-weight: 600;
+}
+
+body.ms-teams #WorldInfo > .flex-container:first-of-type h3 {
+    display: none;
+}
+
+body.ms-teams .mst-file-columns {
+    display: none;
+}
+
+body.ms-teams #WorldInfo .mst-file-columns {
+    display: grid;
+    grid-template-columns: 2.5fr 1fr 1.2fr 0.8fr 0.8fr;
+    gap: 12px;
+    margin-top: 12px;
+    padding: 8px 12px 8px 44px;
+    border-bottom: 1px solid var(--mst-stroke-2);
+    color: var(--mst-fg-3);
+    font-size: var(--mst-text-sm);
+}
+
+body.ms-teams #WorldInfo .mst-file-columns span:first-child::after {
+    content: ' ↑';
+}
+
+body.ms-teams #WorldInfo .world_entry {
+    position: relative;
+    padding-left: 32px;
+    border: none;
+    border-bottom: 1px solid var(--mst-stroke-3);
+    border-radius: 0;
+    background: none;
+}
+
+/* a document icon in front of each entry, like a file row */
+body.ms-teams #WorldInfo .world_entry::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 12px;
+    width: 20px;
+    height: 20px;
+    background: var(--mst-brand-fg);
+    -webkit-mask: var(--mst-icon-document) center / 20px 20px no-repeat;
+    mask: var(--mst-icon-document) center / 20px 20px no-repeat;
+}
+
+body.ms-teams #WorldInfo .world_entry:hover {
+    background: var(--mst-list);
+}
+
+/* Copilot: greeting and prompt box, then the settings */
+body.ms-teams #user-settings-block .mst-copilot-intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 24px 16px 32px;
+    text-align: center;
+}
+
+body.ms-teams .mst-copilot-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: conic-gradient(from 200deg, #0fb5ae, #4f6bed, #b93fde, #e74a7c, #f3a73b, #0fb5ae);
+    -webkit-mask: var(--mst-icon-copilot) center / 44px 44px no-repeat;
+    mask: var(--mst-icon-copilot) center / 44px 44px no-repeat;
+}
+
+body.ms-teams .mst-copilot-hello {
+    margin: 4px 0 0;
+    font-size: 28px;
+    line-height: 36px;
+    font-weight: 600;
+    background: linear-gradient(90deg, #4f6bed, #b93fde 55%, #e74a7c);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+body.ms-teams .mst-copilot-sub {
+    margin: 0 0 12px;
+    color: var(--mst-fg-3);
+}
+
+body.ms-teams .mst-copilot-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: min(680px, 100%);
+    height: 52px;
+    padding: 0 16px;
+    box-sizing: border-box;
+    border: 1px solid var(--mst-stroke-2);
+    border-radius: var(--mst-radius-lg);
+    background: var(--mst-input);
+    box-shadow: var(--mst-shadow-4);
+    color: var(--mst-fg-3);
+    cursor: text;
+}
+
+body.ms-teams .mst-copilot-box:focus-within {
+    border-color: var(--mst-brand);
+}
+
+body.ms-teams .mst-copilot-box input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    box-shadow: none;
+    color: var(--mst-fg);
+    font: inherit;
+    font-size: var(--mst-text-md);
+}
+
+/* Apps: the store's side menu and app cards */
+body.ms-teams #top-settings-holder #rm_extensions_block.drawer-content {
+    --mst-pad-l: 264px;
+    padding-left: var(--mst-pad-l);
+}
+
+body.ms-teams #rm_extensions_block .mst-store-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    position: fixed;
+    top: calc(var(--mst-titlebar-h) + 56px);
+    left: var(--mst-rail-w);
+    width: 240px;
+    bottom: 0;
+    padding: 12px 8px;
+    box-sizing: border-box;
+    border-right: 1px solid var(--mst-stroke-2);
+    background: var(--mst-list);
+}
+
+body.ms-teams .mst-store-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 36px;
+    padding: 0 12px;
+    margin: 0;
+    border: none;
+    border-radius: var(--mst-radius-md);
+    background: none;
+    color: var(--mst-fg-2);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+body.ms-teams .mst-store-link:hover {
+    background: var(--mst-hover);
+}
+
+body.ms-teams .mst-store-link.mst-store-active {
+    background: var(--mst-selected);
+    box-shadow: var(--mst-shadow-2);
+    color: var(--mst-brand-fg);
+    font-weight: 600;
+}
+
+body.ms-teams .mst-app-search {
+    width: min(360px, 40vw);
+    flex: none;
+    margin: 0;
+    border-color: var(--mst-stroke);
+}
+
+body.ms-teams #rm_extensions_block .extensions_block {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+    align-items: start;
+}
+
+body.ms-teams #rm_extensions_block .extensions_block > .wide100p:first-child {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+}
+
+body.ms-teams #rm_extensions_block :is(#extensions_settings, #extensions_settings2, .extension_container) {
+    display: contents;
+}
+
+/* anything that isn't an app card (like the old Extras API row) takes a whole row */
+body.ms-teams #rm_extensions_block .extensions_block > :not(#extensions_settings, #extensions_settings2) {
+    grid-column: 1 / -1;
+}
+
+body.ms-teams #rm_extensions_block :is(.extension_container, #extensions_settings, #extensions_settings2) > :not(.extension_container) {
+    min-width: 0;
+    border: 1px solid var(--mst-stroke-3);
+    border-radius: var(--mst-radius-lg);
+    background: var(--mst-card);
+    box-shadow: var(--mst-shadow-2);
+}
+
+body.ms-teams #rm_extensions_block :is(.extension_container, #extensions_settings, #extensions_settings2) > :has(.inline-drawer-icon.up) {
+    grid-column: 1 / -1;
+}
+
+body.ms-teams #rm_extensions_block .mst-hidden-app {
+    display: none;
+}
+
+body.ms-teams #rm_extensions_block .extensions_block .inline-drawer {
+    margin: 0;
+    border: none;
+    background: none;
+    box-shadow: none;
+}
+
+/* an app tile in front of each app's name */
+body.ms-teams #rm_extensions_block .extensions_block .inline-drawer > .inline-drawer-header {
+    gap: 12px;
+    min-height: 56px;
+    padding: 8px 12px;
+}
+
+body.ms-teams #rm_extensions_block .extensions_block .inline-drawer > .inline-drawer-header::before {
+    content: '';
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--mst-radius-md);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), transparent 60%), var(--mst-brand);
+}
+
+body.ms-teams #rm_extensions_block .extensions_block .inline-drawer > .inline-drawer-header > :first-child {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Phones: no side panes; each app is its header and content */
+@media screen and (max-width: 1000px) {
+    body.ms-teams .mst-stage {
+        display: none !important;
+    }
+
+    body.ms-teams #top-settings-holder :is(#rm_api_block, #AdvancedFormatting, #rm_extensions_block).drawer-content {
+        --mst-pad-l: 12px;
+        padding-left: 12px;
+    }
+
+    body.ms-teams .mst-app-header {
+        margin-right: -12px;
+        padding: 0 8px 0 12px;
+        gap: 8px;
+    }
+
+    body.ms-teams .mst-app-tools:not(.mst-app-tools-end) {
+        display: none;
+    }
+}

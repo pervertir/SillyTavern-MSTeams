@@ -2,6 +2,7 @@
 // (title bar, app rail, chat list, chat header) and exposes a small settings panel.
 
 import { initChatList, markCurrentChat, scheduleRefresh, travel } from './chatlist.js';
+import { initApps, refreshCopilotGreeting } from './apps.js';
 import { setDisguise, refreshTitle } from './disguise.js';
 import { initShortcuts } from './shortcuts.js';
 import { focusSearch, initShell, refreshHeader, refreshNavigation, refreshPersona, refreshRailToggle, setRailTooltips, startNewChat } from './shell.js';
@@ -146,6 +147,7 @@ async function init() {
     darkQuery.addEventListener('change', applySettings);
 
     initShell({ toggleRail });
+    initApps();
     initChatList({ settings: getSettings, opened: showChatOnPhone, historyChanged: refreshNavigation });
     applySettings();
     initTimes();
@@ -164,6 +166,7 @@ async function init() {
     eventSource.on(eventTypes.CHARACTER_RENAMED, refreshTitle);
     eventSource.on(eventTypes.GROUP_UPDATED, refreshTitle);
     eventSource.on(eventTypes.PERSONA_CHANGED, refreshPersona);
+    eventSource.on(eventTypes.PERSONA_CHANGED, () => refreshCopilotGreeting());
     eventSource.on(eventTypes.PERSONA_RENAMED, () => refreshPersona());
     eventSource.on(eventTypes.SETTINGS_UPDATED, () => refreshPersona());
     onChatChanged(SillyTavern.getContext().getCurrentChatId());
