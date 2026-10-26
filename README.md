@@ -13,8 +13,21 @@ A SillyTavern extension that makes the whole app look and work like Microsoft Te
 
 ## What it changes
 
-- **Title bar.** Search filters the chat list by name or message. Your persona's picture sits on the right and opens Persona Management.
-- **App rail.** SillyTavern's menu buttons become Teams apps with labels: Chat, Characters, Personas, Lore, Generation, Formatting, API, Wallpaper, Extensions and Settings. Each menu opens as a panel in the chat list's place.
+- **Title bar.** Search filters the chat list by name or message. On the right, your persona shows as a Teams monogram of its name (or its picture, if you turn that on) and opens Persona Management.
+- **App rail.** The Teams rail, with Teams' icons on SillyTavern's menus in SillyTavern's own order:
+
+  | Rail icon | Opens |
+  |---|---|
+  | Activity (bell) | AI Response Configuration |
+  | Chat | The chat list |
+  | Calendar | API Connections |
+  | Calls (phone) | AI Response Formatting |
+  | OneDrive (cloud) | World Info |
+  | Copilot | User Settings |
+  | More (…) | Backgrounds, Persona Management and Character Management |
+  | Apps (+ in a box), at the bottom | Extensions |
+
+  Hover an icon to see what it opens. App names under the icons are off by default, as in Teams, and can be turned on in the settings. Each menu opens as a panel in the chat list's place.
 - **Chat list.** Your recent chats, with Pinned and Recent sections like Teams. It uses SillyTavern's own recent chats and pins, so pinning a chat on the welcome screen pins it here too. The pen button starts a new chat from the character list.
 - **Chat header.** The character's picture and name, which opens their card, a Chat tab, and buttons for chat history, a new chat and closing the chat.
 - **Messages.** Everyone else's messages sit on the left with their picture, name and time. Yours sit on the right in Teams lavender. Times read the Teams way: `10:42 AM`, `Yesterday 10:42 AM` or `10/21 3:15 PM`. Message actions appear as a toolbar when you hover a message, and swipes become a small pager under the last reply.
@@ -39,6 +52,8 @@ Find them under **Extensions** → **Microsoft Teams Theme**:
 | Enable theme | Turns the whole look on or off. Off leaves SillyTavern exactly as it was. |
 | Appearance | Light, Dark, or follow the system. |
 | Show the chat list | Hides the list on desktop so the chat gets the room. |
+| Show app names under the rail icons | Off by default. Phones always show them, as Teams mobile does. |
+| Show your persona's picture instead of its initials | Off by default, so you get a Teams monogram. |
 | Show characters as Available | The green presence badge on pictures. |
 | Teams-style message times | Short times in place of SillyTavern's full dates. |
 | Chats in the list | How many recent chats to load (5 to 500). |

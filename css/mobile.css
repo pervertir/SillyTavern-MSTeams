@@ -43,10 +43,10 @@
     }
 
     body.ms-teams #top-settings-holder > .drawer,
-    body.ms-teams #top-settings-holder > #mst-app-chat {
-        flex: 1 0 64px;
+    body.ms-teams #top-settings-holder > .mst-app {
+        flex: 1 1 0;
         width: auto;
-        min-width: 64px;
+        min-width: 44px;
     }
 
     body.ms-teams #extensions-settings-button {
@@ -54,13 +54,33 @@
     }
 
     body.ms-teams #top-settings-holder > .drawer > .drawer-toggle,
-    body.ms-teams #mst-app-chat {
+    body.ms-teams #top-settings-holder > .mst-app {
         height: 56px;
+    }
+
+    /* Teams mobile always names its tabs */
+    body.ms-teams #top-settings-holder > .drawer > .drawer-toggle::after,
+    body.ms-teams #top-settings-holder > .mst-app .mst-app-label {
+        display: block;
+    }
+
+    body.ms-teams #top-settings-holder > .drawer.mst-more-drawer {
+        flex: 0 0 0;
+        min-width: 0;
+        width: 0;
+    }
+
+    /* More opens a sheet above the app bar */
+    body.ms-teams #mst-more-menu:not([hidden]) {
+        top: auto;
+        left: 8px;
+        right: 8px;
+        bottom: calc(var(--mst-tabbar-h) + 8px);
     }
 
     /* the selected app's bar runs along the top edge */
     body.ms-teams #top-settings-holder > .drawer > .drawer-toggle::before,
-    body.ms-teams #mst-app-chat::before {
+    body.ms-teams #top-settings-holder > .mst-app::before {
         top: 0;
         left: 50%;
         width: 0;
@@ -71,7 +91,8 @@
     }
 
     body.ms-teams #top-settings-holder > .drawer > .drawer-toggle:has(.openIcon)::before,
-    body.ms-teams:not(:has(#top-settings-holder .drawer-content.openDrawer)) #mst-app-chat::before {
+    body.ms-teams:not(:has(#top-settings-holder .drawer-content.openDrawer)) #mst-app-chat::before,
+    body.ms-teams:has(.mst-more-drawer > .drawer-content.openDrawer) #mst-app-more::before {
         width: 24px;
         height: 3px;
         margin: 0 0 0 -12px;

@@ -7,18 +7,26 @@ const TITLEBAR_ID = 'mst-titlebar';
 const CHAT_APP_ID = 'mst-app-chat';
 const HEADER_ID = 'mst-chat-head';
 
-/** Rail labels for SillyTavern's menu buttons, in the order they appear on the rail */
+/** SillyTavern's menus in their own order, each wearing a Teams app's icon and name.
+    Chat (the chat list) sits second and "More" seventh, as in Teams; Apps sits at the bottom. */
 const RAIL_APPS = [
-    ['rightNavHolder', 'Characters'],
-    ['persona-management-button', 'Personas'],
-    ['WI-SP-button', 'Lore'],
-    ['ai-config-button', 'Generation'],
-    ['advanced-formatting-button', 'Formatting'],
-    ['sys-settings-button', 'API'],
-    ['backgrounds-button', 'Wallpaper'],
-    ['extensions-settings-button', 'Extensions'],
-    ['user-settings-button', 'Settings'],
+    { id: 'ai-config-button', label: 'Activity', icon: 'bell', order: 1 },
+    { id: 'sys-settings-button', label: 'Calendar', icon: 'calendar', order: 3 },
+    { id: 'advanced-formatting-button', label: 'Calls', icon: 'call', order: 4 },
+    { id: 'WI-SP-button', label: 'OneDrive', icon: 'cloud', order: 5 },
+    { id: 'user-settings-button', label: 'Copilot', icon: 'copilot', order: 6 },
+    { id: 'extensions-settings-button', label: 'Apps', icon: 'apps', order: 20 },
 ];
+
+/** Menus that don't get a rail icon of their own: they're under "More" (…), like Teams' extra apps */
+const MORE_APPS = [
+    { id: 'backgrounds-button', label: 'Backgrounds', icon: 'fa-solid fa-panorama' },
+    { id: 'persona-management-button', label: 'Persona Management', icon: 'fa-solid fa-face-smile' },
+    { id: 'rightNavHolder', label: 'Character Management', icon: 'fa-solid fa-address-card' },
+];
+
+const MORE_APP_ID = 'mst-app-more';
+const MORE_MENU_ID = 'mst-more-menu';
 
 function t(text) {
     return SillyTavern.getContext().translate(text);
@@ -119,7 +127,10 @@ function createTitlebar() {
     meImg.alt = '';
     const presence = document.createElement('span');
     presence.className = 'mst-presence mst-presence-on';
-    meAvatar.append(meImg, presence);
+    const monogram = document.createElement('span');
+    monogram.className = 'mst-monogram';
+    monogram.setAttribute('aria-hidden', 'true');
+    meAvatar.append(meImg, monogram, presence);
     me.append(meAvatar);
     me.addEventListener('click', () => toggleDrawer('persona-management-button'));
     right.append(more, me);
@@ -128,12 +139,42 @@ function createTitlebar() {
     document.body.append(bar);
 }
 
-/** Shows the user's persona picture in the title bar. */
+/** Teams' colorful avatar palette; a name always gets the same color */
+const MONOGRAM_COLORS = 10;
+
+/** Initials the way Teams shows them: first and last word, or one letter for a single word. */
+export function getInitials(name) {
+    const words = String(name ?? '').trim().split(/\s+/).filter(Boolean);
+    if (!words.length) {
+        return '?';
+    }
+    const first = [...words[0]][0] ?? '';
+    const last = words.length > 1 ? [...words[words.length - 1]][0] ?? '' : '';
+    return (first + last).toUpperCase();
+}
+
+function getMonogramColor(name) {
+    let hash = 0;
+    for (const char of String(name ?? '')) {
+        hash = (hash * 31 + char.codePointAt(0)) >>> 0;
+    }
+    return hash % MONOGRAM_COLORS;
+}
+
+/** Shows the user's persona in the title bar: a monogram of its name, or its picture. */
 export function refreshPersona(avatarId) {
     const img = /** @type {HTMLImageElement} */ (document.querySelector('#mst-me img'));
     if (!img) {
         return;
     }
+    const name = SillyTavern.getContext().name1;
+    const monogram = /** @type {HTMLElement} */ (document.querySelector('#mst-me .mst-monogram'));
+    if (monogram) {
+        monogram.textContent = getInitials(name);
+        monogram.dataset.mstColor = String(getMonogramColor(name));
+    }
+    const me = document.getElementById('mst-me');
+    me.title = name ? `${name} (${t('Persona Management')})` : t('Persona Management');
     const { getThumbnailUrl } = SillyTavern.getContext();
     let src = '';
     if (avatarId) {
@@ -148,45 +189,123 @@ export function refreshPersona(avatarId) {
     }
 }
 
+/** A rail app of the theme's own (Chat, More), built like SillyTavern's drawer toggles. */
+function railApp(id, label, icon, onClick) {
+    const app = document.createElement('div');
+    app.id = id;
+    app.className = 'mst-app';
+    app.setAttribute('role', 'button');
+    app.tabIndex = 0;
+    app.title = t(label);
+    app.dataset.mstIcon = icon;
+    const glyph = document.createElement('i');
+    glyph.className = 'mst-app-icon';
+    const text = document.createElement('span');
+    text.className = 'mst-app-label';
+    text.textContent = t(label);
+    app.append(glyph, text);
+    app.addEventListener('click', onClick);
+    app.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            app.click();
+        }
+    });
+    return app;
+}
+
+function closeMoreMenu() {
+    const menu = document.getElementById(MORE_MENU_ID);
+    if (menu) {
+        menu.hidden = true;
+    }
+    document.getElementById(MORE_APP_ID)?.classList.remove('mst-app-open');
+}
+
+function toggleMoreMenu() {
+    const app = document.getElementById(MORE_APP_ID);
+    let menu = document.getElementById(MORE_MENU_ID);
+    if (!menu) {
+        menu = document.createElement('div');
+        menu.id = MORE_MENU_ID;
+        menu.setAttribute('role', 'menu');
+        menu.hidden = true;
+        for (const { id, label, icon } of MORE_APPS) {
+            if (!document.getElementById(id)) {
+                continue;
+            }
+            const item = document.createElement('button');
+            item.type = 'button';
+            item.className = 'mst-more-item';
+            item.setAttribute('role', 'menuitem');
+            const glyph = document.createElement('i');
+            glyph.className = icon;
+            const text = document.createElement('span');
+            text.textContent = t(label);
+            item.append(glyph, text);
+            item.addEventListener('click', () => {
+                closeMoreMenu();
+                const content = document.querySelector(`#${id} > .drawer-content`);
+                if (!content?.classList.contains('openDrawer')) {
+                    toggleDrawer(id);
+                }
+            });
+            menu.append(item);
+        }
+        document.body.append(menu);
+        document.addEventListener('pointerdown', (event) => {
+            const target = /** @type {Node} */ (event.target);
+            if (!menu.hidden && !menu.contains(target) && !app.contains(target)) {
+                closeMoreMenu();
+            }
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !menu.hidden) {
+                closeMoreMenu();
+            }
+        });
+    }
+    const opening = menu.hidden;
+    menu.hidden = !opening;
+    app.classList.toggle('mst-app-open', opening);
+    if (opening) {
+        const box = app.getBoundingClientRect();
+        menu.style.setProperty('--mst-more-top', `${Math.round(box.top)}px`);
+        menu.style.setProperty('--mst-more-left', `${Math.round(box.right + 4)}px`);
+        menu.style.setProperty('--mst-more-bottom', `${Math.round(window.innerHeight - box.top + 4)}px`);
+        /** @type {HTMLElement} */ (menu.querySelector('.mst-more-item'))?.focus();
+    }
+}
+
 function createRail() {
     const holder = document.getElementById('top-settings-holder');
     if (!holder) {
         return;
     }
     if (!document.getElementById(CHAT_APP_ID)) {
-        const chat = document.createElement('div');
-        chat.id = CHAT_APP_ID;
-        chat.className = 'mst-app';
-        chat.setAttribute('role', 'button');
-        chat.tabIndex = 0;
-        chat.title = t('Chat');
-        const icon = document.createElement('i');
-        icon.className = 'fa-regular fa-comments mst-app-icon';
-        const label = document.createElement('span');
-        label.className = 'mst-app-label';
-        label.textContent = t('Chat');
-        chat.append(icon, label);
-        chat.addEventListener('click', () => {
+        holder.prepend(railApp(CHAT_APP_ID, 'Chat', 'chat', () => {
             closeDrawers();
+            closeMoreMenu();
             document.body.classList.remove('mst-m-chat');
-        });
-        chat.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                chat.click();
-            }
-        });
-        holder.prepend(chat);
+        }));
     }
-    RAIL_APPS.forEach(([id, label], index) => {
+    if (!document.getElementById(MORE_APP_ID)) {
+        holder.append(railApp(MORE_APP_ID, 'More', 'more', toggleMoreMenu));
+    }
+    for (const { id, label, icon, order } of RAIL_APPS) {
         const drawer = document.getElementById(id);
         const toggle = drawer?.querySelector(':scope > .drawer-toggle');
         if (!toggle) {
-            return;
+            continue;
         }
-        drawer.style.setProperty('--mst-order', String(index + 1));
+        drawer.style.setProperty('--mst-order', String(order));
+        drawer.dataset.mstIcon = icon;
         toggle.dataset.mstLabel = t(label);
-    });
+        toggle.addEventListener('click', closeMoreMenu);
+    }
+    for (const { id } of MORE_APPS) {
+        document.getElementById(id)?.classList.add('mst-more-drawer');
+    }
 }
 
 function createHeader() {

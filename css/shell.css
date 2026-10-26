@@ -8,6 +8,7 @@
 #mst-titlebar,
 #mst-list,
 #mst-app-chat,
+#mst-app-more,
 #mst-chat-head {
     display: none;
 }
@@ -220,7 +221,62 @@ body.ms-teams #mst-me {
     --mst-presence-ring: var(--mst-shell);
 }
 
-/* App rail */
+/* Persona: a Teams monogram of its name by default, its picture with body.mst-persona-picture */
+body.ms-teams #mst-me img {
+    display: none;
+}
+
+body.ms-teams.mst-persona-picture #mst-me img {
+    display: block;
+}
+
+body.ms-teams .mst-monogram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: 0;
+    user-select: none;
+}
+
+body.ms-teams.mst-persona-picture .mst-monogram {
+    display: none;
+}
+
+body.ms-teams .mst-monogram[data-mst-color="0"] { background: #e8ebfa; color: #4f52b2; }
+body.ms-teams .mst-monogram[data-mst-color="1"] { background: #fde7e9; color: #a4262c; }
+body.ms-teams .mst-monogram[data-mst-color="2"] { background: #fdeae0; color: #8e3800; }
+body.ms-teams .mst-monogram[data-mst-color="3"] { background: #fff4ce; color: #7a5400; }
+body.ms-teams .mst-monogram[data-mst-color="4"] { background: #dff6dd; color: #0b6a0b; }
+body.ms-teams .mst-monogram[data-mst-color="5"] { background: #d7f4f4; color: #00666d; }
+body.ms-teams .mst-monogram[data-mst-color="6"] { background: #deecf9; color: #0f548c; }
+body.ms-teams .mst-monogram[data-mst-color="7"] { background: #efe4fb; color: #5c2e91; }
+body.ms-teams .mst-monogram[data-mst-color="8"] { background: #f8e2f7; color: #7a1d7e; }
+body.ms-teams .mst-monogram[data-mst-color="9"] { background: #e8f0e0; color: #3b6e00; }
+
+body.ms-teams.mst-dark .mst-monogram[data-mst-color="0"] { background: #4f52b2; color: #e8ebfa; }
+body.ms-teams.mst-dark .mst-monogram[data-mst-color="1"] { background: #a4262c; color: #fde7e9; }
+body.ms-teams.mst-dark .mst-monogram[data-mst-color="2"] { background: #8e3800; color: #fdeae0; }
+body.ms-teams.mst-dark .mst-monogram[data-mst-color="3"] { background: #7a5400; color: #fff4ce; }
+body.ms-teams.mst-dark .mst-monogram[data-mst-color="4"] { background: #0b6a0b; color: #dff6dd; }
+body.ms-teams.mst-dark .mst-monogram[data-mst-color="5"] { background: #00666d; color: #d7f4f4; }
+body.ms-teams.mst-dark .mst-monogram[data-mst-color="6"] { background: #0f548c; color: #deecf9; }
+body.ms-teams.mst-dark .mst-monogram[data-mst-color="7"] { background: #5c2e91; color: #efe4fb; }
+body.ms-teams.mst-dark .mst-monogram[data-mst-color="8"] { background: #7a1d7e; color: #f8e2f7; }
+body.ms-teams.mst-dark .mst-monogram[data-mst-color="9"] { background: #3b6e00; color: #e8f0e0; }
+
+/* App rail. SillyTavern's menus keep their own order and wear Teams' app icons:
+   Activity, Chat (the theme's own), Calendar, Calls, OneDrive, Copilot, More (…), and Apps
+   at the bottom. Names under the icons only show with body.mst-rail-labels. */
+body.ms-teams:not(.mst-rail-labels) {
+    --mst-rail-w: 56px;
+}
+
 body.ms-teams #top-settings-holder {
     position: fixed;
     top: var(--mst-titlebar-h);
@@ -248,17 +304,26 @@ body.ms-teams #top-settings-holder > .drawer {
     order: var(--mst-order, 20);
 }
 
-body.ms-teams #top-settings-holder > #mst-app-chat {
-    order: 0;
-}
+body.ms-teams #mst-app-chat { order: 2; }
+body.ms-teams #mst-app-more { order: 7; }
 
-/* Extensions and Settings sit at the bottom of the rail, like Teams' Apps */
+/* Apps sits at the bottom of the rail */
 body.ms-teams #extensions-settings-button {
     margin-top: auto;
 }
 
+/* Menus without an icon of their own open from More; their toggles leave the rail */
+body.ms-teams #top-settings-holder > .drawer.mst-more-drawer {
+    order: 30;
+    height: 0;
+}
+
+body.ms-teams #top-settings-holder > .drawer.mst-more-drawer > .drawer-toggle {
+    display: none;
+}
+
 body.ms-teams #top-settings-holder > .drawer > .drawer-toggle,
-body.ms-teams #mst-app-chat {
+body.ms-teams #top-settings-holder > .mst-app {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -266,7 +331,7 @@ body.ms-teams #mst-app-chat {
     justify-content: center;
     gap: 2px;
     width: 100%;
-    height: 56px;
+    height: 48px;
     padding: 0;
     box-sizing: border-box;
     color: var(--mst-fg-3);
@@ -275,13 +340,19 @@ body.ms-teams #mst-app-chat {
     transition: color var(--mst-fast) var(--mst-ease);
 }
 
-/* label under the icon */
+body.ms-teams.mst-rail-labels #top-settings-holder > .drawer > .drawer-toggle,
+body.ms-teams.mst-rail-labels #top-settings-holder > .mst-app {
+    height: 56px;
+}
+
+/* name under the icon */
 body.ms-teams #top-settings-holder > .drawer > .drawer-toggle::after {
     content: attr(data-mst-label);
 }
 
 body.ms-teams #top-settings-holder > .drawer > .drawer-toggle::after,
-body.ms-teams #mst-app-chat .mst-app-label {
+body.ms-teams #top-settings-holder > .mst-app .mst-app-label {
+    display: none;
     max-width: calc(var(--mst-rail-w) - 6px);
     overflow: hidden;
     font-size: var(--mst-text-xs);
@@ -291,9 +362,14 @@ body.ms-teams #mst-app-chat .mst-app-label {
     white-space: nowrap;
 }
 
+body.ms-teams.mst-rail-labels #top-settings-holder > .drawer > .drawer-toggle::after,
+body.ms-teams.mst-rail-labels #top-settings-holder > .mst-app .mst-app-label {
+    display: block;
+}
+
 /* the selected app's bar on the rail's edge */
 body.ms-teams #top-settings-holder > .drawer > .drawer-toggle::before,
-body.ms-teams #mst-app-chat::before {
+body.ms-teams #top-settings-holder > .mst-app::before {
     content: '';
     position: absolute;
     left: 0;
@@ -307,7 +383,7 @@ body.ms-teams #mst-app-chat::before {
 }
 
 body.ms-teams #top-settings-holder .drawer-icon,
-body.ms-teams #mst-app-chat .mst-app-icon {
+body.ms-teams #top-settings-holder .mst-app-icon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -322,9 +398,9 @@ body.ms-teams #mst-app-chat .mst-app-icon {
     transition: none;
 }
 
-/* Fluent outline icons in place of Font Awesome's */
+/* Teams' Fluent icons in place of Font Awesome's */
 body.ms-teams #top-settings-holder .drawer-icon::before,
-body.ms-teams #mst-app-chat .mst-app-icon::before {
+body.ms-teams #top-settings-holder .mst-app-icon::before {
     content: '';
     display: block;
     width: 24px;
@@ -334,18 +410,16 @@ body.ms-teams #mst-app-chat .mst-app-icon::before {
     mask: var(--mst-rail-icon) center / 24px 24px no-repeat;
 }
 
-body.ms-teams #mst-app-chat { --mst-rail-icon: var(--mst-icon-chat); }
-body.ms-teams #rightNavHolder { --mst-rail-icon: var(--mst-icon-people); }
-body.ms-teams #persona-management-button { --mst-rail-icon: var(--mst-icon-person); }
-body.ms-teams #WI-SP-button { --mst-rail-icon: var(--mst-icon-book); }
-body.ms-teams #ai-config-button { --mst-rail-icon: var(--mst-icon-sliders); }
-body.ms-teams #advanced-formatting-button { --mst-rail-icon: var(--mst-icon-text); }
-body.ms-teams #sys-settings-button { --mst-rail-icon: var(--mst-icon-plug); }
-body.ms-teams #backgrounds-button { --mst-rail-icon: var(--mst-icon-image); }
-body.ms-teams #extensions-settings-button { --mst-rail-icon: var(--mst-icon-apps); }
-body.ms-teams #user-settings-button { --mst-rail-icon: var(--mst-icon-gear); }
+body.ms-teams [data-mst-icon="bell"] { --mst-rail-icon: var(--mst-icon-bell); --mst-rail-icon-on: var(--mst-icon-bell-on); }
+body.ms-teams [data-mst-icon="chat"] { --mst-rail-icon: var(--mst-icon-chat); --mst-rail-icon-on: var(--mst-icon-chat-on); }
+body.ms-teams [data-mst-icon="calendar"] { --mst-rail-icon: var(--mst-icon-calendar); --mst-rail-icon-on: var(--mst-icon-calendar); }
+body.ms-teams [data-mst-icon="call"] { --mst-rail-icon: var(--mst-icon-call); --mst-rail-icon-on: var(--mst-icon-call-on); }
+body.ms-teams [data-mst-icon="cloud"] { --mst-rail-icon: var(--mst-icon-cloud); --mst-rail-icon-on: var(--mst-icon-cloud-on); }
+body.ms-teams [data-mst-icon="copilot"] { --mst-rail-icon: var(--mst-icon-copilot); --mst-rail-icon-on: var(--mst-icon-copilot); }
+body.ms-teams [data-mst-icon="more"] { --mst-rail-icon: var(--mst-icon-more); --mst-rail-icon-on: var(--mst-icon-more); }
+body.ms-teams [data-mst-icon="apps"] { --mst-rail-icon: var(--mst-icon-apps); --mst-rail-icon-on: var(--mst-icon-apps); }
 
-/* no API connection: a red badge on the plug, as Teams marks a problem */
+/* no API connection: a red badge on its icon, as Teams marks a problem */
 body.ms-teams #API-status-top.fa-plug-circle-exclamation {
     position: relative;
 }
@@ -353,8 +427,8 @@ body.ms-teams #API-status-top.fa-plug-circle-exclamation {
 body.ms-teams #API-status-top.fa-plug-circle-exclamation::after {
     content: '';
     position: absolute;
-    right: -2px;
-    top: 0;
+    right: -3px;
+    top: -1px;
     width: 8px;
     height: 8px;
     border-radius: 50%;
@@ -363,25 +437,79 @@ body.ms-teams #API-status-top.fa-plug-circle-exclamation::after {
 }
 
 body.ms-teams #top-settings-holder > .drawer > .drawer-toggle:hover,
-body.ms-teams #mst-app-chat:hover {
+body.ms-teams #top-settings-holder > .mst-app:hover {
     color: var(--mst-brand-fg);
 }
 
-/* Selected app: an open menu, or Chat while no menu is open */
+/* Selected app: an open menu, Chat while no menu is open, More while one of its menus is */
 body.ms-teams #top-settings-holder > .drawer > .drawer-toggle:has(.openIcon),
-body.ms-teams:not(:has(#top-settings-holder .drawer-content.openDrawer)) #mst-app-chat {
+body.ms-teams:not(:has(#top-settings-holder .drawer-content.openDrawer)) #mst-app-chat,
+body.ms-teams:has(.mst-more-drawer > .drawer-content.openDrawer) #mst-app-more,
+body.ms-teams #mst-app-more.mst-app-open {
     color: var(--mst-brand-fg);
+    --mst-rail-icon: var(--mst-rail-icon-on);
 }
 
 body.ms-teams #top-settings-holder > .drawer > .drawer-toggle:has(.openIcon)::after,
-body.ms-teams:not(:has(#top-settings-holder .drawer-content.openDrawer)) #mst-app-chat .mst-app-label {
+body.ms-teams:not(:has(#top-settings-holder .drawer-content.openDrawer)) #mst-app-chat .mst-app-label,
+body.ms-teams:has(.mst-more-drawer > .drawer-content.openDrawer) #mst-app-more .mst-app-label {
     font-weight: 600;
 }
 
 body.ms-teams #top-settings-holder > .drawer > .drawer-toggle:has(.openIcon)::before,
-body.ms-teams:not(:has(#top-settings-holder .drawer-content.openDrawer)) #mst-app-chat::before {
+body.ms-teams:not(:has(#top-settings-holder .drawer-content.openDrawer)) #mst-app-chat::before,
+body.ms-teams:has(.mst-more-drawer > .drawer-content.openDrawer) #mst-app-more::before {
     height: 20px;
     margin-top: -10px;
+}
+
+/* More's flyout: SillyTavern's other menus, like Teams' "More added apps" */
+#mst-more-menu {
+    display: none;
+}
+
+body.ms-teams #mst-more-menu:not([hidden]) {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: var(--mst-more-top, 120px);
+    left: var(--mst-more-left, 72px);
+    min-width: 240px;
+    padding: 4px;
+    box-sizing: border-box;
+    border: 1px solid var(--mst-stroke-3);
+    border-radius: var(--mst-radius-md);
+    background: var(--mst-raised);
+    box-shadow: var(--mst-shadow-16);
+    z-index: 3010;
+}
+
+body.ms-teams .mst-more-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 36px;
+    padding: 6px 12px;
+    margin: 0;
+    border: none;
+    border-radius: var(--mst-radius);
+    background: none;
+    color: var(--mst-fg);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+body.ms-teams .mst-more-item:hover,
+body.ms-teams .mst-more-item:focus-visible {
+    background: var(--mst-subtle-hover);
+}
+
+body.ms-teams .mst-more-item i {
+    width: 20px;
+    font-size: 16px;
+    color: var(--mst-fg-2);
+    text-align: center;
 }
 
 /* Menus open as Teams panels in the chat list's place, over the chat if they need more room */

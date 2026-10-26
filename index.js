@@ -18,6 +18,10 @@ const defaultSettings = Object.freeze({
     /** light, dark or system */
     appearance: 'light',
     chatList: true,
+    /** App names under the rail icons; Teams leaves them off */
+    railLabels: false,
+    /** Persona picture in the title bar instead of a monogram of its name */
+    personaPicture: false,
     presence: true,
     shortTimes: true,
     recentMax: 50,
@@ -53,6 +57,8 @@ function applySettings() {
     body.classList.toggle(BODY_CLASS, !!settings.enabled);
     body.classList.toggle('mst-dark', !!settings.enabled && isDark(settings));
     body.classList.toggle('mst-no-list', !settings.chatList);
+    body.classList.toggle('mst-rail-labels', !!settings.railLabels);
+    body.classList.toggle('mst-persona-picture', !!settings.personaPicture);
     body.classList.toggle('mst-presence-on', !!settings.presence);
     body.classList.toggle('mst-short-times', !!settings.shortTimes);
 }
@@ -86,6 +92,8 @@ async function renderSettingsPanel() {
     const enabled = /** @type {HTMLInputElement} */ (document.getElementById('mst_enabled'));
     const appearance = /** @type {HTMLSelectElement} */ (document.getElementById('mst_appearance'));
     const chatList = /** @type {HTMLInputElement} */ (document.getElementById('mst_chat_list'));
+    const railLabels = /** @type {HTMLInputElement} */ (document.getElementById('mst_rail_labels'));
+    const personaPicture = /** @type {HTMLInputElement} */ (document.getElementById('mst_persona_picture'));
     const presence = /** @type {HTMLInputElement} */ (document.getElementById('mst_presence'));
     const shortTimes = /** @type {HTMLInputElement} */ (document.getElementById('mst_short_times'));
     const recentMax = /** @type {HTMLInputElement} */ (document.getElementById('mst_recent_max'));
@@ -93,6 +101,8 @@ async function renderSettingsPanel() {
     enabled.checked = settings.enabled;
     appearance.value = settings.appearance;
     chatList.checked = settings.chatList;
+    railLabels.checked = settings.railLabels;
+    personaPicture.checked = settings.personaPicture;
     presence.checked = settings.presence;
     shortTimes.checked = settings.shortTimes;
     recentMax.value = String(settings.recentMax);
@@ -108,6 +118,8 @@ async function renderSettingsPanel() {
     bind(enabled, 'enabled', () => enabled.checked);
     bind(appearance, 'appearance', () => appearance.value);
     bind(chatList, 'chatList', () => chatList.checked);
+    bind(railLabels, 'railLabels', () => railLabels.checked);
+    bind(personaPicture, 'personaPicture', () => personaPicture.checked);
     bind(presence, 'presence', () => presence.checked);
     bind(shortTimes, 'shortTimes', () => shortTimes.checked, () => labelMessages());
     bind(recentMax, 'recentMax', () => Math.min(500, Math.max(5, Number(recentMax.value) || defaultSettings.recentMax)), () => scheduleRefresh());
@@ -127,6 +139,8 @@ async function init() {
     eventSource.on(eventTypes.CHARACTER_EDITED, refreshHeader);
     eventSource.on(eventTypes.CHARACTER_RENAMED, refreshHeader);
     eventSource.on(eventTypes.PERSONA_CHANGED, refreshPersona);
+    eventSource.on(eventTypes.PERSONA_RENAMED, () => refreshPersona());
+    eventSource.on(eventTypes.SETTINGS_UPDATED, () => refreshPersona());
     onChatChanged(SillyTavern.getContext().getCurrentChatId());
     markCurrentChat();
 
