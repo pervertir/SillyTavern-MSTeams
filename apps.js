@@ -580,6 +580,45 @@ export function refreshCopilotGreeting() {
 
 /* Apps ---------------------------------------------------------------------------------- */
 
+/** An app's tile icon, picked from words in its name */
+const APP_ICONS = [
+    [/image|picture|caption|gallery|sd\b|stable diffusion|comfy/i, 'image'],
+    [/speech|tts|voice|narrat|audio|sound|rvc/i, 'speaker'],
+    [/translat|language/i, 'translate'],
+    [/regex|script|code|css/i, 'code'],
+    [/summar|memory|note/i, 'document'],
+    [/vector|data bank|search|rag/i, 'search'],
+    [/quick ?repl|reply|chat|message/i, 'chat'],
+    [/expression|character|persona|avatar|live2d|vrm/i, 'person'],
+    [/download|asset|import|extension/i, 'import'],
+    [/web|internet|browser|url/i, 'globe'],
+    [/theme|color|style|teams/i, 'paint'],
+    [/background|wallpaper/i, 'image'],
+    [/token|count|stat/i, 'options'],
+    [/idle|timer|time|objective/i, 'calendar'],
+];
+
+const APP_TILE_COLORS = ['#5b5fc7', '#0f6cbd', '#038387', '#107c10', '#c239b3', '#ca5010', '#8764b8', '#d13438', '#4f6bed', '#00666d'];
+
+/** Puts a Teams-style app tile (colored square, white icon) in front of each app's name. */
+function decorateApps(drawer) {
+    for (const head of drawer.querySelectorAll('.extensions_block .inline-drawer > .inline-drawer-header')) {
+        if (head.querySelector(':scope > .mst-app-tile')) {
+            continue;
+        }
+        const name = head.textContent.trim().replace(/\s+/g, ' ');
+        const icon = APP_ICONS.find(([pattern]) => pattern.test(name))?.[1] ?? 'apps';
+        let hash = 0;
+        for (const char of name) {
+            hash = (hash * 31 + char.codePointAt(0)) >>> 0;
+        }
+        const tile = el('span', 'mst-app-tile');
+        tile.style.setProperty('--mst-tile', APP_TILE_COLORS[hash % APP_TILE_COLORS.length]);
+        tile.append(fluentIcon(icon, 20));
+        head.prepend(tile);
+    }
+}
+
 function buildApps() {
     const drawer = document.getElementById('rm_extensions_block');
     if (!drawer) {
@@ -613,6 +652,14 @@ function buildApps() {
         item('Get more apps', 'arrow-down', () => click('#third_party_extension_button')),
     );
     drawer.append(nav);
+
+    // tiles for every app, including ones added after start-up
+    decorateApps(drawer);
+    document.querySelector('#extensions-settings-button > .drawer-toggle')?.addEventListener('click', () => setTimeout(() => decorateApps(drawer), 50));
+    const later = document.getElementById('extensions_settings2');
+    if (later) {
+        new MutationObserver(() => decorateApps(drawer)).observe(later, { childList: true });
+    }
 }
 
 /* Activity ------------------------------------------------------------------------------ */

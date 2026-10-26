@@ -26,8 +26,8 @@ const defaultSettings = Object.freeze({
     railLabels: false,
     /** App rail hidden with the title bar's button */
     railHidden: false,
-    /** Persona picture in the title bar instead of a monogram of its name */
-    personaPicture: false,
+    /** Monogram of the persona's name in the title bar even when it has a picture */
+    personaMonogram: false,
     presence: true,
     shortTimes: true,
     recentMax: 50,
@@ -41,6 +41,8 @@ function getSettings() {
         extensionSettings[MODULE_NAME] = structuredClone(defaultSettings);
     }
     const settings = extensionSettings[MODULE_NAME];
+    // the persona picture became the default; the old opt-in setting is gone
+    delete settings.personaPicture;
     for (const key of Object.keys(defaultSettings)) {
         if (!Object.hasOwn(settings, key)) {
             settings[key] = structuredClone(defaultSettings[key]);
@@ -68,7 +70,7 @@ function applySettings() {
     refreshRailToggle(!!settings.railHidden);
     setDisguise(!!settings.enabled);
     setRailTooltips(!!settings.enabled);
-    body.classList.toggle('mst-persona-picture', !!settings.personaPicture);
+    body.classList.toggle('mst-persona-monogram', !!settings.personaMonogram);
     body.classList.toggle('mst-presence-on', !!settings.presence);
     body.classList.toggle('mst-short-times', !!settings.shortTimes);
 }
@@ -122,7 +124,7 @@ async function renderSettingsPanel() {
     const appearance = /** @type {HTMLSelectElement} */ (document.getElementById('mst_appearance'));
     const chatList = /** @type {HTMLInputElement} */ (document.getElementById('mst_chat_list'));
     const railLabels = /** @type {HTMLInputElement} */ (document.getElementById('mst_rail_labels'));
-    const personaPicture = /** @type {HTMLInputElement} */ (document.getElementById('mst_persona_picture'));
+    const personaMonogram = /** @type {HTMLInputElement} */ (document.getElementById('mst_persona_monogram'));
     const presence = /** @type {HTMLInputElement} */ (document.getElementById('mst_presence'));
     const shortTimes = /** @type {HTMLInputElement} */ (document.getElementById('mst_short_times'));
     const recentMax = /** @type {HTMLInputElement} */ (document.getElementById('mst_recent_max'));
@@ -131,7 +133,7 @@ async function renderSettingsPanel() {
     appearance.value = settings.appearance;
     chatList.checked = settings.chatList;
     railLabels.checked = settings.railLabels;
-    personaPicture.checked = settings.personaPicture;
+    personaMonogram.checked = settings.personaMonogram;
     presence.checked = settings.presence;
     shortTimes.checked = settings.shortTimes;
     recentMax.value = String(settings.recentMax);
@@ -148,7 +150,7 @@ async function renderSettingsPanel() {
     bind(appearance, 'appearance', () => appearance.value);
     bind(chatList, 'chatList', () => chatList.checked);
     bind(railLabels, 'railLabels', () => railLabels.checked);
-    bind(personaPicture, 'personaPicture', () => personaPicture.checked);
+    bind(personaMonogram, 'personaMonogram', () => personaMonogram.checked);
     bind(presence, 'presence', () => presence.checked);
     bind(shortTimes, 'shortTimes', () => shortTimes.checked, () => labelMessages());
     bind(recentMax, 'recentMax', () => Math.min(500, Math.max(5, Number(recentMax.value) || defaultSettings.recentMax)), () => scheduleRefresh());

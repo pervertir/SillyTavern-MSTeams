@@ -13,7 +13,7 @@ A SillyTavern extension that makes the whole app look and work like Microsoft Te
 
 ## What it changes
 
-- **Title bar.** The button at the far left hides or shows the app rail, and the arrows go back and forward between the chats you've opened, as in Teams. Search filters the chat list by name or message. On the right, your persona shows as a Teams monogram of its name (or its picture, if you turn that on) and opens Persona Management.
+- **Title bar.** The button at the far left hides or shows the app rail, and the arrows go back and forward between the chats you've opened, as in Teams. Search filters the chat list by name or message. On the right, your persona shows with its picture (or a Teams monogram of its name when it has none, or if you turn that on) and opens Persona Management.
 - **App rail.** The Teams rail, with Teams' icons on SillyTavern's menus in SillyTavern's own order:
 
   | Rail icon | Opens |
@@ -36,7 +36,7 @@ A SillyTavern extension that makes the whole app look and work like Microsoft Te
   - **OneDrive** keeps your lorebooks in My files as Word documents down the left; New document creates one, Upload imports one. The open lorebook is a Word page with a ribbon (New paragraph, Expand/Collapse all, Rename, Save a copy, Download, Delete): each entry reads as a heading with its keywords and text, and the ¶ Entry settings button shows each entry's matching options.
   - **Copilot** looks like Microsoft Copilot: the settings' sections are the conversations on the left, and opening one shows just that section's options as Copilot's answer. New chat shows the greeting by your persona's name with prompt suggestion cards, and the "Message Copilot" box docked at the bottom searches all settings.
   - **More** (…) holds **People** (characters, as Teams' contact list with search, add, import and new group, loading more as you scroll), **Profiles** (personas as profile cards, also scrolling endlessly) and **Background effects** (Teams' picker grid).
-  - **Apps** is the app store: each extension is a card, the search box filters them, and the side menu opens Manage your apps and Get more apps (install).
+  - **Apps** is the app store: each extension is a card with a Teams app tile, the search box filters them, and the side menu opens Manage your apps and Get more apps (install).
 - **Chat list.** Laid out like Teams: **Favorites** (always at the top; add or remove a chat or channel from its … button or right-click menu, and it uses SillyTavern's own pinned chats), **Chats** with your recent one-on-one chats, and **Teams and channels**, where each group chat is a team with a square monogram and each of its chats is a channel under it. Teams collapse and remember it. The pen button starts a new chat.
 - **Chat header.** The character's picture and name, which open their card, Teams' Chat, Shared and + tabs, and the video, call and … buttons: video starts a new chat, call opens the chat history, and … has those plus View profile and Close chat.
 - **Messages.** Everyone else's messages sit on the left with their picture, name and time. Yours sit on the right in Teams lavender. Times read the Teams way: `10:42 AM`, `Yesterday 10:42 AM` or `10/21 3:15 PM`. Message actions appear as a toolbar when you hover a message, and swipes become a small pager under the last reply.
@@ -66,7 +66,7 @@ Find them under **Extensions** → **Microsoft Teams Theme**:
 | Appearance | Light, Dark, or follow the system. The title bar's … menu also has Switch to dark/light theme. |
 | Show the chat list | Hides the list on desktop so the chat gets the room. |
 | Show app names under the rail icons | Off by default. Phones always show them, as Teams mobile does. |
-| Show your persona's picture instead of its initials | Off by default, so you get a Teams monogram. |
+| Show monogram instead of persona picture | Off by default: your persona's picture shows, or a monogram when it has none. |
 | Show characters as Available | The green presence badge on pictures. |
 | Teams-style message times | Short times in place of SillyTavern's full dates. |
 | Chats in the list | How many recent chats to load (5 to 500). |

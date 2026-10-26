@@ -1162,23 +1162,30 @@ body.ms-teams #rm_extensions_block .extensions_block .inline-drawer {
     box-shadow: none;
 }
 
-/* an app tile in front of each app's name */
+/* an app tile in front of each app's name: a colored square with a white icon */
 body.ms-teams #rm_extensions_block .extensions_block .inline-drawer > .inline-drawer-header {
     gap: 12px;
     min-height: 56px;
     padding: 8px 12px;
 }
 
-body.ms-teams #rm_extensions_block .extensions_block .inline-drawer > .inline-drawer-header::before {
-    content: '';
+.mst-app-tile {
+    display: none;
+}
+
+body.ms-teams .mst-app-tile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     flex: none;
     width: 36px;
     height: 36px;
     border-radius: var(--mst-radius-md);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), transparent 60%), var(--mst-brand);
+    background: var(--mst-tile, var(--mst-brand));
+    color: #ffffff;
 }
 
-body.ms-teams #rm_extensions_block .extensions_block .inline-drawer > .inline-drawer-header > :first-child {
+body.ms-teams #rm_extensions_block .extensions_block .inline-drawer > .inline-drawer-header > :not(.mst-app-tile):not(.inline-drawer-icon) {
     flex: 1;
     min-width: 0;
 }

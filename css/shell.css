@@ -245,13 +245,20 @@ body.ms-teams #mst-me {
     --mst-presence-ring: var(--mst-shell);
 }
 
-/* Persona: a Teams monogram of its name by default, its picture with body.mst-persona-picture */
-body.ms-teams #mst-me img {
+/* Persona: its picture, or a Teams monogram of its name when it has none (or when
+   body.mst-persona-monogram asks for one) */
+body.ms-teams #mst-me .mst-monogram {
     display: none;
 }
 
-body.ms-teams.mst-persona-picture #mst-me img {
-    display: block;
+body.ms-teams:is(.mst-persona-monogram) #mst-me img,
+body.ms-teams #mst-me.mst-me-placeholder img {
+    display: none;
+}
+
+body.ms-teams.mst-persona-monogram #mst-me .mst-monogram,
+body.ms-teams #mst-me.mst-me-placeholder .mst-monogram {
+    display: flex;
 }
 
 body.ms-teams .mst-monogram {
@@ -266,10 +273,6 @@ body.ms-teams .mst-monogram {
     font-weight: 600;
     letter-spacing: 0;
     user-select: none;
-}
-
-body.ms-teams.mst-persona-picture .mst-monogram {
-    display: none;
 }
 
 body.ms-teams .mst-monogram[data-mst-color="0"] { background: #e8ebfa; color: #4f52b2; }

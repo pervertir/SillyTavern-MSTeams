@@ -2,7 +2,7 @@
 // SillyTavern's own menu buttons, and the chat header above the messages.
 
 import { canGoBack, canGoForward, filterChatList, travel } from './chatlist.js';
-import { monogramize } from './monograms.js';
+import { isPlaceholder, monogramize } from './monograms.js';
 import { RAIL_SHORTCUTS, SHORTCUTS, showShortcuts, withShortcut } from './shortcuts.js';
 
 const TITLEBAR_ID = 'mst-titlebar';
@@ -228,7 +228,7 @@ export function refreshPersona(avatarId) {
         monogram.dataset.mstColor = String(getMonogramColor(name));
     }
     const me = document.getElementById('mst-me');
-    me.title = name ? `${name} (${t('Persona Management')})` : t('Persona Management');
+    me.title = name ? `${name} (${t('Profiles')})` : t('Profiles');
     const { getThumbnailUrl } = SillyTavern.getContext();
     let src = '';
     if (avatarId) {
@@ -241,6 +241,10 @@ export function refreshPersona(avatarId) {
     if (src) {
         img.src = src;
     }
+    // no picture of its own (SillyTavern's default silhouette): the monogram stands in
+    isPlaceholder(img.getAttribute('src') ?? '').then((placeholder) => {
+        document.getElementById('mst-me')?.classList.toggle('mst-me-placeholder', placeholder);
+    });
 }
 
 /** A rail app of the theme's own (Chat, More), built like SillyTavern's drawer toggles. */
