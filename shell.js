@@ -13,18 +13,18 @@ const HEADER_ID = 'mst-chat-head';
     name (tooltips give the full names, from RAIL_SHORTCUTS). Chat (the chat list) sits second and
     "More" seventh, as in Teams; Extensions sits at the bottom. */
 const RAIL_APPS = [
-    { id: 'ai-config-button', label: 'AI Config', icon: 'bell', order: 1 },
-    { id: 'sys-settings-button', label: 'API', icon: 'calendar', order: 3 },
-    { id: 'advanced-formatting-button', label: 'Formatting', icon: 'call', order: 4 },
+    { id: 'ai-config-button', label: 'AI Response Configuration', icon: 'bell', order: 1 },
+    { id: 'sys-settings-button', label: 'API Connections', icon: 'calendar', order: 3 },
+    { id: 'advanced-formatting-button', label: 'AI Response Formatting', icon: 'call', order: 4 },
     { id: 'WI-SP-button', label: 'World Info', icon: 'cloud', order: 5 },
-    { id: 'user-settings-button', label: 'Settings', icon: 'copilot', order: 6 },
+    { id: 'user-settings-button', label: 'User Settings', icon: 'copilot', order: 6 },
     { id: 'extensions-settings-button', label: 'Extensions', icon: 'apps', order: 20 },
 ];
 
 /** Menus that don't get a rail icon of their own: they're under "More" (…), like Teams' extra apps */
 const MORE_APPS = [
-    { id: 'rightNavHolder', label: 'Characters', icon: 'fa-regular fa-address-book' },
-    { id: 'persona-management-button', label: 'Personas', icon: 'fa-regular fa-id-badge' },
+    { id: 'rightNavHolder', label: 'Character Management', icon: 'fa-regular fa-address-book' },
+    { id: 'persona-management-button', label: 'Persona Management', icon: 'fa-regular fa-id-badge' },
     { id: 'backgrounds-button', label: 'Backgrounds', icon: 'fa-regular fa-image' },
 ];
 
@@ -109,17 +109,17 @@ function createTitlebar() {
         waffle.append(document.createElement('span'));
     }
     waffle.addEventListener('click', () => toggleFlyout(waffle, [
-        { label: 'AI Config', icon: 'fa-regular fa-bell', run: () => toggleDrawer('ai-config-button') },
+        { label: 'AI Response Configuration', icon: 'fa-regular fa-bell', run: () => toggleDrawer('ai-config-button') },
         {
             label: 'Chat', icon: 'fa-regular fa-comments', run: () => {
                 closeDrawers();
                 document.body.classList.remove('mst-m-chat');
             },
         },
-        { label: 'API', icon: 'fa-regular fa-calendar', run: () => toggleDrawer('sys-settings-button') },
-        { label: 'Formatting', icon: 'fa-solid fa-phone', run: () => toggleDrawer('advanced-formatting-button') },
+        { label: 'API Connections', icon: 'fa-regular fa-calendar', run: () => toggleDrawer('sys-settings-button') },
+        { label: 'AI Response Formatting', icon: 'fa-solid fa-phone', run: () => toggleDrawer('advanced-formatting-button') },
         { label: 'World Info', icon: 'fa-solid fa-cloud', run: () => toggleDrawer('WI-SP-button') },
-        { label: 'Settings', icon: 'fa-regular fa-comment-dots', run: () => toggleDrawer('user-settings-button') },
+        { label: 'User Settings', icon: 'fa-regular fa-comment-dots', run: () => toggleDrawer('user-settings-button') },
         ...MORE_APPS.map(({ id, label, icon }) => ({ label, icon, run: () => toggleDrawer(id) })),
         { label: 'Extensions', icon: 'fa-regular fa-square-plus', run: () => toggleDrawer('extensions-settings-button') },
     ], 'beside'));
@@ -156,7 +156,7 @@ function createTitlebar() {
     right.className = 'mst-tb-right';
     const more = fluentButton('mst-icon-button', t('Settings and more'), 'more');
     more.addEventListener('click', () => toggleFlyout(more, [
-        { label: 'Settings', icon: 'fa-solid fa-gear', run: () => toggleDrawer('user-settings-button') },
+        { label: 'User Settings', icon: 'fa-solid fa-gear', run: () => toggleDrawer('user-settings-button') },
         { label: 'Keyboard shortcuts', icon: 'fa-regular fa-keyboard', run: showShortcuts },
         document.body.classList.contains('mst-dark')
             ? { label: 'Switch to light theme', icon: 'fa-regular fa-sun', run: () => shellOptions.setTheme('light') }
@@ -229,7 +229,7 @@ export function refreshPersona(avatarId) {
         monogram.dataset.mstColor = String(getMonogramColor(name));
     }
     const me = document.getElementById('mst-me');
-    me.title = name ? `${name} (${t('Personas')})` : t('Personas');
+    me.title = name ? `${name} (${t('Persona Management')})` : t('Persona Management');
     const { getThumbnailUrl } = SillyTavern.getContext();
     let src = '';
     if (avatarId) {
@@ -391,7 +391,7 @@ function openProfile() {
 /** On phones the bottom bar has room for five tabs, as in Teams mobile; the rest move under More */
 const PHONE_MORE_APPS = [
     { id: 'WI-SP-button', label: 'World Info', icon: 'fa-solid fa-cloud' },
-    { id: 'user-settings-button', label: 'Settings', icon: 'fa-regular fa-comment-dots' },
+    { id: 'user-settings-button', label: 'User Settings', icon: 'fa-regular fa-comment-dots' },
     { id: 'extensions-settings-button', label: 'Extensions', icon: 'fa-regular fa-square-plus' },
 ];
 

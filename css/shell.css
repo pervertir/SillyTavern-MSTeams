@@ -374,7 +374,9 @@ body.ms-teams #top-settings-holder > .mst-app {
 
 body.ms-teams.mst-rail-labels #top-settings-holder > .drawer > .drawer-toggle,
 body.ms-teams.mst-rail-labels #top-settings-holder > .mst-app {
-    height: 56px;
+    height: 64px;
+    justify-content: flex-start;
+    padding-top: 10px;
 }
 
 /* name under the icon */
@@ -394,9 +396,22 @@ body.ms-teams #top-settings-holder > .mst-app .mst-app-label {
     white-space: nowrap;
 }
 
-body.ms-teams.mst-rail-labels #top-settings-holder > .drawer > .drawer-toggle::after,
+/* SillyTavern's full names take up to two lines */
+body.ms-teams #top-settings-holder > .drawer > .drawer-toggle::after {
+    display: none;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
 body.ms-teams.mst-rail-labels #top-settings-holder > .mst-app .mst-app-label {
     display: block;
+}
+
+body.ms-teams.mst-rail-labels #top-settings-holder > .drawer > .drawer-toggle::after {
+    display: -webkit-box;
 }
 
 /* the selected app's bar on the rail's edge */

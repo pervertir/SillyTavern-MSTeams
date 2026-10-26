@@ -10,7 +10,7 @@
     }
 
     body.ms-teams {
-        --mst-tabbar-h: calc(56px + env(safe-area-inset-bottom, 0px));
+        --mst-tabbar-h: calc(64px + env(safe-area-inset-bottom, 0px));
         --mst-safe-top: env(safe-area-inset-top, 0px);
         --topBarBlockSize: var(--mst-safe-top);
     }
@@ -60,13 +60,18 @@
 
     body.ms-teams #top-settings-holder > .drawer > .drawer-toggle,
     body.ms-teams #top-settings-holder > .mst-app {
-        height: 56px;
+        height: 64px;
+        justify-content: flex-start;
+        padding-top: 8px;
     }
 
     /* Teams mobile always names its tabs */
-    body.ms-teams #top-settings-holder > .drawer > .drawer-toggle::after,
     body.ms-teams #top-settings-holder > .mst-app .mst-app-label {
         display: block;
+    }
+
+    body.ms-teams #top-settings-holder > .drawer > .drawer-toggle::after {
+        display: -webkit-box;
     }
 
     body.ms-teams #top-settings-holder > .drawer.mst-more-drawer {

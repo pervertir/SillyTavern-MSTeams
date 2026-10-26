@@ -207,7 +207,7 @@ function buildCalendar() {
         drawer.classList.remove('mst-cal-week');
         /** @type {HTMLElement} */ (document.getElementById('main_api'))?.focus();
     }, true);
-    header(drawer, 'API', [view, add], [today, prev, next, month]);
+    header(drawer, 'API Connections', [view, add], [today, prev, next, month]);
     drawer.append(stage);
     render();
 
@@ -300,7 +300,7 @@ function buildCalls() {
     if (!drawer) {
         return;
     }
-    header(drawer, 'Formatting', [
+    header(drawer, 'AI Response Formatting', [
         toolButton('Import', 'import', () => click('#af_master_import')),
         toolButton('Export', 'share', () => click('#af_master_export')),
     ]);
@@ -555,7 +555,7 @@ function buildCopilot() {
             drawer.querySelectorAll('.mst-cp-hidden, .mst-copilot-thread-on').forEach(x => x.classList.remove('mst-cp-hidden', 'mst-copilot-thread-on'));
         }
     };
-    header(drawer, 'Settings', [toolButton('New chat', 'compose', () => {
+    header(drawer, 'User Settings', [toolButton('New chat', 'compose', () => {
         ask('');
         delete drawer.dataset.mstShow;
         drawer.querySelectorAll('.mst-cp-hidden, .mst-copilot-thread-on').forEach(x => x.classList.remove('mst-cp-hidden', 'mst-copilot-thread-on'));
@@ -760,7 +760,7 @@ function buildActivity() {
     }
     const feed = toolButton('Feed', 'chevron-down', () => {});
     feed.classList.add('mst-tool-flip');
-    header(drawer, 'AI Config', [toolButton('', 'filter', () => {})], [feed]);
+    header(drawer, 'AI Response Configuration', [toolButton('', 'filter', () => {})], [feed]);
 }
 
 /* People, Profiles and Background effects (the menus under More) ------------------------- */
@@ -850,7 +850,7 @@ function buildPeople() {
     if (!drawer) {
         return;
     }
-    header(drawer, 'Characters', [
+    header(drawer, 'Character Management', [
         toolButton('', 'person-add', () => click('#rm_button_create')),
         toolButton('', 'arrow-down', () => click('#character_import_button')),
         toolButton('New group', 'people-add', () => click('#rm_button_group_chats'), true),
@@ -867,7 +867,7 @@ function buildProfiles() {
     if (!drawer) {
         return;
     }
-    header(drawer, 'Personas', [
+    header(drawer, 'Persona Management', [
         toolButton('Back up', 'arrow-down', () => click('#personas_backup')),
         toolButton('Restore', 'arrow-up', () => click('#personas_restore')),
         toolButton('New profile', 'person-add', () => click('#create_dummy_persona'), true),
