@@ -1610,3 +1610,18 @@ body.ms-teams .mst-speed-contact.mst-speed-on {
     background: var(--mst-selected);
     box-shadow: var(--mst-shadow-2);
 }
+
+/* dropdowns and short fields keep to a Fluent field's width instead of the whole card */
+body.ms-teams #user-settings-block .mst-cp-card :is(select, .select2-container, input.text_pole, input[type="text"], input[type="number"]):not(.neo-range-input) {
+    flex: 0 0 auto !important;
+    width: 320px !important;
+    max-width: 100%;
+}
+
+body.ms-teams #user-settings-block .mst-cp-card .flex-container:has(> :is(span, label) + select) {
+    justify-content: flex-start;
+}
+
+body.ms-teams #user-settings-block .mst-cp-card div:has(> .neo-range-slider) {
+    max-width: 560px !important;
+}
