@@ -3,8 +3,8 @@
    Background effects screens. */
 
 /* Icon-only buttons are Teams' subtle buttons: no box, just the icon */
-body.ms-teams #top-settings-holder .drawer-content .menu_button:is(.fa-solid, .fa-regular, .fa-brands):not(.redWarningBG, .red_button, .toggleEnabled, .active),
-body.ms-teams dialog.popup .menu_button:is(.fa-solid, .fa-regular):not(.popup-button-ok, .redWarningBG) {
+body.ms-teams #top-settings-holder .drawer-content .menu_button:is(.fa-solid, .fa-regular, .fa-brands, :has(> i:only-child)):not(.redWarningBG, .red_button, .toggleEnabled, .active),
+body.ms-teams dialog.popup .menu_button:is(.fa-solid, .fa-regular, :has(> i:only-child)):not(.popup-button-ok, .redWarningBG) {
     min-width: 32px;
     width: 32px;
     height: 32px;
@@ -19,8 +19,8 @@ body.ms-teams dialog.popup .menu_button:is(.fa-solid, .fa-regular):not(.popup-bu
     font-size: 15px;
 }
 
-body.ms-teams #top-settings-holder .drawer-content .menu_button:is(.fa-solid, .fa-regular, .fa-brands):not(.redWarningBG, .red_button, .toggleEnabled, .active):hover,
-body.ms-teams dialog.popup .menu_button:is(.fa-solid, .fa-regular):not(.popup-button-ok, .redWarningBG):hover {
+body.ms-teams #top-settings-holder .drawer-content .menu_button:is(.fa-solid, .fa-regular, .fa-brands, :has(> i:only-child)):not(.redWarningBG, .red_button, .toggleEnabled, .active):hover,
+body.ms-teams dialog.popup .menu_button:is(.fa-solid, .fa-regular, :has(> i:only-child)):not(.popup-button-ok, .redWarningBG):hover {
     background: var(--mst-subtle-hover);
     color: var(--mst-brand-fg);
 }
