@@ -245,10 +245,6 @@
 
     /* ---- Teams mobile ---- */
 
-    body.ms-teams #top-settings-holder > #mst-app-more {
-        display: flex;
-    }
-
     /* five tabs, as in Teams mobile: the rest live under More */
     body.ms-teams #top-settings-holder > .mst-more-drawer:not(:has(.drawer-content.openDrawer)) {
         flex: 0 0 0;

@@ -337,10 +337,15 @@ body.ms-teams #top-settings-holder > .drawer {
 }
 
 body.ms-teams #mst-app-chat { order: 3; }
-body.ms-teams #mst-app-more { order: 10; }
+body.ms-teams #mst-app-more { order: 7; }
 
-/* More is for phones, where the bottom bar runs out of room */
-body.ms-teams #top-settings-holder > #mst-app-more {
+/* Backgrounds, Persona and Characters open from More; their toggles leave the rail */
+body.ms-teams #top-settings-holder > .drawer.mst-more-only {
+    order: 30;
+    height: 0;
+}
+
+body.ms-teams #top-settings-holder > .drawer.mst-more-only > .drawer-toggle {
     display: none;
 }
 
@@ -489,7 +494,7 @@ body.ms-teams #top-settings-holder > .mst-app:hover {
 /* Selected app: an open menu, Chat while no menu is open, More while one of its menus is */
 body.ms-teams #top-settings-holder > .drawer > .drawer-toggle:has(.openIcon),
 body.ms-teams:not(:has(#top-settings-holder .drawer-content.openDrawer)) #mst-app-chat,
-body.ms-teams:has(.mst-more-drawer > .drawer-content.openDrawer) #mst-app-more,
+body.ms-teams:has(.mst-more-only > .drawer-content.openDrawer) #mst-app-more,
 body.ms-teams #mst-app-more.mst-app-open {
     color: var(--mst-brand-fg);
     --mst-rail-icon: var(--mst-rail-icon-on);
@@ -497,13 +502,13 @@ body.ms-teams #mst-app-more.mst-app-open {
 
 body.ms-teams #top-settings-holder > .drawer > .drawer-toggle:has(.openIcon)::after,
 body.ms-teams:not(:has(#top-settings-holder .drawer-content.openDrawer)) #mst-app-chat .mst-app-label,
-body.ms-teams:has(.mst-more-drawer > .drawer-content.openDrawer) #mst-app-more .mst-app-label {
+body.ms-teams:has(.mst-more-only > .drawer-content.openDrawer) #mst-app-more .mst-app-label {
     font-weight: 600;
 }
 
 body.ms-teams #top-settings-holder > .drawer > .drawer-toggle:has(.openIcon)::before,
 body.ms-teams:not(:has(#top-settings-holder .drawer-content.openDrawer)) #mst-app-chat::before,
-body.ms-teams:has(.mst-more-drawer > .drawer-content.openDrawer) #mst-app-more::before {
+body.ms-teams:has(.mst-more-only > .drawer-content.openDrawer) #mst-app-more::before {
     height: 20px;
     margin-top: -10px;
 }

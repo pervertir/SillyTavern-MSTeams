@@ -11,7 +11,7 @@ const HEADER_ID = 'mst-chat-head';
 
 /** SillyTavern's menus down the rail, each wearing a Teams-style icon under a short name (tooltips
     give SillyTavern's full names, from RAIL_SHORTCUTS). Chat (the chat list, order 3) sits between
-    them; Extensions sits at the bottom. */
+    them, then More (…) holds Backgrounds, Persona and Characters; Extensions sits at the bottom. */
 const RAIL_APPS = [
     { id: 'ai-config-button', label: 'AI Config', icon: 'bell', order: 1 },
     { id: 'sys-settings-button', label: 'API', icon: 'calendar', order: 2 },
@@ -391,10 +391,14 @@ function openProfile() {
     }
 }
 
-/** More (phones only): the menus that don't fit in the bottom bar */
+/** Menus that open from More (…) on the desktop rail */
+const MORE_APPS = PHONE_MORE_APPS.filter(({ id }) => ['backgrounds-button', 'persona-management-button', 'rightNavHolder'].includes(id));
+
+/** More: the menus without a rail icon of their own (on phones, everything past the first four) */
 function toggleMoreMenu() {
     const app = document.getElementById(MORE_APP_ID);
-    const items = PHONE_MORE_APPS
+    const phone = window.matchMedia('(max-width: 1000px)').matches;
+    const items = (phone ? PHONE_MORE_APPS : MORE_APPS)
         .filter(({ id }) => document.getElementById(id))
         .map(({ id, label, icon }) => ({
             label,
@@ -476,6 +480,9 @@ function createRail() {
     }
     for (const { id } of PHONE_MORE_APPS) {
         document.getElementById(id)?.classList.add('mst-more-drawer');
+    }
+    for (const { id } of MORE_APPS) {
+        document.getElementById(id)?.classList.add('mst-more-only');
     }
 }
 

@@ -8,7 +8,7 @@ export const IS_MAC = /Mac|iPhone|iPad|iPod/i.test(navigator.userAgentData?.plat
 const MAC_KEYS = { Mod: '⌘', Shift: '⇧', Alt: '⌥', Ctrl: '⌃', Enter: '↩', Left: '←', Right: '→', Esc: 'esc', '.': '.' };
 const PC_KEYS = { Mod: 'Ctrl', Shift: 'Shift', Alt: 'Alt', Ctrl: 'Ctrl', Enter: 'Enter', Left: 'Left', Right: 'Right', Esc: 'Esc', '.': '.' };
 
-/** Rail apps from top to bottom with SillyTavern's full names, opened with Mod+Shift+1 … 9, then 0 */
+/** Rail apps from top to bottom with SillyTavern's full names, opened with Mod+Shift+1 … 8 */
 export const RAIL_SHORTCUTS = [
     { id: 'ai-config-button', label: 'AI Response Configuration' },
     { id: 'sys-settings-button', label: 'API Connections' },
@@ -16,11 +16,9 @@ export const RAIL_SHORTCUTS = [
     { id: 'advanced-formatting-button', label: 'AI Response Formatting' },
     { id: 'WI-SP-button', label: 'World Info' },
     { id: 'user-settings-button', label: 'User Settings' },
-    { id: 'backgrounds-button', label: 'Backgrounds' },
-    { id: 'persona-management-button', label: 'Persona Management' },
-    { id: 'rightNavHolder', label: 'Character Management' },
+    { id: 'mst-app-more', label: 'More' },
     { id: 'extensions-settings-button', label: 'Extensions' },
-].map((app, index) => ({ ...app, keys: ['Mod', 'Shift', String((index + 1) % 10)] }));
+].map((app, index) => ({ ...app, keys: ['Mod', 'Shift', String(index + 1)] }));
 
 export const SHORTCUTS = {
     search: ['Mod', 'Alt', 'E'],
