@@ -1,0 +1,399 @@
+/* SillyTavern's controls, menus and dialogs as Fluent 2 components */
+
+/* Buttons: Fluent secondary; the dialog's OK button is primary */
+body.ms-teams .menu_button {
+    min-height: 32px;
+    padding: 4px 12px;
+    box-sizing: border-box;
+    border: 1px solid var(--mst-stroke);
+    border-radius: var(--mst-radius);
+    background: var(--mst-card);
+    color: var(--mst-fg);
+    font-size: var(--mst-text);
+    font-weight: 600;
+    filter: none;
+    transition: background-color var(--mst-fast) var(--mst-ease), border-color var(--mst-fast) var(--mst-ease);
+}
+
+body.ms-teams .menu_button:hover {
+    background: var(--mst-list);
+    border-color: var(--mst-stroke);
+    filter: none;
+}
+
+body.ms-teams.mst-dark .menu_button:hover {
+    background: var(--mst-hover);
+}
+
+body.ms-teams .menu_button:active {
+    background: var(--mst-subtle-pressed);
+}
+
+body.ms-teams .menu_button.toggleEnabled,
+body.ms-teams .menu_button.active,
+body.ms-teams .popup .popup-button-ok,
+body.ms-teams .menu_button.mst-primary {
+    background: var(--mst-brand);
+    border-color: transparent;
+    color: var(--mst-on-brand);
+}
+
+body.ms-teams .menu_button.toggleEnabled:hover,
+body.ms-teams .menu_button.active:hover,
+body.ms-teams .popup .popup-button-ok:hover {
+    background: var(--mst-brand-hover);
+}
+
+body.ms-teams .menu_button.redWarningBG,
+body.ms-teams .menu_button.caution {
+    background: var(--mst-danger);
+    border-color: transparent;
+    color: #ffffff;
+}
+
+/* icon-only buttons are square */
+body.ms-teams .menu_button.fa-solid,
+body.ms-teams .menu_button.fa-regular,
+body.ms-teams .menu_button.fa-brands {
+    min-width: 32px;
+    padding: 4px;
+    justify-content: center;
+    font-weight: 900;
+}
+
+body.ms-teams .right_menu_button,
+body.ms-teams .mes_button {
+    filter: none;
+}
+
+body.ms-teams .right_menu_button {
+    color: var(--mst-fg-2);
+}
+
+body.ms-teams .right_menu_button:hover {
+    color: var(--mst-brand-fg);
+}
+
+/* Text fields */
+body.ms-teams .text_pole,
+body.ms-teams textarea:not(#send_textarea),
+body.ms-teams select,
+body.ms-teams input[type="text"],
+body.ms-teams input[type="number"],
+body.ms-teams input[type="search"]:not(#mst-search-input),
+body.ms-teams input[type="password"],
+body.ms-teams input[type="url"] {
+    border: 1px solid var(--mst-stroke);
+    border-bottom-color: var(--mst-stroke-accessible);
+    border-radius: var(--mst-radius);
+    background-color: var(--mst-input);
+    color: var(--mst-fg);
+    font-family: var(--mst-font);
+    box-shadow: none;
+    text-shadow: none;
+}
+
+body.ms-teams .text_pole:focus,
+body.ms-teams textarea:not(#send_textarea):focus,
+body.ms-teams select:focus,
+body.ms-teams input[type="text"]:focus,
+body.ms-teams input[type="number"]:focus,
+body.ms-teams input[type="search"]:not(#mst-search-input):focus,
+body.ms-teams input[type="password"]:focus,
+body.ms-teams input[type="url"]:focus {
+    border-bottom-color: var(--mst-brand);
+    box-shadow: inset 0 -1px 0 var(--mst-brand);
+    outline: none;
+}
+
+body.ms-teams ::placeholder {
+    color: var(--mst-fg-3);
+}
+
+/* Checkboxes: brand fill with a white tick */
+body.ms-teams input[type="checkbox"] {
+    --SmartThemeCheckboxTickColor: var(--mst-on-brand);
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--mst-fg-3);
+    border-radius: var(--mst-radius-sm);
+    outline: none;
+    background-color: var(--mst-input);
+    box-shadow: none;
+    filter: none;
+}
+
+body.ms-teams input[type="checkbox"]:checked {
+    border-color: var(--mst-brand);
+    background-color: var(--mst-brand);
+}
+
+body.ms-teams input[type="checkbox"]::before {
+    width: 10px;
+    height: 10px;
+}
+
+body.ms-teams input[type="radio"],
+body.ms-teams input[type="range"] {
+    accent-color: var(--mst-brand);
+}
+
+/* Sliders: Fluent's rail and ringed thumb */
+body.ms-teams input[type="range"] {
+    height: 4px;
+    background: var(--mst-stroke-accessible);
+    border-radius: 2px;
+    box-shadow: none;
+    filter: none;
+}
+
+/* SillyTavern sets its sliders with !important */
+body.ms-teams .neo-range-slider {
+    height: 4px !important;
+    background: var(--mst-stroke-accessible) !important;
+    border-radius: 2px !important;
+    box-shadow: none !important;
+}
+
+body.ms-teams input[type="range"]::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px;
+    border: 4px solid var(--mst-card);
+    border-radius: 50%;
+    background: var(--mst-brand);
+    box-shadow: 0 0 0 1px var(--mst-stroke), var(--mst-shadow-2);
+    box-sizing: border-box;
+}
+
+body.ms-teams input[type="range"]::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border: 4px solid var(--mst-card);
+    border-radius: 50%;
+    background: var(--mst-brand);
+    box-shadow: 0 0 0 1px var(--mst-stroke);
+}
+
+/* Collapsible sections in menus */
+body.ms-teams .inline-drawer-header,
+body.ms-teams .standoutHeader {
+    color: var(--mst-fg);
+    font-weight: 600;
+}
+
+body.ms-teams .inline-drawer {
+    border-color: var(--mst-stroke-2);
+}
+
+/* SillyTavern's gradient section headers become plain Fluent card headers */
+body.ms-teams #user-settings-block h4,
+body.ms-teams .standoutHeader {
+    background: var(--mst-card);
+    background-image: none;
+    border: 1px solid var(--mst-stroke-2);
+    border-radius: var(--mst-radius-md);
+    box-shadow: var(--mst-shadow-2);
+    padding: 6px 10px;
+}
+
+body.ms-teams .standoutHeader ~ .inline-drawer-content {
+    border: 1px solid var(--mst-stroke-2);
+    border-radius: var(--mst-radius-md);
+    background: var(--mst-card);
+}
+
+body.ms-teams #extensions_settings .inline-drawer,
+body.ms-teams #extensions_settings2 .inline-drawer {
+    border-radius: var(--mst-radius-md);
+    background: var(--mst-card);
+    box-shadow: var(--mst-shadow-2);
+    margin-bottom: 8px;
+}
+
+body.ms-teams #extensions_settings .inline-drawer-toggle.inline-drawer-header,
+body.ms-teams #extensions_settings2 .inline-drawer-toggle.inline-drawer-header {
+    padding: 8px 12px;
+    margin: 0;
+    border: none;
+    border-radius: var(--mst-radius-md);
+    background: none;
+    box-shadow: none;
+}
+
+body.ms-teams #extensions_settings .inline-drawer-content,
+body.ms-teams #extensions_settings2 .inline-drawer-content {
+    padding: 0 12px 12px;
+}
+
+/* Character list in the Characters panel: Teams people rows */
+body.ms-teams .character_select,
+body.ms-teams .group_select,
+body.ms-teams .bogus_folder_select {
+    border-radius: var(--mst-radius-md);
+    padding: 6px 8px;
+    transition: background-color var(--mst-fast) var(--mst-ease);
+}
+
+body.ms-teams .character_select:hover,
+body.ms-teams .group_select:hover,
+body.ms-teams .bogus_folder_select:hover {
+    background: var(--mst-hover);
+}
+
+body.ms-teams .character_select.is_fav .ch_name,
+body.ms-teams .group_select.is_fav .ch_name {
+    color: var(--mst-brand-fg);
+}
+
+body.ms-teams #rm_print_characters_block .avatar,
+body.ms-teams #rm_print_characters_block .avatar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+body.ms-teams .tag {
+    border-radius: var(--mst-radius);
+    border-color: var(--mst-stroke-2);
+}
+
+/* Menus: the ☰ chat options and the extensions wand */
+body.ms-teams #options .options-content,
+body.ms-teams #extensionsMenu,
+body.ms-teams .list-group,
+body.ms-teams .ctx-menu,
+body.ms-teams #character_context_menu {
+    padding: 4px;
+    border: 1px solid var(--mst-stroke-3);
+    border-radius: var(--mst-radius-md);
+    background: var(--mst-raised);
+    color: var(--mst-fg);
+    box-shadow: var(--mst-shadow-16);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+body.ms-teams #options .options-content a,
+body.ms-teams #extensionsMenu .list-group-item,
+body.ms-teams .list-group .list-group-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 32px;
+    padding: 6px 10px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: var(--mst-radius);
+    background: none;
+    color: var(--mst-fg);
+    font-size: var(--mst-text);
+    opacity: 1;
+}
+
+body.ms-teams #options .options-content a:hover,
+body.ms-teams #extensionsMenu .list-group-item:hover,
+body.ms-teams .list-group .list-group-item:hover {
+    background: var(--mst-subtle-hover);
+    color: var(--mst-fg);
+}
+
+body.ms-teams #options .options-content a i,
+body.ms-teams #extensionsMenu .list-group-item .extensionsMenuExtensionButton,
+body.ms-teams .list-group .list-group-item i {
+    width: 18px;
+    font-size: 14px;
+    color: var(--mst-fg-2);
+}
+
+body.ms-teams #options hr {
+    margin: 4px 0;
+}
+
+/* Dialogs */
+body.ms-teams dialog.popup,
+body.ms-teams #character_popup,
+body.ms-teams #dialogue_popup {
+    border: none;
+    border-radius: var(--mst-radius-lg);
+    background: var(--mst-card);
+    color: var(--mst-fg);
+    box-shadow: var(--mst-shadow-64);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    font-family: var(--mst-font);
+}
+
+body.ms-teams dialog.popup::backdrop {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+body.ms-teams dialog.popup .popup-body {
+    padding: 8px 8px 0;
+}
+
+body.ms-teams dialog.popup h3 {
+    font-size: var(--mst-text-lg);
+    line-height: 28px;
+}
+
+body.ms-teams dialog.popup .popup-controls {
+    gap: 8px;
+    padding: 16px 8px 8px;
+}
+
+body.ms-teams dialog.popup .popup-controls .menu_button {
+    min-width: 96px;
+    justify-content: center;
+}
+
+/* Toasts: Teams notification cards */
+body.ms-teams #toast-container > div {
+    padding: 12px 16px 12px 48px;
+    border-radius: var(--mst-radius-md);
+    background-color: var(--mst-raised);
+    background-position: 16px center;
+    color: var(--mst-fg);
+    box-shadow: var(--mst-shadow-28);
+    opacity: 1;
+    border-left: 4px solid var(--mst-brand);
+    font-family: var(--mst-font);
+}
+
+body.ms-teams #toast-container > div:hover {
+    box-shadow: var(--mst-shadow-28);
+}
+
+body.ms-teams #toast-container > .toast-success { border-left-color: var(--mst-success); }
+body.ms-teams #toast-container > .toast-error { border-left-color: var(--mst-danger); }
+body.ms-teams #toast-container > .toast-warning { border-left-color: var(--mst-warning); }
+
+body.ms-teams #toast-container .toast-title {
+    font-weight: 600;
+}
+
+/* Settings panel of this extension */
+.mst-settings .mst-setting-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 6px 0;
+}
+
+.mst-settings .mst-setting-row > label {
+    flex: 1;
+}
+
+.mst-settings .mst-setting-row > select,
+.mst-settings .mst-setting-row > input {
+    width: auto;
+    min-width: 160px;
+    margin: 0;
+}
+
+.mst-settings .mst-note {
+    display: block;
+    margin-top: 8px;
+    opacity: 0.8;
+}

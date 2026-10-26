@@ -1,0 +1,144 @@
+/* Compose box: Teams' "Type a message" box with its tools on the right and the send arrow last */
+
+body.ms-teams #form_sheld {
+    width: auto;
+    margin: 0;
+    padding: 4px 20px 16px;
+    box-sizing: border-box;
+    background: var(--mst-canvas);
+    white-space: normal;
+}
+
+body.ms-teams #send_form {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--mst-stroke-2);
+    border-radius: var(--mst-radius-md);
+    background: var(--mst-input);
+    box-shadow: var(--mst-shadow-2);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    overflow: hidden;
+    transition: box-shadow var(--mst-fast) var(--mst-ease);
+}
+
+/* the brand line under the box while typing */
+body.ms-teams #send_form::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--mst-brand);
+    transform: scaleX(0);
+    transition: transform var(--mst-normal) var(--mst-ease);
+    pointer-events: none;
+}
+
+body.ms-teams #send_form:focus-within::after {
+    transform: scaleX(1);
+}
+
+body.ms-teams #send_form.no-connection {
+    background: var(--mst-input);
+}
+
+body.ms-teams #nonQRFormItems {
+    align-items: flex-end;
+    column-gap: 2px;
+    padding: 4px 6px 4px 12px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+body.ms-teams #send_textarea {
+    order: 1;
+    min-height: 36px;
+    height: 36px;
+    max-height: 40dvh;
+    padding: 8px 4px 8px 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    color: var(--mst-fg);
+    font-family: var(--mst-font);
+    font-size: var(--mst-text);
+    line-height: 20px;
+    text-align: start;
+    text-shadow: none;
+    resize: none;
+    box-shadow: none;
+    outline: none;
+}
+
+body.ms-teams #send_textarea::placeholder {
+    text-align: start;
+    color: var(--mst-fg-3);
+    opacity: 1;
+}
+
+body.ms-teams #leftSendForm {
+    order: 2;
+}
+
+body.ms-teams #rightSendForm {
+    order: 3;
+}
+
+body.ms-teams #leftSendForm,
+body.ms-teams #rightSendForm {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 36px;
+}
+
+body.ms-teams #rightSendForm > div:not(.mes_stop),
+body.ms-teams #leftSendForm > div,
+body.ms-teams #rightSendForm > .mes_stop {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--mst-radius);
+    color: var(--mst-fg-3);
+    font-size: 16px;
+    opacity: 1;
+    filter: none;
+    transition: background-color var(--mst-fast) var(--mst-ease), color var(--mst-fast) var(--mst-ease);
+}
+
+body.ms-teams #rightSendForm > div:hover,
+body.ms-teams #leftSendForm > div:hover {
+    background: var(--mst-subtle-hover);
+    color: var(--mst-brand-fg);
+    filter: none;
+}
+
+/* Send: Teams' purple arrow */
+body.ms-teams #send_but {
+    color: var(--mst-brand-fg);
+}
+
+body.ms-teams #rightSendForm > .mes_stop {
+    color: var(--mst-danger);
+}
+
+body.ms-teams #file_form {
+    padding: 8px 12px 0;
+}
+
+body.ms-teams #file_form .file_attached {
+    gap: 8px;
+    padding: 6px 10px;
+    border: 1px solid var(--mst-stroke-2);
+    border-radius: var(--mst-radius);
+    background: var(--mst-list);
+    font-size: var(--mst-text-sm);
+}
+
+/* Delete-messages bar */
+body.ms-teams #dialogue_del_mes {
+    gap: 8px;
+    padding: 0 0 8px;
+}

@@ -1,0 +1,180 @@
+/* Chat list: the "Chat" pane with Pinned and Recent sections */
+
+body.ms-teams .mst-list-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    height: var(--mst-head-h);
+    padding: 0 12px 0 20px;
+    box-sizing: border-box;
+    flex: none;
+}
+
+body.ms-teams .mst-list-head h2 {
+    margin: 0;
+    font-size: var(--mst-text-lg);
+    line-height: 28px;
+    font-weight: 700;
+}
+
+body.ms-teams .mst-list-actions {
+    display: flex;
+    gap: 4px;
+}
+
+body.ms-teams .mst-list-filter {
+    padding: 0 12px 8px 16px;
+    flex: none;
+}
+
+body.ms-teams .mst-list-filter[hidden] {
+    display: none;
+}
+
+body.ms-teams .mst-input {
+    width: 100%;
+    height: 32px;
+    padding: 0 10px;
+    margin: 0;
+    box-sizing: border-box;
+    border: 1px solid var(--mst-stroke);
+    border-bottom-color: var(--mst-stroke-accessible);
+    border-radius: var(--mst-radius);
+    background: var(--mst-input);
+    color: var(--mst-fg);
+    font: inherit;
+    outline: none;
+}
+
+body.ms-teams .mst-input:focus {
+    border-bottom: 2px solid var(--mst-brand);
+}
+
+body.ms-teams .mst-list-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 0 8px 12px;
+}
+
+body.ms-teams .mst-section + .mst-section {
+    margin-top: 8px;
+}
+
+body.ms-teams .mst-section-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    height: 32px;
+    padding: 0 12px;
+    margin: 0;
+    border: none;
+    border-radius: var(--mst-radius);
+    background: none;
+    color: var(--mst-fg-3);
+    font: inherit;
+    font-size: var(--mst-text-sm);
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+}
+
+body.ms-teams .mst-section-head:hover {
+    color: var(--mst-fg);
+}
+
+body.ms-teams .mst-section-head i {
+    width: 12px;
+    font-size: 10px;
+    transition: transform var(--mst-normal) var(--mst-ease);
+}
+
+body.ms-teams .mst-section-collapsed .mst-section-head i {
+    transform: rotate(-90deg);
+}
+
+body.ms-teams .mst-section-collapsed .mst-section-items {
+    display: none;
+}
+
+body.ms-teams .mst-chat {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 52px;
+    padding: 6px 12px;
+    box-sizing: border-box;
+    border-radius: var(--mst-radius-md);
+    color: var(--mst-fg);
+    cursor: pointer;
+    --mst-presence-ring: var(--mst-list);
+    transition: background-color var(--mst-fast) var(--mst-ease);
+}
+
+body.ms-teams .mst-chat:hover {
+    background: var(--mst-hover);
+    --mst-presence-ring: var(--mst-hover);
+}
+
+body.ms-teams .mst-chat.mst-chat-active {
+    background: var(--mst-selected);
+    box-shadow: var(--mst-shadow-2);
+    --mst-presence-ring: var(--mst-selected);
+}
+
+body.ms-teams .mst-chat-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+body.ms-teams .mst-chat-top {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+body.ms-teams .mst-chat-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--mst-text);
+    line-height: 20px;
+}
+
+body.ms-teams .mst-chat-active .mst-chat-name {
+    font-weight: 600;
+}
+
+body.ms-teams .mst-chat-time {
+    flex: none;
+    font-size: var(--mst-text-sm);
+    line-height: 16px;
+    color: var(--mst-fg-3);
+}
+
+body.ms-teams .mst-chat-preview {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--mst-text-sm);
+    line-height: 16px;
+    color: var(--mst-fg-3);
+}
+
+body.ms-teams .mst-avatar-group {
+    background: var(--mst-brand-soft);
+    color: var(--mst-brand-fg);
+}
+
+body.ms-teams .mst-list-empty {
+    padding: 24px 16px;
+    color: var(--mst-fg-3);
+    font-size: var(--mst-text-sm);
+    text-align: center;
+}

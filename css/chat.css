@@ -1,0 +1,545 @@
+/* The chat pane: Teams chat header, then messages as Teams bubbles. Other people's messages
+   sit on the left with their picture, name and time; yours sit on the right in lavender with
+   only the time. */
+
+/* Header */
+body.ms-teams #mst-chat-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: none;
+    height: var(--mst-head-h);
+    padding: 0 16px 0 20px;
+    box-sizing: border-box;
+    background: var(--mst-canvas);
+    border-bottom: 1px solid var(--mst-stroke-2);
+    --mst-presence-ring: var(--mst-canvas);
+}
+
+body.ms-teams #mst-chat-head .mst-back {
+    display: none;
+}
+
+body.ms-teams .mst-head-who {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    padding: 4px 8px 4px 0;
+    margin: 0;
+    border: none;
+    border-radius: var(--mst-radius);
+    background: none;
+    color: var(--mst-fg);
+    font: inherit;
+    cursor: pointer;
+}
+
+body.ms-teams .mst-head-who:hover .mst-head-name {
+    color: var(--mst-brand-fg);
+}
+
+body.ms-teams .mst-head-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--mst-text-md);
+    line-height: 22px;
+    font-weight: 700;
+}
+
+body.ms-teams .mst-tabs {
+    display: flex;
+    align-self: stretch;
+    gap: 16px;
+    flex: none;
+}
+
+body.ms-teams .mst-tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 2px;
+    color: var(--mst-fg-3);
+    font-size: var(--mst-text);
+}
+
+body.ms-teams .mst-tab-active {
+    color: var(--mst-fg);
+    font-weight: 600;
+}
+
+body.ms-teams .mst-tab-active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    border-radius: 2px 2px 0 0;
+    background: var(--mst-brand-fg);
+}
+
+body.ms-teams .mst-head-actions {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+}
+
+body.ms-teams.mst-no-chat .mst-head-actions,
+body.ms-teams.mst-no-chat .mst-tabs {
+    display: none;
+}
+
+/* Message area */
+body.ms-teams #chat {
+    max-height: none;
+    padding: 16px 0 8px;
+    background: var(--mst-canvas);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    text-shadow: none;
+    scroll-padding-top: 16px;
+}
+
+body.ms-teams #chat .mes {
+    --mst-avatar-size: 32px;
+    display: grid;
+    grid-template-columns: var(--mst-avatar-size) minmax(0, max-content) minmax(48px, 1fr);
+    grid-template-rows: auto auto;
+    column-gap: 8px;
+    align-items: start;
+    padding: 6px 20px;
+    margin: 0;
+    box-sizing: border-box;
+    background: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    color: var(--mst-fg);
+    font-family: var(--mst-font);
+}
+
+body.ms-teams #chat .mes .mesAvatarWrapper {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 0;
+    margin: 0;
+    width: var(--mst-avatar-size);
+}
+
+body.ms-teams #chat .mes .avatar,
+body.ms-teams.big-avatars #chat .mes .avatar,
+body.ms-teams.square-avatars #chat .mes .avatar,
+body.ms-teams.rounded-avatars #chat .mes .avatar {
+    flex: none;
+    width: var(--mst-avatar-size);
+    height: var(--mst-avatar-size);
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: none;
+    border: none;
+}
+
+body.ms-teams #chat .mes .avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top center;
+    box-shadow: none;
+    border: none;
+}
+
+body.ms-teams #chat .last_mes .mesAvatarWrapper {
+    padding-bottom: 0;
+}
+
+body.ms-teams #chat .mes .mesIDDisplay,
+body.ms-teams #chat .mes .mes_timer,
+body.ms-teams #chat .mes .tokenCounterDisplay {
+    font-size: var(--mst-text-xs);
+    line-height: 12px;
+    color: var(--mst-fg-4);
+    text-align: center;
+}
+
+/* The bubble */
+body.ms-teams #chat .mes .mes_block {
+    grid-column: 2;
+    grid-row: 1;
+    position: relative;
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
+    padding: 8px 16px 10px;
+    margin: 0;
+    box-sizing: border-box;
+    border-radius: var(--mst-radius-md);
+    background: var(--mst-bubble-in);
+    overflow: visible;
+}
+
+body.ms-teams #chat .mes[is_user="true"] .mes_block {
+    background: var(--mst-bubble-out);
+}
+
+/* Your messages: right-aligned, no picture */
+body.ms-teams #chat .mes[is_user="true"] {
+    grid-template-columns: minmax(48px, 1fr) minmax(0, max-content);
+}
+
+body.ms-teams #chat .mes[is_user="true"] .mesAvatarWrapper {
+    display: none;
+}
+
+body.ms-teams #chat .mes[is_user="true"] .mes_block {
+    grid-column: 2;
+}
+
+body.ms-teams.hideChatAvatars #chat .mes {
+    grid-template-columns: 0 minmax(0, max-content) minmax(48px, 1fr);
+    column-gap: 0;
+}
+
+body.ms-teams.hideChatAvatars #chat .mes[is_user="true"] {
+    grid-template-columns: minmax(48px, 1fr) minmax(0, max-content);
+}
+
+/* Header line: name and time */
+body.ms-teams #chat .mes .ch_name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 16px;
+    margin: 0 0 2px;
+    font-weight: 400;
+}
+
+body.ms-teams #chat .mes .ch_name > .flex-container {
+    min-width: 0;
+}
+
+body.ms-teams #chat .mes .ch_name .alignItemsBaseline {
+    gap: 8px;
+    align-items: baseline;
+    flex-wrap: nowrap;
+    min-width: 0;
+}
+
+body.ms-teams #chat .mes .name_text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--mst-text-sm);
+    line-height: 16px;
+    font-weight: 600;
+    color: var(--mst-fg-2);
+}
+
+body.ms-teams #chat .mes[is_user="true"] .name_text {
+    display: none;
+}
+
+body.ms-teams #chat .mes .timestamp {
+    flex: none;
+    font-size: var(--mst-text-sm);
+    line-height: 16px;
+    color: var(--mst-fg-3);
+    white-space: nowrap;
+}
+
+/* the short Teams time from times.js, in place of SillyTavern's long date */
+body.ms-teams.mst-short-times #chat .mes .timestamp[data-mst-time] {
+    font-size: 0;
+}
+
+body.ms-teams.mst-short-times #chat .mes .timestamp[data-mst-time]::after {
+    content: attr(data-mst-time);
+    font-size: var(--mst-text-sm);
+}
+
+body.ms-teams #chat .mes .mes_ghost {
+    font-size: 11px;
+    color: var(--mst-fg-4);
+}
+
+/* Message text */
+body.ms-teams #chat .mes .mes_text {
+    padding: 0;
+    margin: 0;
+    font-family: var(--mst-font);
+    font-size: var(--mst-text);
+    line-height: 20px;
+    font-weight: 400;
+    color: var(--mst-fg);
+    overflow-wrap: anywhere;
+    text-shadow: none;
+}
+
+body.ms-teams #chat .mes .mes_text p {
+    margin: 0 0 8px;
+}
+
+body.ms-teams #chat .mes .mes_text p:last-child {
+    margin-bottom: 0;
+}
+
+body.ms-teams #chat .mes .mes_text em,
+body.ms-teams #chat .mes .mes_text i {
+    color: var(--mst-fg-3);
+}
+
+body.ms-teams #chat .mes .mes_text q,
+body.ms-teams #chat .mes .mes_text q * {
+    color: var(--mst-brand-fg);
+}
+
+body.ms-teams #chat .mes .mes_text blockquote {
+    margin: 4px 0 8px;
+    padding: 4px 12px;
+    border-left: 3px solid var(--mst-stroke);
+    color: var(--mst-fg-2);
+}
+
+body.ms-teams #chat .mes .mes_text code {
+    padding: 1px 4px;
+    border-radius: var(--mst-radius);
+    background: var(--mst-subtle-hover);
+    font-family: Consolas, "Cascadia Mono", Menlo, monospace;
+    font-size: 13px;
+}
+
+body.ms-teams #chat .mes .mes_text pre {
+    margin: 4px 0 8px;
+    border: 1px solid var(--mst-stroke-2);
+    border-radius: var(--mst-radius);
+    background: var(--mst-list);
+    overflow-x: auto;
+}
+
+body.ms-teams #chat .mes .mes_text pre code {
+    padding: 8px 12px;
+    background: none;
+}
+
+body.ms-teams #chat .mes .mes_text img {
+    border-radius: var(--mst-radius);
+}
+
+body.ms-teams #chat .mes .mes_reasoning_details {
+    margin: 4px 0;
+    border-radius: var(--mst-radius);
+    background: var(--mst-subtle-hover);
+    padding: 4px 8px;
+}
+
+body.ms-teams #chat .mes .mes_reasoning,
+body.ms-teams #chat .mes .mes_reasoning_header_title {
+    font-size: var(--mst-text-sm);
+    color: var(--mst-fg-3);
+}
+
+/* Message actions: Teams' hover toolbar over the bubble's top corner */
+body.ms-teams #chat .mes .mes_buttons {
+    position: absolute;
+    top: -18px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    height: 32px;
+    padding: 0 2px;
+    box-sizing: border-box;
+    border-radius: var(--mst-radius);
+    background: var(--mst-raised);
+    box-shadow: var(--mst-shadow-8);
+    opacity: 0;
+    pointer-events: none;
+    overflow: visible;
+    transition: opacity var(--mst-fast) var(--mst-ease);
+    z-index: 2;
+}
+
+body.ms-teams #chat .mes:hover .mes_buttons,
+body.ms-teams #chat .mes:focus-within .mes_buttons {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+body.ms-teams #chat .mes .extraMesButtons {
+    gap: 0;
+    padding: 0;
+}
+
+body.ms-teams #chat .mes .mes_button,
+body.ms-teams #chat .mes .extraMesButtons > div {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border-radius: var(--mst-radius);
+    font-size: 14px;
+    color: var(--mst-fg-2);
+    opacity: 1;
+    filter: none;
+}
+
+body.ms-teams #chat .mes .mes_button:hover,
+body.ms-teams #chat .mes .extraMesButtons > div:hover {
+    background: var(--mst-subtle-hover);
+    color: var(--mst-brand-fg);
+}
+
+body.ms-teams #chat .mes .mes_edit_buttons {
+    gap: 4px;
+    margin-left: auto;
+    padding: 0;
+    filter: none;
+}
+
+body.ms-teams #chat .mes .mes_edit_buttons .menu_button {
+    width: 28px;
+    height: 28px;
+    margin: 0;
+    opacity: 1;
+    font-size: 13px;
+}
+
+body.ms-teams #chat .mes .edit_textarea {
+    min-width: min(480px, 60vw);
+    padding: 6px 8px;
+    border: 1px solid var(--mst-stroke);
+    border-bottom: 2px solid var(--mst-brand);
+    border-radius: var(--mst-radius);
+    background: var(--mst-input);
+    color: var(--mst-fg);
+    font-family: var(--mst-font);
+    font-size: var(--mst-text);
+    line-height: 20px;
+}
+
+/* Swipes: a small pager under the bubble */
+body.ms-teams #chat .mes .swipe_left,
+body.ms-teams #chat .mes .swipeRightBlock {
+    grid-column: 2;
+    grid-row: 2;
+    position: static;
+    align-self: center;
+    justify-self: start;
+    margin-top: 4px;
+    pointer-events: auto;
+}
+
+body.ms-teams #chat .mes .swipe_left {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+}
+
+body.ms-teams #chat .mes .swipeRightBlock {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 4px;
+    margin-left: 28px;
+}
+
+body.ms-teams #chat .mes .swipe_right {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+}
+
+body.ms-teams #chat .mes .swipe_left,
+body.ms-teams #chat .mes .swipe_right {
+    border-radius: var(--mst-radius);
+    color: var(--mst-fg-3);
+    opacity: 1;
+    filter: none;
+    text-shadow: none;
+}
+
+body.ms-teams #chat .mes .swipe_left:hover,
+body.ms-teams #chat .mes .swipe_right:hover {
+    background: var(--mst-subtle-hover);
+    color: var(--mst-brand-fg);
+}
+
+body.ms-teams #chat .mes .swipes-counter {
+    opacity: 1;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+    font-size: var(--mst-text-sm);
+    line-height: 16px;
+    color: var(--mst-fg-3);
+}
+
+body.ms-teams #chat .mes[is_user="true"] .swipe_left,
+body.ms-teams #chat .mes[is_user="true"] .swipeRightBlock {
+    justify-self: end;
+}
+
+/* SillyTavern only swipes the last message, unless Swipe All Messages is on */
+body.ms-teams:not(.swipeAllMessages) #chat .mes:not(.last_mes) .swipe_left,
+body.ms-teams:not(.swipeAllMessages) #chat .mes:not(.last_mes) .swipeRightBlock {
+    display: none;
+}
+
+/* Delete mode checkboxes */
+body.ms-teams #chat .mes .del_checkbox {
+    grid-column: 1;
+    grid-row: 1;
+    margin: 8px 0 0;
+    z-index: 3;
+}
+
+body.ms-teams #chat .mes .for_checkbox {
+    display: none;
+}
+
+/* System notes: a quiet centered line, as Teams shows events */
+body.ms-teams #chat .mes.smallSysMes {
+    display: flex;
+    justify-content: center;
+    padding: 4px 20px;
+}
+
+body.ms-teams #chat .mes.smallSysMes .mesAvatarWrapper,
+body.ms-teams #chat .mes.smallSysMes .ch_name,
+body.ms-teams #chat .mes.smallSysMes .swipe_left,
+body.ms-teams #chat .mes.smallSysMes .swipeRightBlock {
+    display: none;
+}
+
+body.ms-teams #chat .mes.smallSysMes .mes_block {
+    max-width: 640px;
+    padding: 4px 12px;
+    background: none;
+    text-align: center;
+}
+
+body.ms-teams #chat .mes.smallSysMes .mes_text {
+    font-size: var(--mst-text-sm);
+    line-height: 16px;
+    color: var(--mst-fg-3);
+}
+
+/* SillyTavern's chat display modes all take the Teams look */
+body.ms-teams.bubblechat #chat .mes,
+body.ms-teams.documentstyle #chat .mes {
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+body.ms-teams.documentstyle #chat .mes .mes_text {
+    padding: 0;
+}

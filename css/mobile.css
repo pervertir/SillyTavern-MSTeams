@@ -1,0 +1,212 @@
+/* Phones and narrow windows, at SillyTavern's own 1000px breakpoint: Teams mobile.
+   One pane at a time: the chat list (with the app bar along the bottom), or the open chat
+   (body.mst-m-chat) with a back arrow in its header. Menus fill the screen above the app bar. */
+
+@media screen and (max-width: 1000px) {
+    /* SillyTavern puts translateZ(0) on <html> on phones, which makes it the frame for fixed
+       elements; give it the screen's height so things pinned to the bottom land on screen */
+    html:has(> body.ms-teams) {
+        height: 100dvh;
+    }
+
+    body.ms-teams {
+        --mst-tabbar-h: calc(56px + env(safe-area-inset-bottom, 0px));
+        --mst-safe-top: env(safe-area-inset-top, 0px);
+        --topBarBlockSize: var(--mst-safe-top);
+    }
+
+    body.ms-teams #mst-titlebar {
+        display: none;
+    }
+
+    /* App bar along the bottom; it scrolls sideways when the apps don't fit */
+    body.ms-teams #top-settings-holder {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: var(--mst-tabbar-h);
+        padding: 0 0 env(safe-area-inset-bottom, 0px);
+        flex-direction: row;
+        align-items: stretch;
+        gap: 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+        background: var(--mst-list);
+        border-top: 1px solid var(--mst-stroke-2);
+    }
+
+    body.ms-teams #top-settings-holder::-webkit-scrollbar {
+        display: none;
+    }
+
+    body.ms-teams #top-settings-holder > .drawer,
+    body.ms-teams #top-settings-holder > #mst-app-chat {
+        flex: 1 0 64px;
+        width: auto;
+        min-width: 64px;
+    }
+
+    body.ms-teams #extensions-settings-button {
+        margin-top: 0;
+    }
+
+    body.ms-teams #top-settings-holder > .drawer > .drawer-toggle,
+    body.ms-teams #mst-app-chat {
+        height: 56px;
+    }
+
+    /* the selected app's bar runs along the top edge */
+    body.ms-teams #top-settings-holder > .drawer > .drawer-toggle::before,
+    body.ms-teams #mst-app-chat::before {
+        top: 0;
+        left: 50%;
+        width: 0;
+        height: 3px;
+        margin: 0;
+        border-radius: 0 0 2px 2px;
+        transition: width var(--mst-normal) var(--mst-ease), margin-left var(--mst-normal) var(--mst-ease);
+    }
+
+    body.ms-teams #top-settings-holder > .drawer > .drawer-toggle:has(.openIcon)::before,
+    body.ms-teams:not(:has(#top-settings-holder .drawer-content.openDrawer)) #mst-app-chat::before {
+        width: 24px;
+        height: 3px;
+        margin: 0 0 0 -12px;
+    }
+
+    /* Menus fill the screen above the app bar */
+    body.ms-teams #top-settings-holder .drawer-content,
+    body.ms-teams #top-settings-holder .drawer-content.fillLeft,
+    body.ms-teams #top-settings-holder .drawer-content.fillRight {
+        top: var(--mst-safe-top);
+        left: 0 !important;
+        width: 100dvw !important;
+        min-width: 0;
+        max-height: calc(100dvh - var(--mst-tabbar-h) - var(--mst-safe-top));
+        padding: 8px 12px;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    body.ms-teams #top-settings-holder .drawer-content.openDrawer {
+        height: calc(100dvh - var(--mst-tabbar-h) - var(--mst-safe-top));
+    }
+
+    /* Chat list fills the screen */
+    body.ms-teams #mst-list {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: var(--mst-tabbar-h);
+        width: auto;
+        padding-top: var(--mst-safe-top);
+        border-radius: 0;
+        border-right: none;
+        z-index: 32;
+    }
+
+    body.ms-teams.mst-no-list #mst-list {
+        display: flex;
+    }
+
+    body.ms-teams .mst-list-head {
+        padding: 0 8px 0 16px;
+    }
+
+    body.ms-teams .mst-chat {
+        min-height: 64px;
+    }
+
+    body.ms-teams .mst-chat .mst-avatar {
+        width: 40px;
+        height: 40px;
+    }
+
+    /* The open chat takes the whole screen, app bar included */
+    body.ms-teams #sheld,
+    body.ms-teams.mst-no-list #sheld {
+        top: 0 !important;
+        left: 0 !important;
+        right: 0;
+        bottom: 0;
+        width: 100dvw !important;
+        height: 100dvh;
+        max-height: 100dvh;
+        padding-top: var(--mst-safe-top);
+        box-sizing: border-box;
+        border-radius: 0;
+    }
+
+    body.ms-teams.mst-m-chat #mst-list {
+        display: none;
+    }
+
+    body.ms-teams.mst-m-chat:not(:has(#top-settings-holder .drawer-content.openDrawer)) #top-settings-holder {
+        display: none;
+    }
+
+    body.ms-teams #mst-chat-head {
+        gap: 8px;
+        height: 52px;
+        padding: 0 8px 0 4px;
+    }
+
+    body.ms-teams #mst-chat-head .mst-back {
+        display: inline-flex;
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    body.ms-teams .mst-tabs {
+        display: none;
+    }
+
+    body.ms-teams #chat {
+        padding: 8px 0 4px;
+    }
+
+    body.ms-teams #chat .mes {
+        padding: 4px 12px;
+        grid-template-columns: var(--mst-avatar-size) minmax(0, max-content) minmax(24px, 1fr);
+    }
+
+    body.ms-teams #chat .mes[is_user="true"] {
+        grid-template-columns: minmax(32px, 1fr) minmax(0, max-content);
+    }
+
+    body.ms-teams #chat .mes .mes_block {
+        padding: 6px 12px 8px;
+    }
+
+    /* no hover on touch screens: keep the actions in the header line, quietly */
+    @media (hover: none) {
+        body.ms-teams #chat .mes .mes_buttons {
+            position: static;
+            height: 24px;
+            margin-left: auto;
+            padding: 0;
+            background: none;
+            box-shadow: none;
+            opacity: 0.7;
+            pointer-events: auto;
+        }
+
+        body.ms-teams #chat .mes .mes_button,
+        body.ms-teams #chat .mes .extraMesButtons > div {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    body.ms-teams #form_sheld {
+        padding: 4px 8px calc(8px + env(safe-area-inset-bottom, 0px));
+    }
+
+    body.ms-teams #chat .mes .edit_textarea {
+        min-width: 0;
+    }
+}

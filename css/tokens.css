@@ -1,0 +1,259 @@
+/* Design tokens: the Teams (Fluent 2) palette, type and shapes, plus SillyTavern's own theme
+   variables pointed at them. Light is the default; body.mst-dark switches the palette. */
+
+body.ms-teams {
+    /* Brand (Teams purple) */
+    --mst-brand: #5b5fc7;
+    --mst-brand-hover: #4f52b2;
+    --mst-brand-pressed: #444791;
+    --mst-brand-fg: #5b5fc7;
+    --mst-brand-soft: #e8ebfa;
+    --mst-brand-soft-2: #dce0fa;
+    --mst-on-brand: #ffffff;
+
+    /* Surfaces, from the window frame inwards */
+    --mst-shell: #ebebeb;
+    --mst-list: #f5f5f5;
+    --mst-canvas: #ffffff;
+    --mst-card: #ffffff;
+    --mst-raised: #ffffff;
+    --mst-hover: #ffffff;
+    --mst-selected: #ffffff;
+    --mst-subtle-hover: rgba(0, 0, 0, 0.05);
+    --mst-subtle-pressed: rgba(0, 0, 0, 0.09);
+    --mst-input: #ffffff;
+    --mst-bubble-in: #f5f5f5;
+    --mst-bubble-out: #e8ebfa;
+
+    /* Text */
+    --mst-fg: #242424;
+    --mst-fg-2: #424242;
+    --mst-fg-3: #616161;
+    --mst-fg-4: #707070;
+    --mst-fg-disabled: #bdbdbd;
+
+    /* Lines */
+    --mst-stroke: #d1d1d1;
+    --mst-stroke-2: #e0e0e0;
+    --mst-stroke-3: #f0f0f0;
+    --mst-stroke-accessible: #616161;
+
+    /* Status */
+    --mst-available: #6bb700;
+    --mst-danger: #c4314b;
+    --mst-danger-soft: #fdf3f4;
+    --mst-warning: #c19c00;
+    --mst-success: #237b4b;
+
+    /* Shapes and depth (Fluent) */
+    --mst-radius-sm: 2px;
+    --mst-radius: 4px;
+    --mst-radius-md: 6px;
+    --mst-radius-lg: 8px;
+    --mst-radius-xl: 12px;
+    --mst-shadow-2: 0 0 2px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.14);
+    --mst-shadow-4: 0 0 2px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.14);
+    --mst-shadow-8: 0 0 2px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.14);
+    --mst-shadow-16: 0 0 2px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.14);
+    --mst-shadow-28: 0 0 8px rgba(0, 0, 0, 0.12), 0 14px 28px rgba(0, 0, 0, 0.14);
+    --mst-shadow-64: 0 0 8px rgba(0, 0, 0, 0.12), 0 32px 64px rgba(0, 0, 0, 0.14);
+    --mst-ease: cubic-bezier(0.33, 0, 0.67, 1);
+    --mst-fast: 100ms;
+    --mst-normal: 200ms;
+
+    /* Type: Segoe UI, as Teams uses, with the closest system fonts after it */
+    --mst-font: "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", "Noto Sans", sans-serif;
+    --mst-text-xs: 10px;
+    --mst-text-sm: 12px;
+    --mst-text: 14px;
+    --mst-text-md: 16px;
+    --mst-text-lg: 20px;
+
+    /* Frame sizes */
+    --mst-titlebar-h: 48px;
+    --mst-rail-w: 68px;
+    --mst-list-w: 320px;
+    --mst-head-h: 56px;
+
+    /* SillyTavern's theme variables, so its own panels follow the palette */
+    --SmartThemeBodyColor: var(--mst-fg);
+    --SmartThemeEmColor: var(--mst-fg-3);
+    --SmartThemeUnderlineColor: var(--mst-brand-fg);
+    --SmartThemeQuoteColor: var(--mst-brand-fg);
+    --SmartThemeBlurTintColor: var(--mst-list);
+    --SmartThemeChatTintColor: var(--mst-canvas);
+    --SmartThemeUserMesBlurTintColor: var(--mst-bubble-out);
+    --SmartThemeBotMesBlurTintColor: var(--mst-bubble-in);
+    --SmartThemeShadowColor: transparent;
+    --SmartThemeBorderColor: var(--mst-stroke-2);
+    --SmartThemeBlurStrength: 0px;
+    --SmartThemeFastUIBGColor: var(--mst-list);
+    --interactable-outline-color: var(--mst-fg);
+    --interactable-outline-color-faint: var(--mst-stroke);
+    --mainFontFamily: var(--mst-font);
+    --mainFontSize: 14px;
+    --shadowWidth: 0;
+    --topBarBlockSize: var(--mst-titlebar-h);
+
+    /* App rail icons, drawn in the Fluent outline style */
+    --mst-icon-chat: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 4c4.97 0 9 3.36 9 7.5S16.97 19 12 19c-1.1 0-2.15-.16-3.12-.46L4 20l1.3-3.6C3.87 15.07 3 13.37 3 11.5 3 7.36 7.03 4 12 4z'/></svg>");
+    --mst-icon-people: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><circle cx='9' cy='8' r='3.25'/><path d='M3.5 19c0-3 2.46-5 5.5-5s5.5 2 5.5 5'/><circle cx='17' cy='9' r='2.5'/><path d='M16.2 14.1c2.5-.2 4.3 1.5 4.3 4.4'/></svg>");
+    --mst-icon-person: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='8' r='4'/><path d='M4.5 20c0-3.6 3.36-6 7.5-6s7.5 2.4 7.5 6'/></svg>");
+    --mst-icon-book: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M5 5.5A2.5 2.5 0 0 1 7.5 3H19v14.5H7.5A2.5 2.5 0 0 0 5 20V5.5z'/><path d='M5 20a1.5 1.5 0 0 0 1.5 1.5H19'/><path d='M9 7.5h6'/></svg>");
+    --mst-icon-sliders: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1'/><circle cx='15' cy='6' r='2'/><circle cx='9' cy='12' r='2'/><circle cx='17' cy='18' r='2'/></svg>");
+    --mst-icon-text: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M4 18 9.5 5h1L16 18M6.3 13h7.4'/><path d='M14.5 21h6M19 9.5l1.5-1.5'/></svg>");
+    --mst-icon-plug: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M9 3v4M15 3v4'/><path d='M6 7h12v3.5a6 6 0 0 1-12 0V7z'/><path d='M12 16.5V21'/></svg>");
+    --mst-icon-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='16' rx='2.5'/><circle cx='8.5' cy='9' r='1.75'/><path d='m3.5 17 5-5 4 4 2.5-2.5 5.5 5'/></svg>");
+    --mst-icon-apps: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><rect x='3.5' y='3.5' width='7' height='7' rx='1.5'/><rect x='3.5' y='13.5' width='7' height='7' rx='1.5'/><rect x='13.5' y='13.5' width='7' height='7' rx='1.5'/><path d='M17 3.5v7M13.5 7h7'/></svg>");
+    --mst-icon-gear: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='3'/><path d='M10.3 3.4a1.75 1.75 0 0 1 3.4 0l.2.9a1.75 1.75 0 0 0 2.6 1.1l.8-.5a1.75 1.75 0 0 1 2.4 2.4l-.5.8a1.75 1.75 0 0 0 1.1 2.6l.9.2a1.75 1.75 0 0 1 0 3.4l-.9.2a1.75 1.75 0 0 0-1.1 2.6l.5.8a1.75 1.75 0 0 1-2.4 2.4l-.8-.5a1.75 1.75 0 0 0-2.6 1.1l-.2.9a1.75 1.75 0 0 1-3.4 0l-.2-.9a1.75 1.75 0 0 0-2.6-1.1l-.8.5a1.75 1.75 0 0 1-2.4-2.4l.5-.8a1.75 1.75 0 0 0-1.1-2.6l-.9-.2a1.75 1.75 0 0 1 0-3.4l.9-.2a1.75 1.75 0 0 0 1.1-2.6l-.5-.8a1.75 1.75 0 0 1 2.4-2.4l.8.5a1.75 1.75 0 0 0 2.6-1.1z'/></svg>");
+
+    color-scheme: light;
+    accent-color: var(--mst-brand);
+    background: var(--mst-shell);
+    color: var(--mst-fg);
+    font-family: var(--mst-font);
+    font-size: var(--mst-text);
+    line-height: 20px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dark (Teams dark theme) */
+body.ms-teams.mst-dark {
+    --mst-brand: #5b5fc7;
+    --mst-brand-hover: #4f52b2;
+    --mst-brand-pressed: #444791;
+    --mst-brand-fg: #7f85f5;
+    --mst-brand-soft: #2f2f4a;
+    --mst-brand-soft-2: #383966;
+    --mst-on-brand: #ffffff;
+
+    --mst-shell: #0a0a0a;
+    --mst-list: #1f1f1f;
+    --mst-canvas: #141414;
+    --mst-card: #292929;
+    --mst-raised: #292929;
+    --mst-hover: #2e2e2e;
+    --mst-selected: #333333;
+    --mst-subtle-hover: rgba(255, 255, 255, 0.06);
+    --mst-subtle-pressed: rgba(255, 255, 255, 0.1);
+    --mst-input: #292929;
+    --mst-bubble-in: #292929;
+    --mst-bubble-out: #2f2f4a;
+
+    --mst-fg: #ffffff;
+    --mst-fg-2: #d6d6d6;
+    --mst-fg-3: #adadad;
+    --mst-fg-4: #999999;
+    --mst-fg-disabled: #5c5c5c;
+
+    --mst-stroke: #525252;
+    --mst-stroke-2: #3d3d3d;
+    --mst-stroke-3: #2e2e2e;
+    --mst-stroke-accessible: #adadad;
+
+    --mst-available: #92c353;
+    --mst-danger: #dc626d;
+    --mst-danger-soft: #3b2025;
+    --mst-warning: #f8d22a;
+    --mst-success: #54b054;
+
+    --mst-shadow-2: 0 0 2px rgba(0, 0, 0, 0.24), 0 1px 2px rgba(0, 0, 0, 0.28);
+    --mst-shadow-4: 0 0 2px rgba(0, 0, 0, 0.24), 0 2px 4px rgba(0, 0, 0, 0.28);
+    --mst-shadow-8: 0 0 2px rgba(0, 0, 0, 0.24), 0 4px 8px rgba(0, 0, 0, 0.28);
+    --mst-shadow-16: 0 0 2px rgba(0, 0, 0, 0.24), 0 8px 16px rgba(0, 0, 0, 0.28);
+    --mst-shadow-28: 0 0 8px rgba(0, 0, 0, 0.24), 0 14px 28px rgba(0, 0, 0, 0.28);
+    --mst-shadow-64: 0 0 8px rgba(0, 0, 0, 0.24), 0 32px 64px rgba(0, 0, 0, 0.28);
+
+    color-scheme: dark;
+}
+
+body.ms-teams ::selection {
+    background: var(--mst-brand-soft-2);
+    color: var(--mst-fg);
+}
+
+/* SillyTavern's background picture has no place in Teams */
+body.ms-teams #bg1,
+body.ms-teams #bg_custom {
+    display: none;
+}
+
+body.ms-teams a {
+    color: var(--mst-brand-fg);
+    text-underline-offset: 2px;
+}
+
+body.ms-teams h1,
+body.ms-teams h2,
+body.ms-teams h3,
+body.ms-teams h4,
+body.ms-teams h5 {
+    font-family: var(--mst-font);
+    font-weight: 600;
+    color: var(--mst-fg);
+}
+
+body.ms-teams small,
+body.ms-teams .text_muted {
+    color: var(--mst-fg-3);
+}
+
+body.ms-teams hr,
+body.ms-teams .sysHR {
+    border: none;
+    border-top: 1px solid var(--mst-stroke-2);
+    background: none;
+}
+
+/* Keyboard focus: Fluent's two-tone ring */
+body.ms-teams :focus-visible {
+    outline: 2px solid var(--mst-fg);
+    outline-offset: -2px;
+    box-shadow: none;
+}
+
+/* Scrollbars: thin and quiet, like Teams */
+body.ms-teams * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--mst-stroke) transparent;
+}
+
+body.ms-teams ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+body.ms-teams ::-webkit-scrollbar-thumb,
+body.ms-teams ::-webkit-scrollbar-thumb:vertical {
+    background-color: var(--mst-stroke);
+    border: 2px solid transparent;
+    border-radius: 9999px;
+    background-clip: padding-box;
+    box-shadow: none;
+}
+
+body.ms-teams ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--mst-fg-4);
+}
+
+body.ms-teams ::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Reduced motion, from the OS or SillyTavern's own setting */
+body.ms-teams.reduced-motion *,
+body.ms-teams.reduced-motion *::before,
+body.ms-teams.reduced-motion *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.ms-teams *,
+    body.ms-teams *::before,
+    body.ms-teams *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}

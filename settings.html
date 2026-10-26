@@ -1,0 +1,45 @@
+<div class="mst-settings">
+    <div class="inline-drawer">
+        <div class="inline-drawer-toggle inline-drawer-header">
+            <b>Microsoft Teams Theme</b>
+            <div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div>
+        </div>
+        <div class="inline-drawer-content">
+            <label class="checkbox_label" for="mst_enabled">
+                <input id="mst_enabled" type="checkbox" />
+                <span>Enable theme</span>
+            </label>
+
+            <div class="mst-setting-row">
+                <label for="mst_appearance">Appearance</label>
+                <select id="mst_appearance" class="text_pole">
+                    <option value="light">Light</option>
+                    <option value="dark">Dark</option>
+                    <option value="system">Follow the system</option>
+                </select>
+            </div>
+
+            <label class="checkbox_label" for="mst_chat_list">
+                <input id="mst_chat_list" type="checkbox" />
+                <span>Show the chat list</span>
+            </label>
+
+            <label class="checkbox_label" for="mst_presence">
+                <input id="mst_presence" type="checkbox" />
+                <span>Show characters as Available</span>
+            </label>
+
+            <label class="checkbox_label" for="mst_short_times">
+                <input id="mst_short_times" type="checkbox" />
+                <span>Teams-style message times</span>
+            </label>
+
+            <div class="mst-setting-row">
+                <label for="mst_recent_max">Chats in the list</label>
+                <input id="mst_recent_max" class="text_pole" type="number" min="5" max="500" step="5" />
+            </div>
+
+            <small class="mst-note">Turn off other UI themes (such as Moonlit Echoes or Yodayo Tavern) while this one is on. SillyTavern's background image is hidden while the theme is on.</small>
+        </div>
+    </div>
+</div>

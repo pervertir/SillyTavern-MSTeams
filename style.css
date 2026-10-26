@@ -1,0 +1,12 @@
+/* Microsoft Teams theme for SillyTavern
+   Every rule is scoped to body.ms-teams, so the extension's "Enable theme" switch turns the
+   whole look on and off; body.mst-dark switches to the dark palette.
+   tokens.css comes first because everything uses it, and mobile.css last. */
+
+@import url("css/tokens.css");
+@import url("css/shell.css");
+@import url("css/chatlist.css");
+@import url("css/chat.css");
+@import url("css/compose.css");
+@import url("css/controls.css");
+@import url("css/mobile.css");

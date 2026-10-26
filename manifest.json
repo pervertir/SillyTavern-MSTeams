@@ -1,0 +1,13 @@
+{
+    "display_name": "Microsoft Teams Theme",
+    "description": "Makes SillyTavern look like Microsoft Teams: an app rail, a chat list, a chat header, Teams message bubbles and compose box, in light or dark.",
+    "loading_order": 10,
+    "minimum_client_version": "1.19.0",
+    "js": "index.js",
+    "css": "style.css",
+    "author": "pervertir",
+    "version": "1.0.0",
+    "license": "MIT",
+    "homepage": "https://github.com/pervertir/SillyTavern-MSTeams",
+    "auto_update": true
+}
