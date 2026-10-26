@@ -490,3 +490,16 @@ body.ms-teams #rm_print_characters_block :is(.ch_description, .group_select_bloc
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+/* delete-type icon buttons: a red icon, no red box */
+body.ms-teams .drawer-content .menu_button:is(.redWarningBG, .red_button):is(.fa-solid, .fa-regular, :has(> i:only-child)) {
+    width: 32px;
+    min-width: 32px;
+    height: 32px;
+    padding: 0;
+    justify-content: center;
+    border-color: transparent !important;
+    background: transparent !important;
+    color: var(--mst-danger) !important;
+    filter: none;
+}

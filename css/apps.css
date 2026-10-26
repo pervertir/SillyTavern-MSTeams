@@ -1004,6 +1004,55 @@ body.ms-teams .mst-copilot-note {
     font-size: var(--mst-text-xs);
 }
 
+/* New chat shows the greeting only; a conversation (section) or a question shows settings */
+.mst-copilot-answer {
+    display: none;
+}
+
+body.ms-teams #user-settings-block:not([data-mst-show]):not(.mst-copilot-asking) > :is(#user-settings-block-content, .flex-container.flexFlowColumn),
+body.ms-teams #user-settings-block[data-mst-show]:not([data-mst-show="misc"]) > .flex-container.flexFlowColumn,
+body.ms-teams #user-settings-block[data-mst-show] .mst-copilot-intro,
+body.ms-teams #user-settings-block .mst-cp-hidden {
+    display: none !important;
+}
+
+body.ms-teams #user-settings-block[data-mst-show] .mst-copilot-answer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 1100px;
+    margin: 8px auto 16px;
+}
+
+body.ms-teams .mst-copilot-logo.mst-copilot-logo-small {
+    width: 32px;
+    height: 32px;
+    -webkit-mask-size: 32px 32px;
+    mask-size: 32px 32px;
+}
+
+body.ms-teams .mst-copilot-answer-title {
+    margin: 0;
+    font-size: var(--mst-text-lg);
+    font-weight: 600;
+}
+
+/* one section at a time fills the width */
+body.ms-teams #user-settings-block[data-mst-show] #user-settings-block-content {
+    flex-direction: column;
+}
+
+body.ms-teams #user-settings-block[data-mst-show] #user-settings-block-content > *,
+body.ms-teams #user-settings-block[data-mst-show] #user-settings-block-content [data-mst-section] {
+    width: 100%;
+    max-width: 100%;
+}
+
+body.ms-teams .mst-copilot-card .mst-fluent {
+    color: #b93fde;
+    margin-bottom: 2px;
+}
+
 /* the settings read as Copilot's answer: rounded Fluent cards in a centered column */
 body.ms-teams #user-settings-block > :not(.mst-app-header, .mst-copilot-intro, .mst-copilot-dock, .mst-stage) {
     max-width: 1100px;

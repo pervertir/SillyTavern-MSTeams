@@ -1,0 +1,349 @@
+/* Microsoft's Fluent icons in place of Font Awesome's wherever SillyTavern draws its own
+   buttons: menus, dialogs and message actions. Each icon class maps to a Fluent glyph. */
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-save::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-floppy-disk::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-pencil::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-pen::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-pencil-alt::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-user-pen::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-i-cursor::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-pen-to-square::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-edit::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-trash::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-trash-can::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-skull::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-trash-alt::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-file-import::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-file-arrow-down::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-cloud-arrow-down::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-download::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-file-export::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-file-arrow-up::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-upload::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-share-from-square::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-recycle::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-rotate-left::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-undo::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-clock-rotate-left::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-plus::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-circle-plus::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-file-circle-plus::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-xmark::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-times::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-circle-xmark::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-close::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-copy::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-clone::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-paste::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-arrows-rotate::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-sync::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-rotate::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-repeat::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-circle-info::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-info-circle::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-info::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-circle-question::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-question-circle::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-search::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-magnifying-glass::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-ellipsis::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-ellipsis-vertical::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-ellipsis-h::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-link::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-passport::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-globe::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-earth-americas::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-image::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-images::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-panorama::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-photo-film::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-paintbrush::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-star::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-eye::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-eye-slash::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-folder::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-folder-open::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-folder-tree::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-folder-plus::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-tag::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-tags::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-expand::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-maximize::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-up-right-and-down-left-from-center::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-check::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-user-check::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-check-double::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-paperclip::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-gear::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-cog::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-gears::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-cogs::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-user-gear::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-sliders::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-flag::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-flag-checkered::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-bookmark::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-language::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-bullhorn::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-volume-high::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-code-branch::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-user-plus::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-users-gear::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-user-group::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-face-smile::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-user::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-book::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-book-atlas::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-book-open::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-comments::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-comment::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-message::before {
+    content: '';
+    display: inline-block;
+    width: 1.15em;
+    height: 1.15em;
+    vertical-align: -0.2em;
+    background-color: currentColor;
+    -webkit-mask: var(--mst-fa-glyph) center / contain no-repeat;
+    mask: var(--mst-fa-glyph) center / contain no-repeat;
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-save::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-floppy-disk::before {
+    --mst-fa-glyph: var(--mst-icon-save);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-pencil::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-pen::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-pencil-alt::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-user-pen::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-i-cursor::before {
+    --mst-fa-glyph: var(--mst-icon-edit);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-pen-to-square::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-edit::before {
+    --mst-fa-glyph: var(--mst-icon-compose);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-trash::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-trash-can::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-skull::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-trash-alt::before {
+    --mst-fa-glyph: var(--mst-icon-delete);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-file-import::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-file-arrow-down::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-cloud-arrow-down::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-download::before {
+    --mst-fa-glyph: var(--mst-icon-import);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-file-export::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-file-arrow-up::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-upload::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-share-from-square::before {
+    --mst-fa-glyph: var(--mst-icon-share);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-recycle::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-rotate-left::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-undo::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-clock-rotate-left::before {
+    --mst-fa-glyph: var(--mst-icon-undo);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-plus::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-circle-plus::before {
+    --mst-fa-glyph: var(--mst-icon-add);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-file-circle-plus::before {
+    --mst-fa-glyph: var(--mst-icon-doc-add);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-xmark::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-times::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-circle-xmark::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-close::before {
+    --mst-fa-glyph: var(--mst-icon-dismiss);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-copy::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-clone::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-paste::before {
+    --mst-fa-glyph: var(--mst-icon-copy);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-arrows-rotate::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-sync::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-rotate::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-repeat::before {
+    --mst-fa-glyph: var(--mst-icon-refresh);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-circle-info::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-info-circle::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-info::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-circle-question::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-question-circle::before {
+    --mst-fa-glyph: var(--mst-icon-info);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-search::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-magnifying-glass::before {
+    --mst-fa-glyph: var(--mst-icon-search);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-ellipsis::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-ellipsis-vertical::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-ellipsis-h::before {
+    --mst-fa-glyph: var(--mst-icon-more);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-link::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-passport::before {
+    --mst-fa-glyph: var(--mst-icon-link);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-globe::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-earth-americas::before {
+    --mst-fa-glyph: var(--mst-icon-globe);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-image::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-images::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-panorama::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-photo-film::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-paintbrush::before {
+    --mst-fa-glyph: var(--mst-icon-image);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-star::before {
+    --mst-fa-glyph: var(--mst-icon-star);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-eye::before {
+    --mst-fa-glyph: var(--mst-icon-eye);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-eye-slash::before {
+    --mst-fa-glyph: var(--mst-icon-eye-off);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-folder::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-folder-open::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-folder-tree::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-folder-plus::before {
+    --mst-fa-glyph: var(--mst-icon-folder);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-tag::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-tags::before {
+    --mst-fa-glyph: var(--mst-icon-tag);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-expand::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-maximize::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-up-right-and-down-left-from-center::before {
+    --mst-fa-glyph: var(--mst-icon-expand);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-check::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-user-check::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-check-double::before {
+    --mst-fa-glyph: var(--mst-icon-checkmark);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-paperclip::before {
+    --mst-fa-glyph: var(--mst-icon-attach);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-gear::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-cog::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-gears::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-cogs::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-user-gear::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-sliders::before {
+    --mst-fa-glyph: var(--mst-icon-gear);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-flag::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-flag-checkered::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-bookmark::before {
+    --mst-fa-glyph: var(--mst-icon-flag);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-language::before {
+    --mst-fa-glyph: var(--mst-icon-translate);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-bullhorn::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-volume-high::before {
+    --mst-fa-glyph: var(--mst-icon-speaker);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-code-branch::before {
+    --mst-fa-glyph: var(--mst-icon-branch);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-user-plus::before {
+    --mst-fa-glyph: var(--mst-icon-person-add);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-users-gear::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-user-group::before {
+    --mst-fa-glyph: var(--mst-icon-people-add);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-face-smile::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-user::before {
+    --mst-fa-glyph: var(--mst-icon-person);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-book::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-book-atlas::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-book-open::before {
+    --mst-fa-glyph: var(--mst-icon-book);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-comments::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-comment::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-message::before {
+    --mst-fa-glyph: var(--mst-icon-chat);
+}
+
+/* more of SillyTavern's file icons */
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-file-lines::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-file-alt::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-file::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-file-pen::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-file-text::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-box-archive::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-boxes-stacked::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-archive::before {
+    content: '';
+    display: inline-block;
+    width: 1.15em;
+    height: 1.15em;
+    vertical-align: -0.2em;
+    background-color: currentColor;
+    -webkit-mask: var(--mst-fa-glyph) center / contain no-repeat;
+    mask: var(--mst-fa-glyph) center / contain no-repeat;
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-file-lines::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-file-alt::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-file::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-file-pen::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-file-text::before {
+    --mst-fa-glyph: var(--mst-icon-document);
+}
+
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-box-archive::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-boxes-stacked::before,
+body.ms-teams :is(.drawer-content, dialog.popup, .popup, #shadow_select_chat_popup, #select_chat_popup, #chat .mes_buttons, #chat .mes_edit_buttons, #chat .extraMesButtons, #options, #extensionsMenu, .list-group, #rm_print_characters_pagination) .fa-archive::before {
+    --mst-fa-glyph: var(--mst-icon-folder);
+}

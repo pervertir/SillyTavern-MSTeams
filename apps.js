@@ -377,10 +377,21 @@ function buildOneDrive() {
 
 /** Copilot's prompt suggestions, each a settings search */
 const COPILOT_PROMPTS = [
-    ['Change how chats look', 'Pick a chat style, avatars and a font size', 'Chat Style'],
-    ['Tune message sending', 'Enter to send, swipes and auto-scroll', 'Enter to Send'],
-    ['Make it easier to read', 'Font scale, chat width and reduced motion', 'Font Scale'],
-    ['Set up notifications', 'Where pop-ups appear and message sounds', 'Notifications'],
+    ['Change how chats look', 'Pick a chat style, avatars and a font size', 'Chat Style', 'paint'],
+    ['Tune message sending', 'Enter to send, swipes and auto-scroll', 'Enter to Send', 'send'],
+    ['Make it easier to read', 'Font scale, chat width and reduced motion', 'Font Scale', 'text'],
+    ['Set up notifications', 'Where pop-ups appear and message sounds', 'Notifications', 'bell'],
+];
+
+/** The settings' sections as Copilot conversations: each opens on its own, like a chat */
+const COPILOT_SECTIONS = [
+    { key: 'theme', label: 'UI Theme', icon: 'paint', selector: '#UI-Theme-Block' },
+    { key: 'characters', label: 'Character Handling', icon: 'person', selector: '[name="CharacterHandlingToggles"]' },
+    { key: 'chat', label: 'Chat/Message Handling', icon: 'chat', selector: '[name="ChatMessageHandlingToggles"]' },
+    { key: 'autocomplete', label: 'Autocomplete', icon: 'search', selector: '[name="AutoCompleteToggle"]' },
+    { key: 'misc', label: 'Miscellaneous', icon: 'options', selector: '[name="MiscellaneousToggles"]', alsoShow: true },
+    { key: 'css', label: 'Custom CSS', icon: 'code', selector: '#CustomCSS-block' },
+    { key: 'script', label: 'Script Settings', icon: 'document', selector: '[name="STscriptToggles"]' },
 ];
 
 function buildCopilot() {
@@ -398,8 +409,16 @@ function buildCopilot() {
             search.dispatchEvent(new Event('input', { bubbles: true }));
         }
         drawer.classList.toggle('mst-copilot-asking', !!text.trim());
+        if (text.trim() && drawer.dataset.mstShow) {
+            delete drawer.dataset.mstShow;
+            drawer.querySelectorAll('.mst-cp-hidden, .mst-copilot-thread-on').forEach(x => x.classList.remove('mst-cp-hidden', 'mst-copilot-thread-on'));
+        }
     };
-    header(drawer, 'Copilot', [toolButton('New chat', 'compose', () => ask(''))]);
+    header(drawer, 'Copilot', [toolButton('New chat', 'compose', () => {
+        ask('');
+        delete drawer.dataset.mstShow;
+        drawer.querySelectorAll('.mst-cp-hidden, .mst-copilot-thread-on').forEach(x => x.classList.remove('mst-cp-hidden', 'mst-copilot-thread-on'));
+    })]);
 
     // left: Copilot's conversation list, here the settings' sections
     const nav = el('nav', 'mst-stage mst-copilot-nav');
@@ -411,22 +430,48 @@ function buildCopilot() {
         drawer.scrollTo({ top: 0, behavior: 'smooth' });
     });
     nav.append(fresh, el('h3', 'mst-dial-section', t('Recent')));
-    for (const heading of drawer.querySelectorAll('h4')) {
-        // the app's own name stays out of the list
-        const label = heading.textContent.trim().replace(/\s+/g, ' ').replace(/^STscript\b/, 'Script');
-        if (!label) {
+    const content = document.getElementById('user-settings-block-content');
+    const answerTitle = el('h2', 'mst-copilot-answer-title');
+    // show one section and hide everything around it, up to the settings' outer box
+    const showSection = (section) => {
+        content?.querySelectorAll('.mst-cp-hidden').forEach(x => x.classList.remove('mst-cp-hidden'));
+        nav.querySelectorAll('.mst-copilot-thread').forEach(x => x.classList.toggle('mst-copilot-thread-on', x.dataset.section === section?.key));
+        if (!section) {
+            delete drawer.dataset.mstShow;
+            return;
+        }
+        const target = content?.querySelector(section.selector);
+        if (!target) {
+            return;
+        }
+        ask('');
+        drawer.dataset.mstShow = section.key;
+        answerTitle.textContent = t(section.label);
+        for (let node = target; node && node !== content; node = node.parentElement) {
+            for (const sibling of node.parentElement.children) {
+                if (sibling !== node) {
+                    sibling.classList.add('mst-cp-hidden');
+                }
+            }
+        }
+        // Miscellaneous holds Custom CSS, which has its own conversation
+        if (section.key === 'misc') {
+            content.querySelector('#CustomCSS-block')?.classList.add('mst-cp-hidden');
+        }
+        drawer.scrollTo({ top: 0 });
+    };
+    for (const section of COPILOT_SECTIONS) {
+        if (!document.querySelector(`#user-settings-block ${section.selector}`)) {
             continue;
         }
         const item = el('button', 'mst-copilot-thread');
         item.type = 'button';
-        item.append(fluentIcon('chat', 16), el('span', '', label));
-        item.addEventListener('click', () => {
-            ask('');
-            nav.querySelectorAll('.mst-copilot-thread').forEach(x => x.classList.toggle('mst-copilot-thread-on', x === item));
-            heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
+        item.dataset.section = section.key;
+        item.append(fluentIcon(section.icon, 16), el('span', '', t(section.label)));
+        item.addEventListener('click', () => showSection(section));
         nav.append(item);
     }
+    fresh.addEventListener('click', () => showSection(null));
     drawer.append(nav);
 
     // center: the greeting and prompt suggestions
@@ -435,15 +480,18 @@ function buildCopilot() {
     const hello = el('h2', 'mst-copilot-hello');
     const sub = el('p', 'mst-copilot-sub', t('Here are some things I can help you with in your settings.'));
     const cards = el('div', 'mst-copilot-cards');
-    for (const [title, detail, query] of COPILOT_PROMPTS) {
+    for (const [title, detail, query, icon] of COPILOT_PROMPTS) {
         const card = el('button', 'mst-copilot-card');
         card.type = 'button';
-        card.append(el('strong', '', t(title)), el('span', '', t(detail)));
+        card.append(fluentIcon(icon, 20), el('strong', '', t(title)), el('span', '', t(detail)));
         card.addEventListener('click', () => ask(query));
         cards.append(card);
     }
     intro.append(logo, hello, sub, cards);
     drawer.querySelector('.mst-app-header')?.after(intro);
+    const answer = el('div', 'mst-copilot-answer');
+    answer.append(el('span', 'mst-copilot-logo mst-copilot-logo-small'), answerTitle);
+    intro.after(answer);
 
     // bottom: the "Message Copilot" box, docked like Copilot's
     const dock = el('div', 'mst-copilot-dock');
