@@ -67,6 +67,33 @@ body:is(.ms-teams, .mst-booting) #loader.splash-screen::before {
     to { transform: scale(1.08); opacity: 1; }
 }
 
+/* SillyTavern closes its splash a moment before the theme has dressed the page, so the same
+   screen stays over everything until the Teams UI has drawn (index.js lifts it). */
+body.mst-booting::before,
+body.mst-booting::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 2147483646;
+    background: var(--mst-boot-bg);
+    pointer-events: none;
+    transition: opacity 0.2s ease-out;
+}
+
+body.mst-booting::after {
+    z-index: 2147483647;
+    inset: calc(50% - 48px) auto auto calc(50% - 48px);
+    width: 96px;
+    height: 96px;
+    background: url("https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/assets/brand-icons/product/svg/teams_48x1.svg") center / contain no-repeat;
+    animation: mst-boot-zoom 1.6s cubic-bezier(0.33, 0, 0.67, 1) infinite alternate;
+}
+
+body.mst-booting.mst-boot-done::before,
+body.mst-booting.mst-boot-done::after {
+    opacity: 0;
+}
+
 /* Other loading moments: Fluent's spinner ring in place of the gear */
 body.ms-teams #loader:not(.splash-screen) #load-spinner {
     width: 32px;

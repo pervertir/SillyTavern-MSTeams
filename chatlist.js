@@ -687,6 +687,7 @@ export async function travel(step) {
  * @param {() => void} [options.historyChanged] Called when back/forward availability changes
  * @param {() => void} options.opened Called once a chat from the list is open
  */
+/** @returns {Promise<void>} Resolves once the list has its first chats. */
 export function initChatList({ settings, opened, historyChanged }) {
     getSettings = settings;
     onOpen = opened;
@@ -707,5 +708,5 @@ export function initChatList({ settings, opened, historyChanged }) {
         }
     }
     recordVisit();
-    refreshChatList();
+    return refreshChatList();
 }

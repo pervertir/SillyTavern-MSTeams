@@ -157,13 +157,12 @@ async function renderSettingsPanel() {
 }
 
 async function init() {
-    document.body.classList.remove('mst-booting');
     applySettings();
     darkQuery.addEventListener('change', applySettings);
 
     initShell({ toggleRail, setTheme });
     initApps();
-    initChatList({ settings: getSettings, opened: showChatOnPhone, historyChanged: refreshNavigation });
+    const listLoaded = initChatList({ settings: getSettings, opened: showChatOnPhone, historyChanged: refreshNavigation });
     applySettings();
     initTimes();
     initMonograms();
@@ -187,12 +186,30 @@ async function init() {
     eventSource.on(eventTypes.SETTINGS_UPDATED, () => refreshPersona());
     onChatChanged(SillyTavern.getContext().getCurrentChatId());
     markCurrentChat();
+    await Promise.race([listLoaded, delay(3000)]);
+    endBoot();
 
     try {
         await renderSettingsPanel();
     } catch (error) {
         console.error('[MS Teams] Could not render the settings panel', error);
     }
+}
+
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/** Lifts the loading screen once the Teams UI has painted. */
+function endBoot() {
+    const body = document.body;
+    if (!body.classList.contains('mst-booting')) {
+        return;
+    }
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+        body.classList.add('mst-boot-done');
+        setTimeout(() => body.classList.remove('mst-booting', 'mst-boot-done'), 250);
+    }));
 }
 
 /** Teams' loading screen from the moment this code loads (SillyTavern has its settings by then). */
@@ -202,6 +219,8 @@ function bootLook() {
         return;
     }
     document.body.classList.add('mst-booting');
+    // never leave the cover up if something fails on the way
+    setTimeout(endBoot, 20000);
     document.body.classList.toggle('mst-dark', !!settings && isDark({ ...defaultSettings, ...settings }));
     const logo = /** @type {HTMLImageElement} */ (document.querySelector('#loader .splash-logo'));
     if (logo) {
