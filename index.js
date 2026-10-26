@@ -3,6 +3,7 @@
 
 import { initChatList, markCurrentChat, scheduleRefresh, travel } from './chatlist.js';
 import { initApps, refreshCopilotGreeting } from './apps.js';
+import { initMonograms } from './monograms.js';
 import { setDisguise, refreshTitle } from './disguise.js';
 import { initShortcuts } from './shortcuts.js';
 import { focusSearch, initShell, refreshHeader, refreshNavigation, refreshPersona, refreshRailToggle, setRailTooltips, startNewChat } from './shell.js';
@@ -162,6 +163,7 @@ async function init() {
     initChatList({ settings: getSettings, opened: showChatOnPhone, historyChanged: refreshNavigation });
     applySettings();
     initTimes();
+    initMonograms();
     initShortcuts({
         enabled: () => !!getSettings().enabled,
         focusSearch,

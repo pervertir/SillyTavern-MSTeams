@@ -2,6 +2,7 @@
 // SillyTavern's own menu buttons, and the chat header above the messages.
 
 import { canGoBack, canGoForward, filterChatList, travel } from './chatlist.js';
+import { monogramize } from './monograms.js';
 import { RAIL_SHORTCUTS, SHORTCUTS, showShortcuts, withShortcut } from './shortcuts.js';
 
 const TITLEBAR_ID = 'mst-titlebar';
@@ -528,6 +529,7 @@ export function refreshHeader() {
         presence.className = 'mst-presence';
         avatar.append(img, presence);
         name.textContent = character.name;
+        monogramize(img, character.name);
     } else {
         name.textContent = '';
     }

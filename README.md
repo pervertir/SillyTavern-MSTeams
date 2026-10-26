@@ -41,6 +41,7 @@ A SillyTavern extension that makes the whole app look and work like Microsoft Te
 - **Chat header.** The character's picture and name, which open their card, Teams' Chat, Shared and + tabs, and the video, call and … buttons: video starts a new chat, call opens the chat history, and … has those plus View profile and Close chat.
 - **Messages.** Everyone else's messages sit on the left with their picture, name and time. Yours sit on the right in Teams lavender. Times read the Teams way: `10:42 AM`, `Yesterday 10:42 AM` or `10/21 3:15 PM`. Message actions appear as a toolbar when you hover a message, and swipes become a small pager under the last reply.
 - **Compose box.** "Type a message" with Teams' emoji (extensions menu) and + (chat options) buttons and the send arrow on the right.
+- **Monograms.** Anyone without a picture of their own (SillyTavern's default character or persona picture) gets a Teams monogram of their initials, in the chat list, chat header, messages, People and Profiles.
 - **Controls.** Buttons, fields, checkboxes, sliders, menus, dialogs and toasts follow Fluent 2, and SillyTavern's Font Awesome icons in menus, dialogs and message actions are swapped for Fluent-style ones.
 - **Phones.** One pane at a time: the chat list with an app bar along the bottom, or the open chat with a back arrow.
 

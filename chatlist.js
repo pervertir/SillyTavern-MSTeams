@@ -1,6 +1,7 @@
 // The Teams chat list: SillyTavern's recent chats (the same list as its welcome screen),
 // split into Pinned and Recent, with the open chat highlighted.
 
+import { monogramizeAll } from './monograms.js';
 import { toggleFlyout } from './shell.js';
 import { formatListTime } from './times.js';
 
@@ -307,6 +308,7 @@ function render() {
         body.append(empty);
     }
     markCurrentChat();
+    monogramizeAll(body, '.mst-chat .mst-avatar img', img => img.closest('.mst-chat')?.querySelector('.mst-chat-name')?.textContent ?? '');
 }
 
 /** Moves the highlight to the open chat without fetching the list again. */
