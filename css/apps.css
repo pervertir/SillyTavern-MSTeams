@@ -174,7 +174,7 @@ body.ms-teams .mst-cal-month {
 body.ms-teams .mst-cal-grid {
     display: grid;
     grid-template-columns: 72px repeat(5, minmax(96px, 1fr));
-    grid-template-rows: 64px repeat(10, minmax(52px, 1fr));
+    grid-template-rows: 64px repeat(20, minmax(26px, 1fr));
     min-height: 100%;
     position: relative;
 }
@@ -234,14 +234,12 @@ body.ms-teams .mst-cal-cell.mst-cal-today {
 }
 
 body.ms-teams .mst-cal-event {
-    grid-column: var(--mst-col);
-    grid-row: var(--mst-row);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 2px;
-    margin: 2px 4px;
-    padding: 6px 8px;
+    margin: 1px 4px;
+    padding: 4px 8px;
     border: none;
     border-left: 4px solid var(--mst-brand);
     border-radius: var(--mst-radius);
@@ -264,14 +262,41 @@ body.ms-teams .mst-cal-event span {
     color: var(--mst-fg-3);
 }
 
+body.ms-teams .mst-cal-event.mst-cal-short {
+    flex-direction: row;
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+body.ms-teams .mst-cal-event.mst-cal-focus {
+    border-left-color: #038387;
+    background: color-mix(in srgb, #038387 14%, var(--mst-canvas));
+}
+
+body.ms-teams .mst-cal-event.mst-cal-away {
+    border-left-color: #ca5010;
+    background: color-mix(in srgb, #ca5010 12%, var(--mst-canvas));
+}
+
+body.ms-teams div.mst-cal-event {
+    cursor: default;
+}
+
+body.ms-teams .mst-cal-event.mst-cal-connection {
+    cursor: pointer;
+    box-shadow: var(--mst-shadow-4);
+}
+
+body.ms-teams .mst-cal-event.mst-cal-past:not(.mst-cal-connection) {
+    opacity: 0.6;
+}
+
 body.ms-teams .mst-cal-event.mst-cal-event-off {
     border-left-color: var(--mst-danger);
     background: var(--mst-danger-soft);
 }
 
 body.ms-teams .mst-cal-now {
-    grid-column: var(--mst-col);
-    grid-row: 2 / -1;
     position: relative;
     pointer-events: none;
     z-index: 3;

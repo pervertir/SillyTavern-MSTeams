@@ -31,7 +31,7 @@ A SillyTavern extension that makes the whole app look and work like Microsoft Te
 
   Each app looks like its Teams screen while doing its own job:
   - **Activity** is a pane beside the open chat, like Teams' feed.
-  - **Calendar** shows this work week with the current time line; your API connection is today's meeting (red when disconnected), and the connection settings sit on the right like the meeting's details. Today and the arrows move the week.
+  - **Calendar** shows a busy-looking work week (standups, reviews, focus time, lunch) with the red line at the current time, moving every minute; your API connection is today's meeting (red when disconnected), and the connection settings sit on the right like the meeting's details. Today and the arrows move the week.
   - **Calls** has Teams' dial pad and speed dial on the left, with the formatting settings beside it.
   - **OneDrive** keeps your lorebooks in My files as Word documents down the left; New document creates one, Upload imports one. The open lorebook is a Word page with a ribbon (New paragraph, Expand/Collapse all, Rename, Save a copy, Download, Delete): each entry reads as a heading with its keywords and text, and the ¶ Entry settings button shows each entry's matching options.
   - **Copilot** greets your persona by name, and its "Message Copilot" box searches the settings.

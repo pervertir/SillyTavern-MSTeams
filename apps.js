@@ -76,16 +76,30 @@ function getConnection() {
     return { connected: !disconnected, apiName };
 }
 
+/** A believable work week, Monday to Friday: [start hour, hours, title, where, kind] */
+const MEETINGS = [
+    [[9.5, 0.25, 'Daily standup', 'Microsoft Teams Meeting'], [11, 1, 'Sprint planning', 'Microsoft Teams Meeting'], [13, 1, 'Lunch', '', 'away'], [15, 0.5, '1:1 with Alex', 'Microsoft Teams Meeting']],
+    [[9.5, 0.25, 'Daily standup', 'Microsoft Teams Meeting'], [10, 1, 'Design review', 'Conference Room 4B'], [14, 1.5, 'Focus time', '', 'focus'], [16, 0.5, 'Customer sync', 'Microsoft Teams Meeting']],
+    [[9.5, 0.25, 'Daily standup', 'Microsoft Teams Meeting'], [11, 0.5, 'Architecture office hours', 'Microsoft Teams Meeting'], [13, 1, 'Lunch', '', 'away'], [15, 1, 'All hands', 'Town hall', 'event']],
+    [[9.5, 0.25, 'Daily standup', 'Microsoft Teams Meeting'], [10, 1.5, 'Focus time', '', 'focus'], [14, 0.5, 'Vendor call', 'Microsoft Teams Meeting'], [16, 1, 'Backlog grooming', 'Microsoft Teams Meeting']],
+    [[9.5, 0.25, 'Daily standup', 'Microsoft Teams Meeting'], [11, 1, 'Demo prep', 'Microsoft Teams Meeting'], [14, 1, 'Sprint review', 'Microsoft Teams Meeting'], [16.5, 0.5, 'Weekly wrap-up', 'Microsoft Teams Meeting']],
+];
+
+/** Rows are half hours: row 2 is DAY_START. */
+function halfHourRow(hour) {
+    return Math.round((hour - DAY_START) * 2) + 2;
+}
+
 function renderCalendar(stage, monthLabel) {
     const { timestampToMoment } = SillyTavern.getContext();
     const now = timestampToMoment(Date.now());
     const monday = now.clone().startOf('isoWeek').add(weekOffset, 'weeks');
     monthLabel.textContent = monday.format('MMMM YYYY');
 
-    // every cell has its own place, so the meeting and the "now" line can sit on top of them
-    const place = (element, column, row) => {
+    // every cell has its own place, so meetings and the "now" line can sit on top of them
+    const place = (element, column, row, span = 1) => {
         element.style.gridColumn = String(column);
-        element.style.gridRow = String(row);
+        element.style.gridRow = `${row} / span ${span}`;
         return element;
     };
     const grid = el('div', 'mst-cal-grid');
@@ -100,37 +114,56 @@ function renderCalendar(stage, monthLabel) {
         grid.append(place(head, i + 2, 1));
     }
     for (let hour = DAY_START; hour < DAY_END; hour++) {
-        const row = hour - DAY_START + 2;
-        grid.append(place(el('div', 'mst-cal-hour', now.clone().hour(hour).minute(0).format('LT')), 1, row));
+        const row = halfHourRow(hour);
+        grid.append(place(el('div', 'mst-cal-hour', now.clone().hour(hour).minute(0).format('LT')), 1, row, 2));
         days.forEach((day, index) => {
             const cell = el('div', 'mst-cal-cell');
             cell.classList.toggle('mst-cal-today', day.isSame(now, 'day'));
-            grid.append(place(cell, index + 2, row));
+            grid.append(place(cell, index + 2, row, 2));
         });
     }
 
     const todayIndex = days.findIndex(day => day.isSame(now, 'day'));
+    // the connection is today's meeting at the current hour, as long as an hour
+    const connectionHour = Math.min(Math.max(now.hour(), DAY_START), DAY_END - 1);
+
+    days.forEach((day, index) => {
+        for (const [start, length, title, where, kind] of MEETINGS[index]) {
+            const isToday = index === todayIndex;
+            if (isToday && start < connectionHour + 1 && start + length > connectionHour) {
+                continue;
+            }
+            const meeting = el('div', `mst-cal-event${kind ? ` mst-cal-${kind}` : ''}`);
+            meeting.classList.toggle('mst-cal-short', length < 0.5);
+            meeting.classList.toggle('mst-cal-past', day.clone().hour(Math.floor(start + length)).minute(((start + length) % 1) * 60).isBefore(now));
+            const from = day.clone().hour(Math.floor(start)).minute((start % 1) * 60);
+            const to = from.clone().add(length * 60, 'minutes');
+            meeting.title = `${t(title)}\n${from.format('LT')} – ${to.format('LT')}${where ? `\n${t(where)}` : ''}`;
+            meeting.append(el('strong', '', t(title)));
+            if (where && length >= 0.5) {
+                meeting.append(el('span', '', t(where)));
+            }
+            grid.append(place(meeting, index + 2, halfHourRow(start), Math.max(1, Math.round(length * 2))));
+        }
+    });
+
     if (todayIndex !== -1) {
-        // the connection is today's meeting, and the red line is now, as in Teams
         const { connected, apiName } = getConnection();
-        const hour = Math.min(Math.max(now.hour(), DAY_START), DAY_END - 1);
-        const event = el('button', `mst-cal-event${connected ? '' : ' mst-cal-event-off'}`);
+        const event = el('button', `mst-cal-event mst-cal-connection${connected ? '' : ' mst-cal-event-off'}`);
         event.type = 'button';
-        event.style.setProperty('--mst-col', String(todayIndex + 2));
-        event.style.setProperty('--mst-row', String(hour - DAY_START + 2));
         event.append(
             el('strong', '', connected ? apiName || t('Connected') : t('Not connected')),
             el('span', '', connected ? t('Connected') : t('Pick an API and connect')),
         );
         event.addEventListener('click', () => /** @type {HTMLElement} */ (document.getElementById('main_api'))?.focus());
-        grid.append(event);
+        grid.append(place(event, todayIndex + 2, halfHourRow(connectionHour), 2));
 
+        // the red line is now, moved along every minute while the calendar is open
         const minutes = now.hour() * 60 + now.minute();
         if (minutes >= DAY_START * 60 && minutes < DAY_END * 60) {
             const line = el('div', 'mst-cal-now');
-            line.style.setProperty('--mst-col', String(todayIndex + 2));
             line.style.setProperty('--mst-now', String((minutes - DAY_START * 60) / ((DAY_END - DAY_START) * 60)));
-            grid.append(line);
+            grid.append(place(line, todayIndex + 2, 2, (DAY_END - DAY_START) * 2));
         }
     }
     stage.replaceChildren(grid);
@@ -170,6 +203,11 @@ function buildCalendar() {
     if (status) {
         new MutationObserver(render).observe(status, { attributes: true, attributeFilter: ['class'] });
     }
+    setInterval(() => {
+        if (drawer.classList.contains('openDrawer') && document.body.classList.contains('ms-teams')) {
+            render();
+        }
+    }, 60 * 1000);
 }
 
 /* Calls --------------------------------------------------------------------------------- */
