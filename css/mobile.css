@@ -5,7 +5,7 @@
 @media screen and (max-width: 1000px) {
     /* SillyTavern puts translateZ(0) on <html> on phones, which makes it the frame for fixed
        elements; give it the screen's height so things pinned to the bottom land on screen */
-    html:has(> body.ms-teams) {
+    html.mst-html {
         height: 100dvh;
     }
 
@@ -74,16 +74,6 @@
         display: -webkit-box;
     }
 
-    body.ms-teams #top-settings-holder > :is(#backgrounds-button, #persona-management-button, #rightNavHolder) {
-        flex: 0 0 0;
-        min-width: 0;
-        width: 0;
-    }
-
-    body.ms-teams #top-settings-holder > :is(#backgrounds-button, #persona-management-button, #rightNavHolder) > .drawer-toggle {
-        display: none;
-    }
-
     /* More opens a sheet above the app bar */
     body.ms-teams #mst-flyout:not([hidden]) {
         top: auto;
@@ -104,9 +94,9 @@
         transition: width var(--mst-normal) var(--mst-ease), margin-left var(--mst-normal) var(--mst-ease);
     }
 
-    body.ms-teams #top-settings-holder > .drawer > .drawer-toggle:has(.openIcon)::before,
-    body.ms-teams:not(:has(#top-settings-holder .drawer-content.openDrawer)) #mst-app-chat::before,
-    body.ms-teams:has(.mst-more-drawer > .drawer-content.openDrawer) #mst-app-more::before {
+    body.ms-teams #top-settings-holder > .drawer.mst-open > .drawer-toggle::before,
+    body.ms-teams:not(.mst-menu-open) #mst-app-chat::before,
+    body.ms-teams.mst-phone-more-open #mst-app-more::before {
         width: 24px;
         height: 3px;
         margin: 0 0 0 -12px;
@@ -179,7 +169,7 @@
         display: none;
     }
 
-    body.ms-teams.mst-m-chat:not(:has(#top-settings-holder .drawer-content.openDrawer)) #top-settings-holder {
+    body.ms-teams.mst-m-chat:not(.mst-menu-open) #top-settings-holder {
         display: none;
     }
 
@@ -245,16 +235,28 @@
 
     /* ---- Teams mobile ---- */
 
-    /* five tabs, as in Teams mobile: the rest live under More */
-    body.ms-teams #top-settings-holder > .mst-more-drawer:not(:has(.drawer-content.openDrawer)) {
+    /* five tabs, as in Teams mobile: the rest live under More, which lights up while one is open */
+    body.ms-teams.mst-phone-more-open #top-settings-holder > #mst-app-more {
+        color: var(--mst-brand-fg);
+        --mst-rail-icon: var(--mst-rail-icon-on);
+    }
+
+    body.ms-teams.mst-phone-more-open #mst-app-more .mst-app-label {
+        font-weight: 600;
+    }
+
+    body.ms-teams #top-settings-holder > .mst-more-drawer {
         flex: 0 0 0;
         min-width: 0;
         width: 0;
+    }
+
+    body.ms-teams #top-settings-holder > .mst-more-drawer:not(.mst-open) {
         overflow: hidden;
     }
 
-    body.ms-teams #top-settings-holder > .mst-more-drawer:not(:has(.drawer-content.openDrawer)) > .drawer-toggle {
-        visibility: hidden;
+    body.ms-teams #top-settings-holder > .mst-more-drawer > .drawer-toggle {
+        display: none;
     }
 
     body.ms-teams #top-settings-holder {
@@ -318,13 +320,13 @@
     }
 
     /* one-on-one chats show no picture or name beside the other person's messages */
-    body.ms-teams:not(:has(#mst-chat-head.mst-head-channel)) #chat .mes:not([is_user="true"]) {
+    body.ms-teams:not(.mst-channel) #chat .mes:not([is_user="true"]) {
         grid-template-columns: 0 minmax(0, max-content) minmax(32px, 1fr);
         column-gap: 0;
     }
 
-    body.ms-teams:not(:has(#mst-chat-head.mst-head-channel)) #chat .mes:not([is_user="true"]) .mesAvatarWrapper,
-    body.ms-teams:not(:has(#mst-chat-head.mst-head-channel)) #chat .mes .name_text {
+    body.ms-teams:not(.mst-channel) #chat .mes:not([is_user="true"]) .mesAvatarWrapper,
+    body.ms-teams:not(.mst-channel) #chat .mes .name_text {
         display: none;
     }
 

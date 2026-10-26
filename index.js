@@ -63,6 +63,7 @@ function applySettings() {
     const settings = getSettings();
     const body = document.body;
     body.classList.toggle(BODY_CLASS, !!settings.enabled);
+    document.documentElement.classList.toggle('mst-html', !!settings.enabled);
     body.classList.toggle('mst-dark', !!settings.enabled && isDark(settings));
     body.classList.toggle('mst-no-list', !settings.chatList);
     body.classList.toggle('mst-rail-labels', !!settings.railLabels);

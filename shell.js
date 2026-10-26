@@ -564,6 +564,7 @@ export function refreshHeader() {
     document.body.classList.toggle('mst-no-chat', !hasChat);
 
     head.classList.toggle('mst-head-channel', !!group);
+    document.body.classList.toggle('mst-channel', !!group);
     if (group) {
         // a group is a team and its chat a channel: the team's square picture, then "Team › Channel"
         avatar.append(buildTeamMonogram(group.name));
@@ -643,10 +644,42 @@ let shellOptions = { toggleRail: () => {}, setTheme: (_appearance) => {} };
  * @param {() => void} options.toggleRail Hides or shows the app rail
  * @param {(appearance: string) => void} options.setTheme Switches between light and dark
  */
+/**
+ * Mirrors which menus are open as classes (drawer.mst-open; body.mst-menu-open, mst-more-open,
+ * mst-phone-more-open), so the styles don't need page-wide :has() checks, which make the browser
+ * re-check the whole page on every change (each streamed word of a reply, for one).
+ */
+function trackDrawers() {
+    const drawers = [...document.querySelectorAll('#top-settings-holder > .drawer')];
+    const update = () => {
+        let any = false, more = false, phoneMore = false;
+        for (const drawer of drawers) {
+            const open = !!drawer.querySelector(':scope > .drawer-content.openDrawer');
+            drawer.classList.toggle('mst-open', open);
+            any ||= open;
+            more ||= open && drawer.classList.contains('mst-more-only');
+            phoneMore ||= open && drawer.classList.contains('mst-more-drawer');
+        }
+        const body = document.body.classList;
+        body.toggle('mst-menu-open', any);
+        body.toggle('mst-more-open', more);
+        body.toggle('mst-phone-more-open', phoneMore);
+    };
+    const observer = new MutationObserver(update);
+    for (const drawer of drawers) {
+        const content = drawer.querySelector(':scope > .drawer-content');
+        if (content) {
+            observer.observe(content, { attributes: true, attributeFilter: ['class'] });
+        }
+    }
+    update();
+}
+
 export function initShell(options) {
     shellOptions = options;
     createTitlebar();
     createRail();
+    trackDrawers();
     createHeader();
     createEmptyState();
     refreshHeader();

@@ -839,7 +839,17 @@ function endlessScroll(drawer, pagerSelector) {
             check();
         }, 250);
     };
-    drawer.addEventListener('scroll', check, { capture: true, passive: true });
+    // at most one check per frame, however fast the list scrolls
+    let queued = false;
+    drawer.addEventListener('scroll', () => {
+        if (!queued) {
+            queued = true;
+            requestAnimationFrame(() => {
+                queued = false;
+                check();
+            });
+        }
+    }, { capture: true, passive: true });
     new MutationObserver(() => setTimeout(check, 50)).observe(drawer, { attributes: true, attributeFilter: ['class'] });
     const { eventSource, eventTypes } = SillyTavern.getContext();
     eventSource.on(eventTypes.CHARACTER_PAGE_LOADED, () => setTimeout(check, 50));
