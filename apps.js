@@ -592,6 +592,68 @@ function proxySearch(placeholder, targetId) {
     return search;
 }
 
+/**
+ * Endless scroll for one of SillyTavern's paged lists: the pager stays hidden on page 1, and
+ * its page size steps up to the next option whenever the list nears its end.
+ * @param {HTMLElement} drawer The panel the list scrolls in
+ * @param {string} pagerSelector SillyTavern's pagination container
+ */
+function endlessScroll(drawer, pagerSelector) {
+    let busy = false;
+    const total = (pager) => {
+        const numbers = (pager.querySelector('.paginationjs-nav')?.textContent ?? '').match(/\d+/g);
+        return numbers ? { first: Number(numbers[0]), last: Number(numbers[numbers.length - 1]) } : null;
+    };
+    const check = () => {
+        const pager = /** @type {HTMLElement} */ (document.querySelector(pagerSelector));
+        const select = /** @type {HTMLSelectElement} */ (pager?.querySelector('select'));
+        if (busy || !pager || !select || !document.body.classList.contains('ms-teams') || !drawer.classList.contains('openDrawer')) {
+            return;
+        }
+        const $ = /** @type {any} */ (window).jQuery;
+        const counts = total(pager);
+        if (counts && counts.first > 1 && $) {
+            $(pager).pagination('go', 1);
+            return;
+        }
+        // the list's scrolling box is whichever ancestor actually scrolls
+        const scrollers = [];
+        for (let node = drawer.querySelector('.mst-endless') ?? drawer; node; node = node.parentElement) {
+            if (node.scrollHeight > node.clientHeight + 1 && /auto|scroll/.test(getComputedStyle(node).overflowY)) {
+                scrollers.push(node);
+            }
+            if (node === drawer) {
+                break;
+            }
+        }
+        const nearEnd = !scrollers.length || scrollers.some(node => node.scrollTop + node.clientHeight > node.scrollHeight - 400);
+        const shown = Number(select.value);
+        if (!nearEnd || !counts || shown >= counts.last) {
+            return;
+        }
+        const next = [...select.options].map(option => Number(option.value)).filter(size => size > shown).sort((a, b) => a - b)[0];
+        if (!next) {
+            return;
+        }
+        busy = true;
+        const positions = scrollers.map(node => [node, node.scrollTop]);
+        select.value = String(next);
+        select.dispatchEvent(new Event('change', { bubbles: true }));
+        // SillyTavern scrolls a reprinted list back to the top; keep the reader's place
+        const restore = () => positions.forEach(([node, top]) => { node.scrollTop = top; });
+        setTimeout(restore, 30);
+        setTimeout(() => {
+            restore();
+            busy = false;
+            check();
+        }, 250);
+    };
+    drawer.addEventListener('scroll', check, { capture: true, passive: true });
+    new MutationObserver(() => setTimeout(check, 50)).observe(drawer, { attributes: true, attributeFilter: ['class'] });
+    const { eventSource, eventTypes } = SillyTavern.getContext();
+    eventSource.on(eventTypes.CHARACTER_PAGE_LOADED, () => setTimeout(check, 50));
+}
+
 function buildPeople() {
     const drawer = document.getElementById('right-nav-panel');
     if (!drawer) {
@@ -605,6 +667,8 @@ function buildPeople() {
     const [add, importer] = drawer.querySelectorAll('.mst-app-header .mst-tool-icon');
     add.title = t('Add contact');
     importer.title = t('Import contact');
+    document.getElementById('rm_print_characters_block')?.classList.add('mst-endless');
+    endlessScroll(drawer, '#rm_print_characters_pagination');
 }
 
 function buildProfiles() {
@@ -617,6 +681,8 @@ function buildProfiles() {
         toolButton('Restore', 'arrow-up', () => click('#personas_restore')),
         toolButton('New profile', 'person-add', () => click('#create_dummy_persona'), true),
     ], [proxySearch('Search profiles', 'persona_search_bar')]);
+    document.getElementById('user_avatar_block')?.classList.add('mst-endless');
+    endlessScroll(drawer, '#persona_pagination_container');
 }
 
 function buildBackgrounds() {

@@ -503,3 +503,8 @@ body.ms-teams .drawer-content .menu_button:is(.redWarningBG, .red_button):is(.fa
     color: var(--mst-danger) !important;
     filter: none;
 }
+
+/* People and Profiles scroll endlessly (apps.js grows the page), so their pagers go */
+body.ms-teams :is(#rm_print_characters_pagination, #persona_pagination_container) :is(.paginationjs-pages, .paginationjs-nav, .paginationjs-size-changer) {
+    display: none !important;
+}
