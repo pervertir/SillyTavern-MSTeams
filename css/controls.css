@@ -397,3 +397,8 @@ body.ms-teams #toast-container .toast-title {
     margin-top: 8px;
     opacity: 0.8;
 }
+
+/* The app's own name and version stay out of sight */
+body.ms-teams #version_display {
+    display: none;
+}

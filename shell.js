@@ -1,7 +1,7 @@
 // The Teams frame around SillyTavern: the title bar with search, the app rail built from
 // SillyTavern's own menu buttons, and the chat header above the messages.
 
-import { filterChatList } from './chatlist.js';
+import { canGoBack, canGoForward, filterChatList, travel } from './chatlist.js';
 
 const TITLEBAR_ID = 'mst-titlebar';
 const CHAT_APP_ID = 'mst-app-chat';
@@ -26,10 +26,16 @@ const MORE_APPS = [
 ];
 
 const MORE_APP_ID = 'mst-app-more';
-const MORE_MENU_ID = 'mst-more-menu';
 
 function t(text) {
     return SillyTavern.getContext().translate(text);
+}
+
+/** An icon button drawn with one of the theme's Fluent icons (--mst-icon-<name>). */
+function fluentButton(className, title, iconName) {
+    const element = button(className, title, 'mst-fluent');
+    element.querySelector('i').style.setProperty('--mst-glyph', `var(--mst-icon-${iconName})`);
+    return element;
 }
 
 function button(className, title, icon) {
@@ -77,16 +83,19 @@ function createTitlebar() {
 
     const left = document.createElement('div');
     left.className = 'mst-tb-left';
-    const waffle = document.createElement('span');
-    waffle.className = 'mst-waffle';
-    waffle.setAttribute('aria-hidden', 'true');
-    for (let i = 0; i < 9; i++) {
-        waffle.append(document.createElement('span'));
-    }
-    const brand = document.createElement('span');
-    brand.className = 'mst-brand';
-    brand.textContent = 'SillyTavern';
-    left.append(waffle, brand);
+    const railToggle = fluentButton('mst-icon-button mst-tb-rail', t('Hide app bar'), 'panel');
+    railToggle.id = 'mst-rail-toggle';
+    railToggle.addEventListener('click', () => shellOptions.toggleRail());
+    const nav = document.createElement('div');
+    nav.className = 'mst-tb-nav';
+    const back = fluentButton('mst-icon-button', t('Back'), 'arrow-left');
+    back.id = 'mst-nav-back';
+    back.addEventListener('click', () => travel(-1));
+    const forward = fluentButton('mst-icon-button', t('Forward'), 'arrow-right');
+    forward.id = 'mst-nav-forward';
+    forward.addEventListener('click', () => travel(1));
+    nav.append(back, forward);
+    left.append(railToggle, nav);
 
     const search = document.createElement('label');
     search.className = 'mst-search';
@@ -114,7 +123,7 @@ function createTitlebar() {
 
     const right = document.createElement('div');
     right.className = 'mst-tb-right';
-    const more = button('mst-icon-button', t('Settings and more'), 'fa-solid fa-ellipsis');
+    const more = fluentButton('mst-icon-button', t('Settings and more'), 'more');
     more.addEventListener('click', () => toggleDrawer('user-settings-button'));
     const me = document.createElement('button');
     me.type = 'button';
@@ -214,67 +223,103 @@ function railApp(id, label, icon, onClick) {
     return app;
 }
 
-function closeMoreMenu() {
-    const menu = document.getElementById(MORE_MENU_ID);
-    if (menu) {
-        menu.hidden = true;
+const FLYOUT_ID = 'mst-flyout';
+let flyoutAnchor = null;
+
+function closeFlyout() {
+    const flyout = document.getElementById(FLYOUT_ID);
+    if (flyout) {
+        flyout.hidden = true;
     }
-    document.getElementById(MORE_APP_ID)?.classList.remove('mst-app-open');
+    flyoutAnchor?.classList.remove('mst-app-open');
+    flyoutAnchor = null;
+}
+
+function getFlyout() {
+    let flyout = document.getElementById(FLYOUT_ID);
+    if (flyout) {
+        return flyout;
+    }
+    flyout = document.createElement('div');
+    flyout.id = FLYOUT_ID;
+    flyout.setAttribute('role', 'menu');
+    flyout.hidden = true;
+    document.body.append(flyout);
+    document.addEventListener('pointerdown', (event) => {
+        const target = /** @type {Node} */ (event.target);
+        if (!flyout.hidden && !flyout.contains(target) && !flyoutAnchor?.contains(target)) {
+            closeFlyout();
+        }
+    });
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !flyout.hidden) {
+            closeFlyout();
+        }
+    });
+    return flyout;
+}
+
+/**
+ * Opens a Teams menu next to a button, or closes it when it's already open there.
+ * @param {HTMLElement} anchor
+ * @param {{label: string, icon: string, run: () => void}[]} items
+ * @param {'beside'|'below-end'} placement
+ */
+function toggleFlyout(anchor, items, placement) {
+    const flyout = getFlyout();
+    if (!flyout.hidden && flyoutAnchor === anchor) {
+        closeFlyout();
+        return;
+    }
+    closeFlyout();
+    flyout.replaceChildren(...items.map(({ label, icon, run }) => {
+        const item = document.createElement('button');
+        item.type = 'button';
+        item.className = 'mst-more-item';
+        item.setAttribute('role', 'menuitem');
+        const glyph = document.createElement('i');
+        glyph.className = icon;
+        const text = document.createElement('span');
+        text.textContent = t(label);
+        item.append(glyph, text);
+        item.addEventListener('click', () => {
+            closeFlyout();
+            run();
+        });
+        return item;
+    }));
+    flyout.dataset.placement = placement;
+    flyout.hidden = false;
+    flyoutAnchor = anchor;
+    anchor.classList.add('mst-app-open');
+    const box = anchor.getBoundingClientRect();
+    flyout.style.setProperty('--mst-flyout-top', `${Math.round(placement === 'beside' ? box.top : box.bottom + 4)}px`);
+    flyout.style.setProperty('--mst-flyout-left', `${Math.round(box.right + 4)}px`);
+    flyout.style.setProperty('--mst-flyout-right', `${Math.round(window.innerWidth - box.right)}px`);
+    /** @type {HTMLElement} */ (flyout.querySelector('.mst-more-item'))?.focus();
+}
+
+function openProfile() {
+    const panel = document.getElementById('right-nav-panel');
+    if (!panel?.classList.contains('openDrawer')) {
+        toggleDrawer('rightNavHolder');
+    }
 }
 
 function toggleMoreMenu() {
     const app = document.getElementById(MORE_APP_ID);
-    let menu = document.getElementById(MORE_MENU_ID);
-    if (!menu) {
-        menu = document.createElement('div');
-        menu.id = MORE_MENU_ID;
-        menu.setAttribute('role', 'menu');
-        menu.hidden = true;
-        for (const { id, label, icon } of MORE_APPS) {
-            if (!document.getElementById(id)) {
-                continue;
-            }
-            const item = document.createElement('button');
-            item.type = 'button';
-            item.className = 'mst-more-item';
-            item.setAttribute('role', 'menuitem');
-            const glyph = document.createElement('i');
-            glyph.className = icon;
-            const text = document.createElement('span');
-            text.textContent = t(label);
-            item.append(glyph, text);
-            item.addEventListener('click', () => {
-                closeMoreMenu();
-                const content = document.querySelector(`#${id} > .drawer-content`);
-                if (!content?.classList.contains('openDrawer')) {
+    const items = MORE_APPS
+        .filter(({ id }) => document.getElementById(id))
+        .map(({ id, label, icon }) => ({
+            label,
+            icon,
+            run: () => {
+                if (!document.querySelector(`#${id} > .drawer-content`)?.classList.contains('openDrawer')) {
                     toggleDrawer(id);
                 }
-            });
-            menu.append(item);
-        }
-        document.body.append(menu);
-        document.addEventListener('pointerdown', (event) => {
-            const target = /** @type {Node} */ (event.target);
-            if (!menu.hidden && !menu.contains(target) && !app.contains(target)) {
-                closeMoreMenu();
-            }
-        });
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape' && !menu.hidden) {
-                closeMoreMenu();
-            }
-        });
-    }
-    const opening = menu.hidden;
-    menu.hidden = !opening;
-    app.classList.toggle('mst-app-open', opening);
-    if (opening) {
-        const box = app.getBoundingClientRect();
-        menu.style.setProperty('--mst-more-top', `${Math.round(box.top)}px`);
-        menu.style.setProperty('--mst-more-left', `${Math.round(box.right + 4)}px`);
-        menu.style.setProperty('--mst-more-bottom', `${Math.round(window.innerHeight - box.top + 4)}px`);
-        /** @type {HTMLElement} */ (menu.querySelector('.mst-more-item'))?.focus();
-    }
+            },
+        }));
+    toggleFlyout(app, items, 'beside');
 }
 
 function createRail() {
@@ -285,7 +330,7 @@ function createRail() {
     if (!document.getElementById(CHAT_APP_ID)) {
         holder.prepend(railApp(CHAT_APP_ID, 'Chat', 'chat', () => {
             closeDrawers();
-            closeMoreMenu();
+            closeFlyout();
             document.body.classList.remove('mst-m-chat');
         }));
     }
@@ -301,7 +346,7 @@ function createRail() {
         drawer.style.setProperty('--mst-order', String(order));
         drawer.dataset.mstIcon = icon;
         toggle.dataset.mstLabel = t(label);
-        toggle.addEventListener('click', closeMoreMenu);
+        toggle.addEventListener('click', closeFlyout);
     }
     for (const { id } of MORE_APPS) {
         document.getElementById(id)?.classList.add('mst-more-drawer');
@@ -322,38 +367,47 @@ function createHeader() {
     const who = document.createElement('button');
     who.type = 'button';
     who.className = 'mst-head-who';
-    who.title = t('Character Management');
+    who.title = t('View profile');
     const avatar = document.createElement('span');
     avatar.className = 'mst-avatar';
     const name = document.createElement('span');
     name.className = 'mst-head-name';
     who.append(avatar, name);
-    who.addEventListener('click', () => {
-        const panel = document.getElementById('right-nav-panel');
-        if (!panel?.classList.contains('openDrawer')) {
-            toggleDrawer('rightNavHolder');
-        }
-    });
+    who.addEventListener('click', openProfile);
 
     const tabs = document.createElement('nav');
     tabs.className = 'mst-tabs';
     const tab = document.createElement('span');
     tab.className = 'mst-tab mst-tab-active';
     tab.textContent = t('Chat');
-    tabs.append(tab);
+    const shared = document.createElement('button');
+    shared.type = 'button';
+    shared.className = 'mst-tab';
+    shared.textContent = t('Shared');
+    shared.addEventListener('click', openProfile);
+    const add = fluentButton('mst-tab mst-tab-add', t('Add a tab'), 'add');
+    add.addEventListener('click', () => toggleDrawer('extensions-settings-button'));
+    tabs.append(tab, shared, add);
 
     const actions = document.createElement('div');
     actions.className = 'mst-head-actions';
-    const history = button('mst-icon-button', t('Manage chat files'), 'fa-solid fa-clock-rotate-left');
-    history.addEventListener('click', () => clickOption('option_select_chat'));
-    const fresh = button('mst-icon-button', t('Start new chat'), 'fa-regular fa-pen-to-square');
+    const fresh = fluentButton('mst-icon-button', t('New chat'), 'video');
     fresh.addEventListener('click', () => clickOption('option_start_new_chat'));
-    const close = button('mst-icon-button', t('Close chat'), 'fa-solid fa-xmark');
-    close.addEventListener('click', () => {
-        clickOption('option_close_chat');
-        document.body.classList.remove('mst-m-chat');
-    });
-    actions.append(history, fresh, close);
+    const history = fluentButton('mst-icon-button', t('Chat history'), 'call');
+    history.addEventListener('click', () => clickOption('option_select_chat'));
+    const more = fluentButton('mst-icon-button', t('More options'), 'more');
+    more.addEventListener('click', () => toggleFlyout(more, [
+        { label: 'New chat', icon: 'fa-regular fa-pen-to-square', run: () => clickOption('option_start_new_chat') },
+        { label: 'Chat history', icon: 'fa-solid fa-clock-rotate-left', run: () => clickOption('option_select_chat') },
+        { label: 'View profile', icon: 'fa-regular fa-id-card', run: openProfile },
+        {
+            label: 'Close chat', icon: 'fa-solid fa-xmark', run: () => {
+                clickOption('option_close_chat');
+                document.body.classList.remove('mst-m-chat');
+            },
+        },
+    ], 'below-end'));
+    actions.append(fresh, history, more);
 
     head.append(back, who, tabs, actions);
     sheld.prepend(head);
@@ -391,18 +445,70 @@ export function refreshHeader() {
         avatar.append(img, presence);
         name.textContent = character.name;
     } else {
-        const icon = document.createElement('i');
-        icon.className = 'fa-solid fa-mug-hot';
-        avatar.classList.add('mst-avatar-group');
-        avatar.append(icon);
-        name.textContent = 'SillyTavern';
+        name.textContent = '';
     }
 }
 
-export function initShell() {
+/** Teams' empty chat pane, shown while no chat is open */
+function createEmptyState() {
+    const sheld = document.getElementById('sheld');
+    if (!sheld || document.getElementById('mst-empty')) {
+        return;
+    }
+    const empty = document.createElement('div');
+    empty.id = 'mst-empty';
+    const art = document.createElement('div');
+    art.className = 'mst-empty-art';
+    art.setAttribute('aria-hidden', 'true');
+    const title = document.createElement('h2');
+    title.textContent = t('Start a new chat');
+    const text = document.createElement('p');
+    text.textContent = t('Pick a conversation from the list, or start a new one.');
+    const action = document.createElement('button');
+    action.type = 'button';
+    action.className = 'menu_button mst-primary';
+    action.textContent = t('New chat');
+    action.addEventListener('click', openProfile);
+    empty.append(art, title, text, action);
+    sheld.append(empty);
+}
+
+/** Enables back/forward to match the chat history. */
+export function refreshNavigation() {
+    const back = /** @type {HTMLButtonElement} */ (document.getElementById('mst-nav-back'));
+    const forward = /** @type {HTMLButtonElement} */ (document.getElementById('mst-nav-forward'));
+    if (back) {
+        back.disabled = !canGoBack();
+    }
+    if (forward) {
+        forward.disabled = !canGoForward();
+    }
+}
+
+/** Names the title bar's rail button for what it will do. */
+export function refreshRailToggle(hidden) {
+    const toggle = document.getElementById('mst-rail-toggle');
+    if (toggle) {
+        const label = t(hidden ? 'Show app bar' : 'Hide app bar');
+        toggle.title = label;
+        toggle.setAttribute('aria-label', label);
+        toggle.setAttribute('aria-pressed', String(!hidden));
+    }
+}
+
+let shellOptions = { toggleRail: () => {} };
+
+/**
+ * @param {object} options
+ * @param {() => void} options.toggleRail Hides or shows the app rail
+ */
+export function initShell(options) {
+    shellOptions = options;
     createTitlebar();
     createRail();
     createHeader();
+    createEmptyState();
     refreshHeader();
+    refreshNavigation();
     refreshPersona();
 }

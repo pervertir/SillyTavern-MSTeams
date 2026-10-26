@@ -248,7 +248,7 @@ export function filterChatList(text) {
     render();
 }
 
-async function openEntry(entry) {
+export async function openEntry(entry) {
     const context = SillyTavern.getContext();
     if (isCurrent(entry)) {
         onOpen();
@@ -388,18 +388,97 @@ export function createChatList() {
     return list;
 }
 
+/* Back and forward between chats, like Teams' title bar arrows */
+const visited = [];
+let visitIndex = -1;
+let travelling = false;
+let onHistoryChange = () => {};
+
+function getCurrentPlace() {
+    const context = SillyTavern.getContext();
+    const fileId = context.getCurrentChatId();
+    if (!fileId) {
+        return null;
+    }
+    if (context.groupId) {
+        return { group: String(context.groupId), avatar: '', fileId };
+    }
+    const character = context.characters[context.characterId];
+    return character ? { group: '', avatar: character.avatar, fileId } : null;
+}
+
+function samePlace(a, b) {
+    return !!a && !!b && a.fileId === b.fileId && a.group === b.group && a.avatar === b.avatar;
+}
+
+let visitTimer = 0;
+
+/** Records the open chat once it settles: picking a character opens its last chat first. */
+function scheduleVisit() {
+    clearTimeout(visitTimer);
+    visitTimer = setTimeout(recordVisit, 400);
+}
+
+function recordVisit() {
+    if (travelling) {
+        return;
+    }
+    const place = getCurrentPlace();
+    if (!place || samePlace(place, visited[visitIndex])) {
+        return;
+    }
+    visited.splice(visitIndex + 1);
+    visited.push(place);
+    if (visited.length > 50) {
+        visited.shift();
+    }
+    visitIndex = visited.length - 1;
+    onHistoryChange();
+}
+
+export function canGoBack() {
+    return visitIndex > 0;
+}
+
+export function canGoForward() {
+    return visitIndex < visited.length - 1;
+}
+
+/** Opens the previous (-1) or next (+1) chat in the history. */
+export async function travel(step) {
+    const index = visitIndex + step;
+    const place = visited[index];
+    if (!place || travelling) {
+        return;
+    }
+    travelling = true;
+    try {
+        await openEntry(place);
+        visitIndex = index;
+    } finally {
+        // outlast the pending visit record, so the trip itself isn't recorded
+        setTimeout(() => {
+            travelling = false;
+            onHistoryChange();
+        }, 500);
+    }
+}
+
 /**
  * @param {object} options
  * @param {() => object} options.settings Returns the theme settings
+ * @param {() => void} [options.historyChanged] Called when back/forward availability changes
  * @param {() => void} options.opened Called once a chat from the list is open
  */
-export function initChatList({ settings, opened }) {
+export function initChatList({ settings, opened, historyChanged }) {
     getSettings = settings;
     onOpen = opened;
+    onHistoryChange = historyChanged ?? onHistoryChange;
     createChatList();
 
     const { eventSource, eventTypes } = SillyTavern.getContext();
     eventSource.on(eventTypes.CHAT_CHANGED, () => {
+        scheduleVisit();
         markCurrentChat();
         scheduleRefresh(300);
     });
@@ -410,5 +489,6 @@ export function initChatList({ settings, opened }) {
             eventSource.on(type, () => scheduleRefresh());
         }
     }
+    recordVisit();
     refreshChatList();
 }

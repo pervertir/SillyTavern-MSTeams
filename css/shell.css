@@ -25,6 +25,19 @@ body.ms-teams.mst-no-list {
     --mst-content-left: var(--mst-rail-w);
 }
 
+/* App rail hidden with the title bar's button (html adds weight over the labels' width) */
+html body.ms-teams.mst-rail-hidden {
+    --mst-rail-w: 0px;
+}
+
+body.ms-teams.mst-rail-hidden #top-settings-holder {
+    visibility: hidden;
+}
+
+body.ms-teams.mst-rail-hidden .mst-tb-rail {
+    margin-left: 12px;
+}
+
 body.ms-teams #top-bar,
 body.ms-teams #sheldheader {
     display: none;
@@ -124,34 +137,26 @@ body.ms-teams #mst-titlebar {
 body.ms-teams .mst-tb-left {
     display: flex;
     align-items: center;
-    gap: 12px;
+    justify-content: space-between;
     width: calc(var(--mst-list-w) + var(--mst-rail-w) - 16px);
     min-width: 0;
     flex: none;
 }
 
-body.ms-teams .mst-waffle {
-    display: grid;
-    grid-template-columns: repeat(3, 4px);
-    gap: 3px;
-    place-content: center;
-    width: var(--mst-rail-w);
-    height: var(--mst-titlebar-h);
-    flex: none;
+/* the rail button sits over the rail, the arrows by the search box, as in Teams */
+body.ms-teams .mst-tb-rail {
+    margin-left: calc((var(--mst-rail-w) - 32px) / 2);
 }
 
-body.ms-teams .mst-waffle span {
-    width: 4px;
-    height: 4px;
-    border-radius: 1px;
-    background: var(--mst-fg-2);
+body.ms-teams .mst-tb-nav {
+    display: flex;
+    gap: 2px;
 }
 
-body.ms-teams .mst-brand {
-    font-size: var(--mst-text);
-    font-weight: 600;
-    color: var(--mst-fg);
-    white-space: nowrap;
+body.ms-teams .mst-icon-button:disabled {
+    color: var(--mst-fg-disabled);
+    background: none;
+    cursor: default;
 }
 
 body.ms-teams .mst-search {
@@ -463,17 +468,22 @@ body.ms-teams:has(.mst-more-drawer > .drawer-content.openDrawer) #mst-app-more::
     margin-top: -10px;
 }
 
-/* More's flyout: SillyTavern's other menus, like Teams' "More added apps" */
-#mst-more-menu {
+body.ms-teams #mst-flyout[data-placement="below-end"]:not([hidden]) {
+    left: auto;
+    right: var(--mst-flyout-right, 16px);
+}
+
+/* Flyout menus (More, the chat header's …): SillyTavern's other menus, like Teams' "More added apps" */
+#mst-flyout {
     display: none;
 }
 
-body.ms-teams #mst-more-menu:not([hidden]) {
+body.ms-teams #mst-flyout:not([hidden]) {
     display: flex;
     flex-direction: column;
     position: fixed;
-    top: var(--mst-more-top, 120px);
-    left: var(--mst-more-left, 72px);
+    top: var(--mst-flyout-top, 120px);
+    left: var(--mst-flyout-left, 72px);
     min-width: 240px;
     padding: 4px;
     box-sizing: border-box;

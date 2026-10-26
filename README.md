@@ -13,7 +13,7 @@ A SillyTavern extension that makes the whole app look and work like Microsoft Te
 
 ## What it changes
 
-- **Title bar.** Search filters the chat list by name or message. On the right, your persona shows as a Teams monogram of its name (or its picture, if you turn that on) and opens Persona Management.
+- **Title bar.** The button at the far left hides or shows the app rail, and the arrows go back and forward between the chats you've opened, as in Teams. Search filters the chat list by name or message. On the right, your persona shows as a Teams monogram of its name (or its picture, if you turn that on) and opens Persona Management.
 - **App rail.** The Teams rail, with Teams' icons on SillyTavern's menus in SillyTavern's own order:
 
   | Rail icon | Opens |
@@ -29,11 +29,13 @@ A SillyTavern extension that makes the whole app look and work like Microsoft Te
 
   Hover an icon to see what it opens. App names under the icons are off by default, as in Teams, and can be turned on in the settings. Each menu opens as a panel in the chat list's place.
 - **Chat list.** Your recent chats, with Pinned and Recent sections like Teams. It uses SillyTavern's own recent chats and pins, so pinning a chat on the welcome screen pins it here too. The pen button starts a new chat from the character list.
-- **Chat header.** The character's picture and name, which opens their card, a Chat tab, and buttons for chat history, a new chat and closing the chat.
+- **Chat header.** The character's picture and name, which open their card, Teams' Chat, Shared and + tabs, and the video, call and … buttons: video starts a new chat, call opens the chat history, and … has those plus View profile and Close chat.
 - **Messages.** Everyone else's messages sit on the left with their picture, name and time. Yours sit on the right in Teams lavender. Times read the Teams way: `10:42 AM`, `Yesterday 10:42 AM` or `10/21 3:15 PM`. Message actions appear as a toolbar when you hover a message, and swipes become a small pager under the last reply.
-- **Compose box.** "Type a message" with the tools on the right and the purple send arrow.
+- **Compose box.** "Type a message" with Teams' emoji (extensions menu) and + (chat options) buttons and the send arrow on the right.
 - **Controls.** Buttons, fields, checkboxes, sliders, menus, dialogs and toasts follow Fluent 2.
 - **Phones.** One pane at a time: the chat list with an app bar along the bottom, or the open chat with a back arrow.
+
+- **No trace of SillyTavern.** While the theme is on, the browser tab reads like a Teams tab (`Chat | Name | Microsoft Teams`) with a plain purple chat icon, the message box says "Type a message", the welcome screen gives way to a Teams-style empty pane, and the version number is hidden. Turning the theme off puts all of it back. SillyTavern's loading screen still shows for a moment before extensions load, and some of its own menus mention it by name.
 
 SillyTavern's background image is hidden while the theme is on.
 

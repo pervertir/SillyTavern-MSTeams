@@ -115,6 +115,30 @@ body.ms-teams #leftSendForm > div:hover {
     filter: none;
 }
 
+/* Teams' compose icons on SillyTavern's buttons: + (actions and apps) for the options menu,
+   the emoji face for the extensions menu, and Teams' send arrow */
+body.ms-teams #options_button::before,
+body.ms-teams #extensionsMenuButton::before,
+body.ms-teams #send_but::before,
+body.ms-teams #mes_stop i::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 20px;
+    background-color: currentColor;
+    -webkit-mask: var(--mst-glyph) center / 20px 20px no-repeat;
+    mask: var(--mst-glyph) center / 20px 20px no-repeat;
+}
+
+body.ms-teams #options_button { --mst-glyph: var(--mst-icon-plus-circle); }
+body.ms-teams #extensionsMenuButton { --mst-glyph: var(--mst-icon-emoji); }
+body.ms-teams #send_but { --mst-glyph: var(--mst-icon-send); }
+body.ms-teams #mes_stop { --mst-glyph: var(--mst-icon-stop); }
+
+body.ms-teams #extensionsMenuButton {
+    order: -1;
+}
+
 /* Send: Teams' purple arrow */
 body.ms-teams #send_but {
     color: var(--mst-brand-fg);

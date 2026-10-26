@@ -2,7 +2,8 @@
 // (title bar, app rail, chat list, chat header) and exposes a small settings panel.
 
 import { initChatList, markCurrentChat, scheduleRefresh } from './chatlist.js';
-import { initShell, refreshHeader, refreshPersona } from './shell.js';
+import { setDisguise, refreshTitle } from './disguise.js';
+import { initShell, refreshHeader, refreshNavigation, refreshPersona, refreshRailToggle } from './shell.js';
 import { initTimes, labelMessages } from './times.js';
 
 const MODULE_NAME = 'msTeamsTheme';
@@ -20,6 +21,8 @@ const defaultSettings = Object.freeze({
     chatList: true,
     /** App names under the rail icons; Teams leaves them off */
     railLabels: false,
+    /** App rail hidden with the title bar's button */
+    railHidden: false,
     /** Persona picture in the title bar instead of a monogram of its name */
     personaPicture: false,
     presence: true,
@@ -58,6 +61,9 @@ function applySettings() {
     body.classList.toggle('mst-dark', !!settings.enabled && isDark(settings));
     body.classList.toggle('mst-no-list', !settings.chatList);
     body.classList.toggle('mst-rail-labels', !!settings.railLabels);
+    body.classList.toggle('mst-rail-hidden', !!settings.railHidden);
+    refreshRailToggle(!!settings.railHidden);
+    setDisguise(!!settings.enabled);
     body.classList.toggle('mst-persona-picture', !!settings.personaPicture);
     body.classList.toggle('mst-presence-on', !!settings.presence);
     body.classList.toggle('mst-short-times', !!settings.shortTimes);
@@ -70,8 +76,16 @@ function showChatOnPhone() {
     }
 }
 
+function toggleRail() {
+    const settings = getSettings();
+    settings.railHidden = !settings.railHidden;
+    applySettings();
+    saveSettings();
+}
+
 function onChatChanged(chatId) {
     refreshHeader();
+    refreshTitle();
     if (chatId) {
         showChatOnPhone();
     } else {
@@ -129,8 +143,9 @@ async function init() {
     applySettings();
     darkQuery.addEventListener('change', applySettings);
 
-    initShell();
-    initChatList({ settings: getSettings, opened: showChatOnPhone });
+    initShell({ toggleRail });
+    initChatList({ settings: getSettings, opened: showChatOnPhone, historyChanged: refreshNavigation });
+    applySettings();
     initTimes();
 
     const { eventSource, eventTypes } = SillyTavern.getContext();
@@ -138,6 +153,8 @@ async function init() {
     eventSource.on(eventTypes.GROUP_UPDATED, refreshHeader);
     eventSource.on(eventTypes.CHARACTER_EDITED, refreshHeader);
     eventSource.on(eventTypes.CHARACTER_RENAMED, refreshHeader);
+    eventSource.on(eventTypes.CHARACTER_RENAMED, refreshTitle);
+    eventSource.on(eventTypes.GROUP_UPDATED, refreshTitle);
     eventSource.on(eventTypes.PERSONA_CHANGED, refreshPersona);
     eventSource.on(eventTypes.PERSONA_RENAMED, () => refreshPersona());
     eventSource.on(eventTypes.SETTINGS_UPDATED, () => refreshPersona());

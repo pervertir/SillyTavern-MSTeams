@@ -86,9 +86,109 @@ body.ms-teams .mst-head-actions {
     margin-left: auto;
 }
 
-body.ms-teams.mst-no-chat .mst-head-actions,
-body.ms-teams.mst-no-chat .mst-tabs {
+/* No chat open: Teams' empty pane in place of the welcome screen */
+#mst-empty {
     display: none;
+}
+
+body.ms-teams.mst-no-chat #mst-chat-head,
+body.ms-teams.mst-no-chat #chat,
+body.ms-teams.mst-no-chat #form_sheld {
+    display: none;
+}
+
+body.ms-teams.mst-no-chat #mst-empty {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 24px;
+    text-align: center;
+    background: var(--mst-canvas);
+}
+
+body.ms-teams .mst-empty-art {
+    width: 160px;
+    height: 120px;
+    margin-bottom: 16px;
+    border-radius: var(--mst-radius-xl);
+    background: var(--mst-brand-soft);
+    position: relative;
+    overflow: hidden;
+}
+
+/* two chat bubbles in brand colors */
+body.ms-teams .mst-empty-art::before,
+body.ms-teams .mst-empty-art::after {
+    content: '';
+    position: absolute;
+    -webkit-mask: var(--mst-icon-chat-on) center / contain no-repeat;
+    mask: var(--mst-icon-chat-on) center / contain no-repeat;
+}
+
+body.ms-teams .mst-empty-art::before {
+    left: 26px;
+    top: 18px;
+    width: 64px;
+    height: 64px;
+    background: var(--mst-brand);
+}
+
+body.ms-teams .mst-empty-art::after {
+    right: 26px;
+    bottom: 14px;
+    width: 52px;
+    height: 52px;
+    background: var(--mst-brand-fg);
+    opacity: 0.55;
+    transform: scaleX(-1);
+}
+
+body.ms-teams #mst-empty h2 {
+    margin: 0;
+    font-size: var(--mst-text-lg);
+    line-height: 28px;
+}
+
+body.ms-teams #mst-empty .menu_button {
+    width: auto;
+    padding: 4px 16px;
+    white-space: nowrap;
+}
+
+body.ms-teams #mst-empty p {
+    margin: 0 0 12px;
+    color: var(--mst-fg-3);
+}
+
+/* Header tabs: Chat, Shared and + */
+body.ms-teams button.mst-tab {
+    margin: 0;
+    border: none;
+    background: none;
+    font: inherit;
+    cursor: pointer;
+}
+
+body.ms-teams button.mst-tab:hover {
+    color: var(--mst-fg);
+}
+
+body.ms-teams .mst-tab-add {
+    align-self: center;
+    width: 28px;
+    height: 28px;
+    justify-content: center;
+    border-radius: var(--mst-radius);
+}
+
+body.ms-teams .mst-tab-add .mst-fluent {
+    width: 16px;
+    height: 16px;
+    -webkit-mask-size: 16px 16px;
+    mask-size: 16px 16px;
 }
 
 /* Message area */
