@@ -35,7 +35,7 @@ body.ms-teams.mst-rail-hidden #top-settings-holder {
 }
 
 body.ms-teams.mst-rail-hidden .mst-tb-rail {
-    margin-left: 12px;
+    margin-left: 0;
 }
 
 body.ms-teams #top-bar,
@@ -118,8 +118,10 @@ body.ms-teams .mst-presence.mst-presence-on {
 }
 
 /* Title bar */
+/* three columns, so the search box sits in the middle of the window, as in Teams */
 body.ms-teams #mst-titlebar {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(200px, 680px) minmax(0, 1fr);
     align-items: center;
     gap: 16px;
     position: fixed;
@@ -127,7 +129,7 @@ body.ms-teams #mst-titlebar {
     left: 0;
     right: 0;
     height: var(--mst-titlebar-h);
-    padding: 0 12px 0 0;
+    padding: 0 12px;
     box-sizing: border-box;
     background: var(--mst-shell);
     z-index: 3004;
@@ -138,14 +140,12 @@ body.ms-teams .mst-tb-left {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: calc(var(--mst-list-w) + var(--mst-rail-w) - 16px);
     min-width: 0;
-    flex: none;
 }
 
 /* the rail button sits over the rail, the arrows by the search box, as in Teams */
 body.ms-teams .mst-tb-rail {
-    margin-left: calc((var(--mst-rail-w) - 32px) / 2);
+    margin-left: calc((var(--mst-rail-w) - 32px) / 2 - 12px);
 }
 
 body.ms-teams .mst-tb-nav {
@@ -163,10 +163,9 @@ body.ms-teams .mst-search {
     display: flex;
     align-items: center;
     gap: 8px;
-    flex: 1 1 auto;
-    max-width: 680px;
+    width: 100%;
     height: 32px;
-    margin: 0 auto 0 0;
+    margin: 0;
     padding: 0 10px;
     box-sizing: border-box;
     border: 1px solid transparent;
@@ -211,8 +210,9 @@ body.ms-teams .mst-search input::placeholder {
 body.ms-teams .mst-tb-right {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 8px;
-    flex: none;
+    min-width: 0;
 }
 
 body.ms-teams #mst-me {
