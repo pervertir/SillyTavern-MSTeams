@@ -40,6 +40,7 @@ function toolButton(label, icon, onClick, primary = false) {
         button.append(fluentIcon(icon, 16));
     }
     if (label) {
+        button.title = t(label);
         button.append(el('span', '', t(label)));
     } else {
         button.classList.add('mst-tool-icon');
@@ -158,7 +159,10 @@ function renderCalendar(stage, monthLabel) {
             el('strong', '', connected ? apiName || t('Connected') : t('Not connected')),
             el('span', '', connected ? t('Connected') : t('Pick an API and connect')),
         );
-        event.addEventListener('click', () => /** @type {HTMLElement} */ (document.getElementById('main_api'))?.focus());
+        event.addEventListener('click', () => {
+            document.getElementById('rm_api_block')?.classList.remove('mst-cal-week');
+            /** @type {HTMLElement} */ (document.getElementById('main_api'))?.focus();
+        });
         grid.append(place(event, todayIndex + 2, halfHourRow(connectionHour), 2));
 
         // the red line is now, moved along every minute while the calendar is open
@@ -194,8 +198,15 @@ function buildCalendar() {
     });
     prev.title = t('Previous week');
     next.title = t('Next week');
-    const view = toolButton('Work week', 'calendar', () => {});
-    const add = toolButton('New event', 'add', () => /** @type {HTMLElement} */ (document.getElementById('main_api'))?.focus(), true);
+    // on phones there's room for one view: Work week shows the schedule, New event the settings
+    const view = toolButton('Work week', 'calendar', () => {
+        drawer.classList.add('mst-cal-week');
+        render();
+    });
+    const add = toolButton('New event', 'add', () => {
+        drawer.classList.remove('mst-cal-week');
+        /** @type {HTMLElement} */ (document.getElementById('main_api'))?.focus();
+    }, true);
     header(drawer, 'Calendar', [view, add], [today, prev, next, month]);
     drawer.append(stage);
     render();

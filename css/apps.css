@@ -1215,6 +1215,105 @@ body.ms-teams #rm_extensions_block .extensions_block .inline-drawer > .inline-dr
         padding: 24px 16px;
     }
 
+    /* Calls: the three templates one below the other; no dial pad or filler */
+    body.ms-teams #AdvancedFormatting > .flex-container.spaceEvenly {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    body.ms-teams #AdvancedFormatting .mst-call-card {
+        display: none !important;
+    }
+
+    body.ms-teams #AdvancedFormatting[data-mst-call] :is(#ContextSettings, #InstructSettingsColumn, #SystemPromptColumn) {
+        display: flex !important;
+    }
+
+    body.ms-teams #top-settings-holder #AdvancedFormatting.drawer-content {
+        --mst-pad-l: 12px;
+        padding-left: 12px;
+    }
+
+    /* Calendar: Work week shows the schedule in the settings' place */
+    body.ms-teams #rm_api_block.mst-cal-week .mst-calendar {
+        display: block !important;
+        position: fixed;
+        top: calc(var(--mst-safe-top, 0px) + 56px);
+        left: 0;
+        right: 0;
+        width: auto;
+        bottom: var(--mst-tabbar-h);
+        border-right: none;
+    }
+
+    body.ms-teams #rm_api_block.mst-cal-week > :not(.mst-app-header, .mst-calendar) {
+        visibility: hidden;
+    }
+
+    body.ms-teams #rm_api_block.mst-cal-week .mst-cal-grid {
+        grid-template-columns: 44px repeat(5, minmax(0, 1fr));
+    }
+
+    body.ms-teams #rm_api_block.mst-cal-week .mst-cal-dayhead {
+        padding: 0 4px;
+    }
+
+    body.ms-teams #rm_api_block.mst-cal-week .mst-cal-date {
+        font-size: 18px;
+    }
+
+    body.ms-teams #rm_api_block.mst-cal-week .mst-cal-weekday {
+        font-size: 10px;
+    }
+
+    body.ms-teams #rm_api_block.mst-cal-week .mst-cal-hour {
+        padding-right: 4px;
+        font-size: 10px;
+    }
+
+    body.ms-teams #rm_api_block.mst-cal-week .mst-cal-event {
+        margin: 1px;
+        padding: 2px 4px;
+        border-left-width: 3px;
+        font-size: 10px;
+        line-height: 12px;
+    }
+
+    body.ms-teams #rm_api_block.mst-cal-week .mst-cal-event span {
+        display: none;
+    }
+
+    body.ms-teams #rm_api_block.mst-cal-week .mst-app-header .mst-app-tools:not(.mst-app-tools-end) {
+        display: flex;
+    }
+
+    /* the calendar's bar fits a phone: tools as icons only */
+    body.ms-teams #rm_api_block .mst-app-header .mst-tool span {
+        display: none;
+    }
+
+    body.ms-teams #rm_api_block .mst-app-header .mst-tool {
+        width: 32px;
+        padding: 0;
+        justify-content: center;
+    }
+
+    body.ms-teams #rm_api_block .mst-app-header {
+        gap: 6px;
+        overflow: hidden;
+    }
+
+    body.ms-teams #rm_api_block .mst-cal-month {
+        font-size: var(--mst-text-sm);
+    }
+
+    body.ms-teams #rm_api_block .mst-app-tools {
+        gap: 2px;
+    }
+
+    body.ms-teams #rm_api_block .mst-app-header .mst-app-title {
+        font-size: var(--mst-text-md);
+    }
+
     /* phones pick documents with SillyTavern's own picker */
     body.ms-teams #world_popup > .mst-wi-pickrow {
         display: flex;
@@ -1323,9 +1422,21 @@ body.ms-teams #AdvancedFormatting > .flex-container.alignItemsBaseline:has(#af_m
 /* History and Voicemail (filler), then the group picked in Speed dial */
 body.ms-teams #AdvancedFormatting > .flex-container.spaceEvenly {
     display: grid;
-    grid-template-columns: minmax(220px, 1fr) minmax(220px, 1fr) minmax(360px, 1.5fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.5fr);
     gap: 16px;
     align-items: start;
+    min-width: 0;
+}
+
+/* nothing inside Calls may push the page sideways */
+body.ms-teams #top-settings-holder #AdvancedFormatting.drawer-content {
+    overflow-x: hidden;
+}
+
+body.ms-teams #AdvancedFormatting :is(#ContextSettings, #InstructSettingsColumn, #SystemPromptColumn) * {
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 body.ms-teams #AdvancedFormatting[data-mst-call]:not([data-mst-call="context"]) #ContextSettings,
@@ -1334,9 +1445,9 @@ body.ms-teams #AdvancedFormatting[data-mst-call]:not([data-mst-call="system"]) #
     display: none;
 }
 
-@media screen and (max-width: 1180px) {
+@media screen and (max-width: 1400px) {
     body.ms-teams #AdvancedFormatting > .flex-container.spaceEvenly {
-        grid-template-columns: minmax(240px, 1fr) minmax(360px, 1.6fr);
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
     }
 
     body.ms-teams #AdvancedFormatting .mst-call-card:nth-child(2) {
