@@ -375,36 +375,95 @@ function buildOneDrive() {
 
 /* Copilot ------------------------------------------------------------------------------- */
 
+/** Copilot's prompt suggestions, each a settings search */
+const COPILOT_PROMPTS = [
+    ['Change how chats look', 'Pick a chat style, avatars and a font size', 'Chat Style'],
+    ['Tune message sending', 'Enter to send, swipes and auto-scroll', 'Enter to Send'],
+    ['Make it easier to read', 'Font scale, chat width and reduced motion', 'Font Scale'],
+    ['Set up notifications', 'Where pop-ups appear and message sounds', 'Notifications'],
+];
+
 function buildCopilot() {
     const drawer = document.getElementById('user-settings-block');
     if (!drawer) {
         return;
     }
-    header(drawer, 'Copilot', [toolButton('New chat', 'compose', () => {
-        prompt.value = '';
-        sync();
-    })]);
+    const prompt = el('input');
+    // the prompt box is SillyTavern's settings search
+    const ask = (text) => {
+        prompt.value = text;
+        const search = /** @type {HTMLTextAreaElement} */ (document.getElementById('settingsSearch'));
+        if (search) {
+            search.value = text;
+            search.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        drawer.classList.toggle('mst-copilot-asking', !!text.trim());
+    };
+    header(drawer, 'Copilot', [toolButton('New chat', 'compose', () => ask(''))]);
+
+    // left: Copilot's conversation list, here the settings' sections
+    const nav = el('nav', 'mst-stage mst-copilot-nav');
+    const fresh = el('button', 'mst-tool mst-copilot-new');
+    fresh.type = 'button';
+    fresh.append(fluentIcon('compose', 16), el('span', '', t('New chat')));
+    fresh.addEventListener('click', () => {
+        ask('');
+        drawer.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    nav.append(fresh, el('h3', 'mst-dial-section', t('Recent')));
+    for (const heading of drawer.querySelectorAll('h4')) {
+        // the app's own name stays out of the list
+        const label = heading.textContent.trim().replace(/\s+/g, ' ').replace(/^STscript\b/, 'Script');
+        if (!label) {
+            continue;
+        }
+        const item = el('button', 'mst-copilot-thread');
+        item.type = 'button';
+        item.append(fluentIcon('chat', 16), el('span', '', label));
+        item.addEventListener('click', () => {
+            ask('');
+            nav.querySelectorAll('.mst-copilot-thread').forEach(x => x.classList.toggle('mst-copilot-thread-on', x === item));
+            heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        nav.append(item);
+    }
+    drawer.append(nav);
+
+    // center: the greeting and prompt suggestions
     const intro = el('div', 'mst-copilot-intro');
     const logo = el('span', 'mst-copilot-logo');
     const hello = el('h2', 'mst-copilot-hello');
-    const sub = el('p', 'mst-copilot-sub', t('Ask me to find a setting, or browse them below.'));
+    const sub = el('p', 'mst-copilot-sub', t('Here are some things I can help you with in your settings.'));
+    const cards = el('div', 'mst-copilot-cards');
+    for (const [title, detail, query] of COPILOT_PROMPTS) {
+        const card = el('button', 'mst-copilot-card');
+        card.type = 'button';
+        card.append(el('strong', '', t(title)), el('span', '', t(detail)));
+        card.addEventListener('click', () => ask(query));
+        cards.append(card);
+    }
+    intro.append(logo, hello, sub, cards);
+    drawer.querySelector('.mst-app-header')?.after(intro);
+
+    // bottom: the "Message Copilot" box, docked like Copilot's
+    const dock = el('div', 'mst-copilot-dock');
     const box = el('label', 'mst-copilot-box');
-    const prompt = el('input');
     prompt.type = 'text';
     prompt.placeholder = t('Message Copilot');
-    const send = fluentIcon('send', 18);
-    box.append(prompt, send);
-    // the prompt box is SillyTavern's settings search
-    const sync = () => {
-        const search = /** @type {HTMLTextAreaElement} */ (document.getElementById('settingsSearch'));
-        if (search) {
-            search.value = prompt.value;
-            search.dispatchEvent(new Event('input', { bubbles: true }));
+    prompt.addEventListener('input', () => ask(prompt.value));
+    prompt.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            ask('');
         }
-    };
-    prompt.addEventListener('input', sync);
-    intro.append(logo, hello, sub, box);
-    drawer.querySelector('.mst-app-header')?.after(intro);
+    });
+    const send = el('button', 'mst-copilot-send');
+    send.type = 'button';
+    send.title = t('Send');
+    send.append(fluentIcon('send', 18));
+    send.addEventListener('click', () => ask(prompt.value));
+    box.append(fluentIcon('plus-circle', 18), prompt, send);
+    dock.append(box, el('p', 'mst-copilot-note', t('AI-generated content may be incorrect')));
+    drawer.append(dock);
     refreshCopilotGreeting();
 }
 

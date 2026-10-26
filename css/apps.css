@@ -789,29 +789,93 @@ body.ms-teams #WorldInfo .world_entry .world_entry_edit small {
     color: var(--mst-fg-3);
 }
 
-/* Copilot: greeting and prompt box, then the settings */
+/* Copilot: conversations on the left, greeting and suggestions, the settings as answer cards,
+   and the prompt box docked at the bottom */
+.mst-copilot-dock {
+    display: none;
+}
+
+body.ms-teams #top-settings-holder #user-settings-block.drawer-content {
+    --mst-pad-l: 304px;
+    padding-left: var(--mst-pad-l);
+    padding-bottom: 0;
+}
+
+body.ms-teams #user-settings-block .mst-copilot-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    position: fixed;
+    top: calc(var(--mst-titlebar-h) + 56px);
+    left: var(--mst-rail-w);
+    width: 280px;
+    bottom: 0;
+    padding: 16px 12px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    border-right: 1px solid var(--mst-stroke-2);
+    background: var(--mst-list);
+}
+
+body.ms-teams .mst-copilot-new {
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+body.ms-teams .mst-copilot-thread {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 36px;
+    padding: 6px 10px;
+    margin: 0;
+    border: none;
+    border-radius: var(--mst-radius-md);
+    background: none;
+    color: var(--mst-fg);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+body.ms-teams .mst-copilot-thread .mst-fluent {
+    color: var(--mst-fg-3);
+    flex: none;
+}
+
+body.ms-teams .mst-copilot-thread:hover {
+    background: var(--mst-hover);
+}
+
+body.ms-teams .mst-copilot-thread.mst-copilot-thread-on {
+    background: var(--mst-selected);
+    box-shadow: var(--mst-shadow-2);
+    font-weight: 600;
+}
+
 body.ms-teams #user-settings-block .mst-copilot-intro {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
-    padding: 24px 16px 32px;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 16px 28px;
     text-align: center;
 }
 
 body.ms-teams .mst-copilot-logo {
-    width: 48px;
-    height: 48px;
-    border-radius: 14px;
+    width: 56px;
+    height: 56px;
     background: conic-gradient(from 200deg, #0fb5ae, #4f6bed, #b93fde, #e74a7c, #f3a73b, #0fb5ae);
-    -webkit-mask: var(--mst-icon-copilot) center / 44px 44px no-repeat;
-    mask: var(--mst-icon-copilot) center / 44px 44px no-repeat;
+    -webkit-mask: var(--mst-icon-copilot) center / 56px 56px no-repeat;
+    mask: var(--mst-icon-copilot) center / 56px 56px no-repeat;
 }
 
 body.ms-teams .mst-copilot-hello {
-    margin: 4px 0 0;
-    font-size: 28px;
-    line-height: 36px;
+    margin: 8px 0 0;
+    font-size: 32px;
+    line-height: 40px;
     font-weight: 600;
     background: linear-gradient(90deg, #4f6bed, #b93fde 55%, #e74a7c);
     -webkit-background-clip: text;
@@ -820,28 +884,86 @@ body.ms-teams .mst-copilot-hello {
 }
 
 body.ms-teams .mst-copilot-sub {
-    margin: 0 0 12px;
+    margin: 0 0 16px;
     color: var(--mst-fg-3);
+    font-size: var(--mst-text-md);
+}
+
+body.ms-teams .mst-copilot-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    width: 100%;
+}
+
+body.ms-teams .mst-copilot-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 16px;
+    margin: 0;
+    border: 1px solid var(--mst-stroke-2);
+    border-radius: var(--mst-radius-xl);
+    background: var(--mst-card);
+    box-shadow: var(--mst-shadow-2);
+    color: var(--mst-fg);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: box-shadow var(--mst-fast) var(--mst-ease), border-color var(--mst-fast) var(--mst-ease);
+}
+
+body.ms-teams .mst-copilot-card:hover {
+    border-color: #b93fde80;
+    box-shadow: var(--mst-shadow-8);
+}
+
+body.ms-teams .mst-copilot-card strong {
+    font-weight: 600;
+}
+
+body.ms-teams .mst-copilot-card span {
+    color: var(--mst-fg-3);
+    font-size: var(--mst-text-sm);
+}
+
+/* while searching, the answer (matching settings) replaces the suggestions */
+body.ms-teams #user-settings-block.mst-copilot-asking .mst-copilot-cards,
+body.ms-teams #user-settings-block.mst-copilot-asking .mst-copilot-sub {
+    display: none;
+}
+
+body.ms-teams #user-settings-block .mst-copilot-dock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    position: sticky;
+    bottom: 0;
+    margin: 16px -16px 0 calc(-1 * var(--mst-pad-l) + 280px);
+    padding: 16px 16px 12px;
+    background: linear-gradient(to bottom, transparent, var(--mst-canvas) 30%);
+    z-index: 5;
 }
 
 body.ms-teams .mst-copilot-box {
     display: flex;
     align-items: center;
-    gap: 8px;
-    width: min(680px, 100%);
-    height: 52px;
-    padding: 0 16px;
+    gap: 10px;
+    width: min(760px, 100%);
+    min-height: 56px;
+    padding: 0 8px 0 16px;
     box-sizing: border-box;
     border: 1px solid var(--mst-stroke-2);
-    border-radius: var(--mst-radius-lg);
+    border-radius: var(--mst-radius-xl);
     background: var(--mst-input);
-    box-shadow: var(--mst-shadow-4);
+    box-shadow: var(--mst-shadow-8);
     color: var(--mst-fg-3);
     cursor: text;
 }
 
 body.ms-teams .mst-copilot-box:focus-within {
-    border-color: var(--mst-brand);
+    border-color: #b93fde;
 }
 
 body.ms-teams .mst-copilot-box input {
@@ -856,6 +978,41 @@ body.ms-teams .mst-copilot-box input {
     color: var(--mst-fg);
     font: inherit;
     font-size: var(--mst-text-md);
+}
+
+body.ms-teams .mst-copilot-send {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    margin: 0;
+    border: none;
+    border-radius: var(--mst-radius-md);
+    background: none;
+    color: var(--mst-brand-fg);
+    cursor: pointer;
+}
+
+body.ms-teams .mst-copilot-send:hover {
+    background: var(--mst-subtle-hover);
+}
+
+body.ms-teams .mst-copilot-note {
+    margin: 0;
+    color: var(--mst-fg-3);
+    font-size: var(--mst-text-xs);
+}
+
+/* the settings read as Copilot's answer: rounded Fluent cards in a centered column */
+body.ms-teams #user-settings-block > :not(.mst-app-header, .mst-copilot-intro, .mst-copilot-dock, .mst-stage) {
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body.ms-teams #user-settings-block :is([name="UserSettingsFirstColumn"], [name="UserSettingsSecondColumn"], [name="UserSettingsThirdColumn"], #UI-Theme-Block, #UI-Customization, #power-user-options-block) {
+    border-radius: var(--mst-radius-xl);
 }
 
 /* Apps: the store's side menu and app cards */
