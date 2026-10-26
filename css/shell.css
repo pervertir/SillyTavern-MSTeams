@@ -556,7 +556,12 @@ body.ms-teams #top-settings-holder .drawer-content.openDrawer {
 /* widths each menu reads well at */
 body.ms-teams #left-nav-panel { --mst-panel-w: 460px; }
 body.ms-teams #rm_api_block { --mst-panel-w: 500px; }
-body.ms-teams #AdvancedFormatting { --mst-panel-w: 880px; }
+/* Calls (AI Response Formatting) takes the whole content area, as Teams' Calls app does */
+body.ms-teams #top-settings-holder #AdvancedFormatting.drawer-content {
+    --mst-panel-w: calc(100vw - var(--mst-rail-w));
+    --mst-panel-max: calc(100vw - var(--mst-rail-w));
+    border-radius: var(--mst-radius-lg) 0 0 0;
+}
 body.ms-teams #WorldInfo { --mst-panel-w: 760px; }
 body.ms-teams #user-settings-block { --mst-panel-w: 860px; }
 body.ms-teams #Backgrounds { --mst-panel-w: 680px; }
