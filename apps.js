@@ -215,6 +215,75 @@ function buildCalendar() {
 
 /* Calls --------------------------------------------------------------------------------- */
 
+/** Made-up calls and voicemails for the Calls screen's first two columns */
+const CALL_HISTORY = [
+    ['Priya Shah', 'in', 0, 9, 42, '12m 08s'],
+    ['Daily standup', 'out', 0, 9, 30, '15m 02s'],
+    ['Alex Morgan', 'missed', 0, 8, 51, ''],
+    ['Jordan Kim', 'out', 1, 16, 20, '4m 37s'],
+    ['Taylor Brooks', 'in', 1, 14, 5, '22m 10s'],
+    ['Riley Chen', 'missed', 1, 11, 47, ''],
+    ['Sam Lee', 'in', 2, 15, 33, '6m 54s'],
+    ['Morgan Diaz', 'out', 3, 10, 12, '1m 20s'],
+    ['Chris Patel', 'in', 4, 17, 2, '9m 45s'],
+];
+
+const VOICEMAILS = [
+    ['Riley Chen', 1, 11, 48, '0:42', 'Hi, just checking whether the design review is still on for Thursday. Call me back when you can.'],
+    ['Alex Morgan', 0, 8, 52, '0:18', 'Hey, quick one about the launch plan, I’ll send the notes over in chat.'],
+    ['Avery Cole', 3, 16, 5, '1:05', 'Following up on the vendor contract, they need a signature by Friday.'],
+];
+
+function callRow(name, when, detail, kind) {
+    const row = el('div', `mst-call-row${kind === 'missed' ? ' mst-call-missed' : ''}`);
+    const avatar = el('span', 'mst-monogram mst-speed-avatar', getInitials(name));
+    avatar.dataset.mstColor = String(getMonogramColor(name));
+    const text = el('span', 'mst-speed-text');
+    const top = el('span', 'mst-call-top');
+    top.append(el('span', 'mst-speed-name', name), el('span', 'mst-call-when', when));
+    const line = el('span', 'mst-speed-detail');
+    if (kind) {
+        const icon = fluentIcon(kind === 'out' ? 'arrow-right' : kind === 'missed' ? 'dismiss' : 'arrow-left', 12);
+        icon.classList.add('mst-call-dir');
+        line.append(icon);
+    }
+    line.append(document.createTextNode(detail));
+    text.append(top, line);
+    row.append(avatar, text);
+    return row;
+}
+
+/** History and Voicemail, as Teams' Calls app shows them */
+function buildCallFillers(drawer) {
+    const grid = drawer.querySelector(':scope > .flex-container.spaceEvenly');
+    if (!grid || grid.querySelector('.mst-call-card')) {
+        return;
+    }
+    const { timestampToMoment } = SillyTavern.getContext();
+    const when = (daysAgo, hour, minute) => {
+        const time = timestampToMoment(Date.now()).subtract(daysAgo, 'days').hour(hour).minute(minute);
+        return daysAgo === 0 ? time.format('LT') : daysAgo === 1 ? t('Yesterday') : time.format('ddd');
+    };
+    const history = el('section', 'mst-call-card');
+    history.append(el('h3', 'mst-call-card-title', t('History')));
+    const filters = el('div', 'mst-call-filters');
+    ['All', 'Missed', 'Incoming', 'Outgoing'].forEach((label, index) => filters.append(el('span', `mst-call-chip${index === 0 ? ' mst-call-chip-on' : ''}`, t(label))));
+    history.append(filters);
+    for (const [name, kind, days, hour, minute, length] of CALL_HISTORY) {
+        const label = kind === 'missed' ? t('Missed call') : `${kind === 'out' ? t('Outgoing') : t('Incoming')} · ${length}`;
+        history.append(callRow(name, when(days, hour, minute), label, kind));
+    }
+    const voicemail = el('section', 'mst-call-card');
+    voicemail.append(el('h3', 'mst-call-card-title', t('Voicemail')));
+    for (const [name, days, hour, minute, length, transcript] of VOICEMAILS) {
+        const row = callRow(name, when(days, hour, minute), length, '');
+        const text = el('p', 'mst-call-transcript', transcript);
+        row.querySelector('.mst-speed-text')?.append(text);
+        voicemail.append(row);
+    }
+    grid.prepend(history, voicemail);
+}
+
 function buildCalls() {
     const drawer = document.getElementById('AdvancedFormatting');
     if (!drawer) {
@@ -250,17 +319,23 @@ function buildCalls() {
     // speed dial: the three formatting groups, as contacts that take you to their card
     const dial = el('div', 'mst-speed-dial');
     const contacts = [
-        ['Context Template', '#ContextSettings'],
-        ['Instruct Template', '#InstructSettingsColumn'],
-        ['System Prompt', '#SystemPromptColumn'],
+        ['Context Template', '#ContextSettings', 'context'],
+        ['Instruct Template', '#InstructSettingsColumn', 'instruct'],
+        ['System Prompt', '#SystemPromptColumn', 'system'],
     ];
-    for (const [name, selector] of contacts) {
+    // the third column shows the group picked here; Context Template to start
+    const pick = (key) => {
+        drawer.dataset.mstCall = key;
+        dial.querySelectorAll('.mst-speed-contact').forEach(x => x.classList.toggle('mst-speed-on', x.dataset.call === key));
+    };
+    for (const [name, selector, key] of contacts) {
         const card = /** @type {HTMLElement} */ (drawer.querySelector(selector));
         if (!card) {
             continue;
         }
         const row = el('button', 'mst-speed-contact');
         row.type = 'button';
+        row.dataset.call = key;
         const avatar = el('span', 'mst-monogram mst-speed-avatar', getInitials(name));
         avatar.dataset.mstColor = String(getMonogramColor(name));
         const text = el('span', 'mst-speed-text');
@@ -276,7 +351,8 @@ function buildCalls() {
         row.append(avatar, text, fluentIcon('call', 16));
         row.addEventListener('click', () => {
             showPreset();
-            card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            pick(key);
+            drawer.scrollTo({ top: 0, behavior: 'smooth' });
             card.classList.remove('mst-flash');
             void card.offsetWidth;
             card.classList.add('mst-flash');
@@ -284,6 +360,8 @@ function buildCalls() {
         dial.append(row);
     }
     stage.append(el('h3', 'mst-dial-section', t('Make a call')), number, keys, call, speed, dial);
+    pick('context');
+    buildCallFillers(drawer);
     drawer.append(stage);
 }
 
