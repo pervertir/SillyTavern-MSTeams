@@ -327,7 +327,7 @@ export function focusSearch() {
     document.body.classList.remove('mst-m-chat');
     const filter = document.querySelector('#mst-list .mst-list-filter');
     if (filter?.hidden) {
-        /** @type {HTMLElement} */ (document.querySelector('#mst-list .mst-list-actions .mst-icon-button'))?.click();
+        /** @type {HTMLElement} */ (document.querySelector('#mst-list .mst-list-search'))?.click();
     } else {
         /** @type {HTMLInputElement} */ (filter?.querySelector('input'))?.focus();
     }

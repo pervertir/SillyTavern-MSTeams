@@ -31,6 +31,14 @@ function getPinned() {
     }
 }
 
+/** Opens or closes every section and team in the list. */
+function setAllCollapsed(list, collapsed) {
+    list.querySelectorAll('.mst-section').forEach(section => section.classList.toggle('mst-section-collapsed', collapsed));
+    list.querySelectorAll('.mst-team').forEach(team => team.classList.toggle('mst-team-collapsed', collapsed));
+    setCollapsed(collapsed ? [...list.querySelectorAll('.mst-section')].map(x => x.dataset.section) : []);
+    setCollapsed(collapsed ? [...list.querySelectorAll('.mst-team')].map(x => x.dataset.group) : [], COLLAPSED_TEAMS_KEY);
+}
+
 /** SillyTavern's key for a pinned chat (welcome-screen.js), so its pins and these favorites are one list */
 function pinKey({ group, avatar, fileName }) {
     return `${group ? 'group_' + group : ''}${avatar ? 'char_' + avatar : ''}_${fileName}`;
@@ -461,27 +469,47 @@ export function createChatList() {
     const actions = document.createElement('div');
     actions.className = 'mst-list-actions';
 
-    const filterButton = document.createElement('button');
-    filterButton.type = 'button';
-    filterButton.className = 'mst-icon-button';
-    filterButton.title = t('Filter');
-    filterButton.innerHTML = '<i class="fa-solid fa-filter"></i>';
-
-    const newButton = document.createElement('button');
-    newButton.type = 'button';
-    newButton.className = 'mst-icon-button';
-    newButton.title = t('New chat');
-    newButton.innerHTML = '<i class="fa-regular fa-pen-to-square"></i>';
-    newButton.addEventListener('click', () => {
+    const iconButton = (className, label, icon) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = `mst-icon-button ${className}`;
+        button.title = t(label);
+        button.setAttribute('aria-label', t(label));
+        const glyph = document.createElement('i');
+        glyph.className = 'mst-fluent';
+        glyph.style.setProperty('--mst-glyph', `var(--mst-icon-${icon})`);
+        button.append(glyph);
+        return button;
+    };
+    const openCharacters = (buttonId) => {
         const drawer = document.getElementById('right-nav-panel');
         if (drawer && !drawer.classList.contains('openDrawer')) {
             document.querySelector('#rightNavHolder > .drawer-toggle')?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         }
-        // show the character list rather than the last character's card
-        document.getElementById('rm_button_characters')?.click();
-    });
+        document.getElementById(buttonId)?.click();
+    };
 
-    actions.append(filterButton, newButton);
+    // Teams' list header: Chat, then … , search, and new chat with its dropdown
+    const moreButton = iconButton('mst-list-more', 'More options', 'more');
+    moreButton.addEventListener('click', () => toggleFlyout(moreButton, [
+        { label: 'Expand all', icon: 'fa-solid fa-angles-down', run: () => setAllCollapsed(list, false) },
+        { label: 'Collapse all', icon: 'fa-solid fa-angles-up', run: () => setAllCollapsed(list, true) },
+        { label: 'Refresh', icon: 'fa-solid fa-arrows-rotate', run: () => refreshChatList() },
+    ], 'below-end'));
+    const filterButton = iconButton('mst-list-search', 'Search', 'search');
+    const newGroup = document.createElement('div');
+    newGroup.className = 'mst-split';
+    const newButton = iconButton('mst-split-main', 'New chat', 'compose');
+    newButton.addEventListener('click', () => openCharacters('rm_button_characters'));
+    const newMenu = iconButton('mst-split-menu', 'More ways to start a chat', 'chevron-down');
+    newMenu.addEventListener('click', () => toggleFlyout(newMenu, [
+        { label: 'New chat', icon: 'fa-regular fa-comment', run: () => openCharacters('rm_button_characters') },
+        { label: 'New group chat', icon: 'fa-solid fa-user-group', run: () => openCharacters('rm_button_group_chats') },
+        { label: 'New contact', icon: 'fa-solid fa-user-plus', run: () => openCharacters('rm_button_create') },
+    ], 'below-end'));
+    newGroup.append(newButton, newMenu);
+
+    actions.append(moreButton, filterButton, newGroup);
     head.append(title, actions);
 
     const filterRow = document.createElement('div');

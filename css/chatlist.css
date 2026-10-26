@@ -311,3 +311,34 @@ body.ms-teams .mst-list-hint {
         margin-right: 28px;
     }
 }
+
+/* New chat with its dropdown, joined like Teams' split button */
+body.ms-teams .mst-split {
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--mst-radius);
+}
+
+body.ms-teams .mst-split:hover {
+    background: var(--mst-subtle-hover);
+}
+
+body.ms-teams .mst-split .mst-split-main {
+    border-radius: var(--mst-radius) 0 0 var(--mst-radius);
+}
+
+body.ms-teams .mst-split .mst-split-menu {
+    width: 18px;
+    border-radius: 0 var(--mst-radius) var(--mst-radius) 0;
+}
+
+body.ms-teams .mst-split .mst-split-menu .mst-fluent {
+    width: 12px;
+    height: 12px;
+    -webkit-mask-size: 12px 12px;
+    mask-size: 12px 12px;
+}
+
+body.ms-teams .mst-list-actions {
+    gap: 2px;
+}
