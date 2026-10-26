@@ -327,12 +327,12 @@ body.ms-teams #avatar_div_div img {
 }
 
 /* Profiles: the personas as Teams profile cards */
-/* a pane beside the chat, sized to its content: the profile list and one profile card */
+/* full screen like a Teams app; the profile card keeps to its width and the rest stays blank */
 body.ms-teams #top-settings-holder #PersonaManagement.drawer-content {
-    --mst-panel-w: 1000px;
+    --mst-panel-w: calc(100vw - var(--mst-rail-w));
+    --mst-panel-max: calc(100vw - var(--mst-rail-w));
     background: var(--mst-canvas);
-    box-shadow: var(--mst-shadow-16);
-    border-right: 1px solid var(--mst-stroke-2);
+    box-shadow: none;
 }
 
 body.ms-teams #PersonaManagement h3:has(> span[data-i18n="Persona Management"]),
