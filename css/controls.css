@@ -480,3 +480,13 @@ body.ms-teams .select2-container--open .select2-selection--multiple {
     border-bottom-color: var(--mst-brand);
     box-shadow: inset 0 -1px 0 var(--mst-brand);
 }
+
+/* Loaders and other see-through dialogs stay see-through */
+body.ms-teams dialog.popup.transparent_dialogue_popup,
+body.ms-teams dialog.popup.transparent_dialogue_popup:focus,
+body.ms-teams dialog.popup.transparent_dialogue_popup:focus-visible {
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}

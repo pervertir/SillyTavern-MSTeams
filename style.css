@@ -4,6 +4,7 @@
    tokens.css comes first because everything uses it, and mobile.css last. */
 
 @import url("css/tokens.css");
+@import url("css/boot.css");
 @import url("css/shell.css");
 @import url("css/chatlist.css");
 @import url("css/chat.css");

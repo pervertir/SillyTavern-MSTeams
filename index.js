@@ -157,6 +157,7 @@ async function renderSettingsPanel() {
 }
 
 async function init() {
+    document.body.classList.remove('mst-booting');
     applySettings();
     darkQuery.addEventListener('change', applySettings);
 
@@ -193,6 +194,23 @@ async function init() {
         console.error('[MS Teams] Could not render the settings panel', error);
     }
 }
+
+/** Teams' loading screen from the moment this code loads (SillyTavern has its settings by then). */
+function bootLook() {
+    const settings = SillyTavern.getContext().extensionSettings?.[MODULE_NAME];
+    if (settings?.enabled === false) {
+        return;
+    }
+    document.body.classList.add('mst-booting');
+    document.body.classList.toggle('mst-dark', !!settings && isDark({ ...defaultSettings, ...settings }));
+    const logo = /** @type {HTMLImageElement} */ (document.querySelector('#loader .splash-logo'));
+    if (logo) {
+        logo.alt = '';
+        logo.removeAttribute('aria-label');
+    }
+}
+
+bootLook();
 
 const { eventSource, eventTypes } = SillyTavern.getContext();
 eventSource.on(eventTypes.APP_READY, init);
