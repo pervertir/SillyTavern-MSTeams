@@ -512,7 +512,14 @@ export function createChatList() {
     newGroup.append(newButton, newMenu);
 
     actions.append(moreButton, filterButton, newGroup);
-    head.append(title, actions);
+    // Teams mobile starts the bar with your picture, which opens your profiles
+    const me = document.createElement('button');
+    me.type = 'button';
+    me.className = 'mst-list-me';
+    me.title = t('Profiles');
+    me.setAttribute('aria-label', t('Profiles'));
+    me.addEventListener('click', () => document.getElementById('mst-me')?.click());
+    head.append(me, title, actions);
 
     const filterRow = document.createElement('div');
     filterRow.className = 'mst-list-filter';

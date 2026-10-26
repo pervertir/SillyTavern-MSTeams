@@ -244,7 +244,18 @@ export function refreshPersona(avatarId) {
     // no picture of its own (SillyTavern's default silhouette): the monogram stands in
     isPlaceholder(img.getAttribute('src') ?? '').then((placeholder) => {
         document.getElementById('mst-me')?.classList.toggle('mst-me-placeholder', placeholder);
+        mirrorPersona();
     });
+    mirrorPersona();
+}
+
+/** The chat list's picture button on phones shows the same persona picture as the title bar. */
+function mirrorPersona() {
+    const source = document.querySelector('#mst-me .mst-avatar');
+    for (const button of document.querySelectorAll('.mst-list-me')) {
+        button.replaceChildren(...(source ? [source.cloneNode(true)] : []));
+        button.classList.toggle('mst-me-placeholder', !!document.getElementById('mst-me')?.classList.contains('mst-me-placeholder'));
+    }
 }
 
 /** A rail app of the theme's own (Chat, More), built like SillyTavern's drawer toggles. */
@@ -376,9 +387,17 @@ function openProfile() {
     }
 }
 
+/** On phones the bottom bar has room for five tabs, as in Teams mobile; the rest move under More */
+const PHONE_MORE_APPS = [
+    { id: 'WI-SP-button', label: 'OneDrive', icon: 'fa-solid fa-cloud' },
+    { id: 'user-settings-button', label: 'Copilot', icon: 'fa-regular fa-comment-dots' },
+    { id: 'extensions-settings-button', label: 'Apps', icon: 'fa-regular fa-square-plus' },
+];
+
 function toggleMoreMenu() {
     const app = document.getElementById(MORE_APP_ID);
-    const items = MORE_APPS
+    const phone = window.matchMedia('(max-width: 1000px)').matches;
+    const items = [...(phone ? PHONE_MORE_APPS : []), ...MORE_APPS]
         .filter(({ id }) => document.getElementById(id))
         .map(({ id, label, icon }) => ({
             label,

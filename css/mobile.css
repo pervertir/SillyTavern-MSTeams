@@ -233,4 +233,105 @@
     body.ms-teams #chat .mes .edit_textarea {
         min-width: 0;
     }
+
+    /* ---- Teams mobile ---- */
+
+    /* five tabs, as in Teams mobile: OneDrive, Copilot and Apps live under More */
+    body.ms-teams #top-settings-holder > :is(#WI-SP-button, #user-settings-button, #extensions-settings-button):not(:has(.drawer-content.openDrawer)) {
+        flex: 0 0 0;
+        min-width: 0;
+        width: 0;
+        overflow: hidden;
+    }
+
+    body.ms-teams #top-settings-holder > :is(#WI-SP-button, #user-settings-button, #extensions-settings-button):not(:has(.drawer-content.openDrawer)) > .drawer-toggle {
+        visibility: hidden;
+    }
+
+    body.ms-teams #top-settings-holder {
+        background: var(--mst-canvas);
+    }
+
+    /* Teams mobile marks the tab with a filled, colored icon, without a bar */
+    body.ms-teams #top-settings-holder > .drawer > .drawer-toggle::before,
+    body.ms-teams #top-settings-holder > .mst-app::before {
+        display: none;
+    }
+
+    /* the chat list's bar: your picture, Chat, then search and new chat */
+    body.ms-teams .mst-list-me {
+        display: inline-flex;
+        flex: none;
+        padding: 0;
+        margin: 0 12px 0 0;
+        border: none;
+        border-radius: 50%;
+        background: none;
+        cursor: pointer;
+        --mst-presence-ring: var(--mst-list);
+    }
+
+    body.ms-teams .mst-list-head {
+        justify-content: flex-start;
+    }
+
+    body.ms-teams .mst-list-head h2 {
+        flex: 1;
+        font-size: var(--mst-text-lg);
+    }
+
+    body.ms-teams .mst-list-head :is(.mst-list-more, .mst-split-menu) {
+        display: none;
+    }
+
+    /* rows: no … (a long press opens the menu, as in Teams mobile), and no empty Favorites */
+    body.ms-teams .mst-chat-more {
+        display: none !important;
+    }
+
+    body.ms-teams .mst-chat .mst-chat-time {
+        margin-right: 0;
+        visibility: visible !important;
+    }
+
+    body.ms-teams .mst-section[data-section="pinned"]:not(:has(.mst-chat)) {
+        display: none;
+    }
+
+    /* the chat: back, picture and name, then video and call */
+    body.ms-teams #mst-chat-head .mst-head-actions > :last-child {
+        display: none;
+    }
+
+    body.ms-teams .mst-head-name {
+        font-size: var(--mst-text-md);
+        font-weight: 600;
+    }
+
+    /* one-on-one chats show no picture or name beside the other person's messages */
+    body.ms-teams:not(:has(#mst-chat-head.mst-head-channel)) #chat .mes:not([is_user="true"]) {
+        grid-template-columns: 0 minmax(0, max-content) minmax(32px, 1fr);
+        column-gap: 0;
+    }
+
+    body.ms-teams:not(:has(#mst-chat-head.mst-head-channel)) #chat .mes:not([is_user="true"]) .mesAvatarWrapper,
+    body.ms-teams:not(:has(#mst-chat-head.mst-head-channel)) #chat .mes .name_text {
+        display: none;
+    }
+
+    /* the message box: a rounded pill, as on Teams mobile */
+    body.ms-teams #send_form {
+        border-radius: 22px;
+        border-color: var(--mst-stroke-2);
+        background: var(--mst-list);
+        box-shadow: none;
+    }
+
+    body.ms-teams #send_form::after {
+        display: none;
+    }
+
+    body.ms-teams #nonQRFormItems {
+        padding: 2px 4px 2px 14px;
+    }
 }

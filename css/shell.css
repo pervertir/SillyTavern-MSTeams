@@ -247,18 +247,23 @@ body.ms-teams #mst-me {
 
 /* Persona: its picture, or a Teams monogram of its name when it has none (or when
    body.mst-persona-monogram asks for one) */
-body.ms-teams #mst-me .mst-monogram {
+body.ms-teams :is(#mst-me, .mst-list-me) .mst-monogram {
     display: none;
 }
 
-body.ms-teams:is(.mst-persona-monogram) #mst-me img,
-body.ms-teams #mst-me.mst-me-placeholder img {
+body.ms-teams:is(.mst-persona-monogram) :is(#mst-me, .mst-list-me) img,
+body.ms-teams :is(#mst-me, .mst-list-me).mst-me-placeholder img {
     display: none;
 }
 
-body.ms-teams.mst-persona-monogram #mst-me .mst-monogram,
-body.ms-teams #mst-me.mst-me-placeholder .mst-monogram {
+body.ms-teams.mst-persona-monogram :is(#mst-me, .mst-list-me) .mst-monogram,
+body.ms-teams :is(#mst-me, .mst-list-me).mst-me-placeholder .mst-monogram {
     display: flex;
+}
+
+/* the chat list's picture button only shows on phones */
+.mst-list-me {
+    display: none;
 }
 
 body.ms-teams .mst-monogram {
