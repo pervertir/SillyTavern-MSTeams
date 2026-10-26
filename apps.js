@@ -79,10 +79,10 @@ function getConnection() {
 /** A believable work week, Monday to Friday: [start hour, hours, title, where, kind] */
 const MEETINGS = [
     [[9.5, 0.25, 'Daily standup', 'Microsoft Teams Meeting'], [11, 1, 'Sprint planning', 'Microsoft Teams Meeting'], [13, 1, 'Lunch', '', 'away'], [15, 0.5, '1:1 with Alex', 'Microsoft Teams Meeting']],
-    [[9.5, 0.25, 'Daily standup', 'Microsoft Teams Meeting'], [10, 1, 'Design review', 'Conference Room 4B'], [14, 1.5, 'Focus time', '', 'focus'], [16, 0.5, 'Customer sync', 'Microsoft Teams Meeting']],
-    [[9.5, 0.25, 'Daily standup', 'Microsoft Teams Meeting'], [11, 0.5, 'Architecture office hours', 'Microsoft Teams Meeting'], [13, 1, 'Lunch', '', 'away'], [15, 1, 'All hands', 'Town hall', 'event']],
-    [[9.5, 0.25, 'Daily standup', 'Microsoft Teams Meeting'], [10, 1.5, 'Focus time', '', 'focus'], [14, 0.5, 'Vendor call', 'Microsoft Teams Meeting'], [16, 1, 'Backlog grooming', 'Microsoft Teams Meeting']],
-    [[9.5, 0.25, 'Daily standup', 'Microsoft Teams Meeting'], [11, 1, 'Demo prep', 'Microsoft Teams Meeting'], [14, 1, 'Sprint review', 'Microsoft Teams Meeting'], [16.5, 0.5, 'Weekly wrap-up', 'Microsoft Teams Meeting']],
+    [[9.5, 0.25, 'Daily standup', 'Microsoft Teams Meeting'], [10, 1, 'Design review', 'Conference Room 4B'], [14, 1.5, 'Focus time', '', 'focus'], [16, 0.5, 'Customer sync', 'Microsoft Teams Meeting', 'tentative']],
+    [[9.5, 0.25, 'Daily standup', 'Microsoft Teams Meeting'], [11, 0.5, 'Architecture office hours', 'Microsoft Teams Meeting', 'tentative'], [13, 1, 'Lunch', '', 'away'], [15, 1, 'All hands', 'Town hall', 'event']],
+    [[9.5, 0.25, 'Daily standup', 'Microsoft Teams Meeting'], [10, 1.5, 'Focus time', '', 'focus'], [14, 0.5, 'Vendor call', 'Microsoft Teams Meeting', 'tentative'], [16, 1, 'Backlog grooming', 'Microsoft Teams Meeting']],
+    [[9.5, 0.25, 'Daily standup', 'Microsoft Teams Meeting'], [11, 1, 'Demo prep', 'Microsoft Teams Meeting'], [14, 1, 'Sprint review', 'Microsoft Teams Meeting'], [16.5, 0.5, 'Weekly wrap-up', 'Microsoft Teams Meeting', 'tentative']],
 ];
 
 /** Rows are half hours: row 2 is DAY_START. */
@@ -138,7 +138,8 @@ function renderCalendar(stage, monthLabel) {
             meeting.classList.toggle('mst-cal-past', day.clone().hour(Math.floor(start + length)).minute(((start + length) % 1) * 60).isBefore(now));
             const from = day.clone().hour(Math.floor(start)).minute((start % 1) * 60);
             const to = from.clone().add(length * 60, 'minutes');
-            meeting.title = `${t(title)}\n${from.format('LT')} – ${to.format('LT')}${where ? `\n${t(where)}` : ''}`;
+            const status = kind === 'tentative' ? `\n${t('Tentative')}` : '';
+            meeting.title = `${t(title)}\n${from.format('LT')} – ${to.format('LT')}${where ? `\n${t(where)}` : ''}${status}`;
             meeting.append(el('strong', '', t(title)));
             if (where && length >= 0.5) {
                 meeting.append(el('span', '', t(where)));

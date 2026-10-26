@@ -268,6 +268,15 @@ body.ms-teams .mst-cal-event.mst-cal-short {
     padding-bottom: 1px;
 }
 
+/* Tentative: Teams' hatched meeting */
+body.ms-teams .mst-cal-event.mst-cal-tentative {
+    border-left-color: color-mix(in srgb, var(--mst-brand) 55%, var(--mst-canvas));
+    background: repeating-linear-gradient(-45deg,
+        color-mix(in srgb, var(--mst-brand) 16%, var(--mst-canvas)) 0 5px,
+        var(--mst-canvas) 5px 10px);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mst-brand) 25%, transparent);
+}
+
 body.ms-teams .mst-cal-event.mst-cal-focus {
     border-left-color: #038387;
     background: color-mix(in srgb, #038387 14%, var(--mst-canvas));
