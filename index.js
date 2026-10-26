@@ -79,6 +79,17 @@ function showChatOnPhone() {
     }
 }
 
+function setTheme(appearance) {
+    const settings = getSettings();
+    settings.appearance = appearance;
+    applySettings();
+    saveSettings();
+    const select = /** @type {HTMLSelectElement} */ (document.getElementById('mst_appearance'));
+    if (select) {
+        select.value = appearance;
+    }
+}
+
 function toggleRail() {
     const settings = getSettings();
     settings.railHidden = !settings.railHidden;
@@ -146,7 +157,7 @@ async function init() {
     applySettings();
     darkQuery.addEventListener('change', applySettings);
 
-    initShell({ toggleRail });
+    initShell({ toggleRail, setTheme });
     initApps();
     initChatList({ settings: getSettings, opened: showChatOnPhone, historyChanged: refreshNavigation });
     applySettings();

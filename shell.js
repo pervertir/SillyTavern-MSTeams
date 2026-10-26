@@ -129,6 +129,9 @@ function createTitlebar() {
     more.addEventListener('click', () => toggleFlyout(more, [
         { label: 'Settings', icon: 'fa-solid fa-gear', run: () => toggleDrawer('user-settings-button') },
         { label: 'Keyboard shortcuts', icon: 'fa-regular fa-keyboard', run: showShortcuts },
+        document.body.classList.contains('mst-dark')
+            ? { label: 'Switch to light theme', icon: 'fa-regular fa-sun', run: () => shellOptions.setTheme('light') }
+            : { label: 'Switch to dark theme', icon: 'fa-regular fa-moon', run: () => shellOptions.setTheme('dark') },
     ], 'below-end'));
     const me = document.createElement('button');
     me.type = 'button';
@@ -577,11 +580,12 @@ export function refreshRailToggle(hidden) {
     }
 }
 
-let shellOptions = { toggleRail: () => {} };
+let shellOptions = { toggleRail: () => {}, setTheme: (_appearance) => {} };
 
 /**
  * @param {object} options
  * @param {() => void} options.toggleRail Hides or shows the app rail
+ * @param {(appearance: string) => void} options.setTheme Switches between light and dark
  */
 export function initShell(options) {
     shellOptions = options;

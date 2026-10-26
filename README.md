@@ -61,7 +61,7 @@ Find them under **Extensions** → **Microsoft Teams Theme**:
 | Setting | What it does |
 |---|---|
 | Enable theme | Turns the whole look on or off. Off leaves SillyTavern exactly as it was. |
-| Appearance | Light, Dark, or follow the system. |
+| Appearance | Light, Dark, or follow the system. The title bar's … menu also has Switch to dark/light theme. |
 | Show the chat list | Hides the list on desktop so the chat gets the room. |
 | Show app names under the rail icons | Off by default. Phones always show them, as Teams mobile does. |
 | Show your persona's picture instead of its initials | Off by default, so you get a Teams monogram. |
