@@ -1231,3 +1231,79 @@ body.ms-teams #WorldInfo:not(.mst-show-marks) .world_entry_edit [name="keywordsA
 body.ms-teams .mst-ribbon-command.mst-ribbon-on {
     background: var(--mst-subtle-pressed);
 }
+
+/* Copilot's answer: the open section as one Fluent card */
+body.ms-teams #user-settings-block .mst-cp-card {
+    flex: 1 1 100%;
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto 24px;
+    padding: 20px 24px;
+    box-sizing: border-box;
+    border: 1px solid var(--mst-stroke-3);
+    border-radius: var(--mst-radius-xl);
+    background: var(--mst-card);
+    box-shadow: var(--mst-shadow-4);
+}
+
+/* the section's own title is the answer heading already */
+body.ms-teams #user-settings-block .mst-cp-card > h4:first-child,
+body.ms-teams #user-settings-block .mst-cp-card > :first-child > h4:only-child {
+    display: none;
+}
+
+/* switches as a two-column Fluent list with dividers */
+body.ms-teams #user-settings-block .mst-cp-card[name$="Toggles"] {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 32px;
+    align-items: start;
+}
+
+body.ms-teams #user-settings-block .mst-cp-card[name$="Toggles"] > :not(.checkbox_label) {
+    grid-column: 1 / -1;
+}
+
+body.ms-teams #user-settings-block .mst-cp-card .checkbox_label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 40px;
+    margin: 0;
+    padding: 8px 0;
+    box-sizing: border-box;
+    border-bottom: 1px solid var(--mst-stroke-3);
+    font-size: var(--mst-text);
+    color: var(--mst-fg);
+}
+
+body.ms-teams #user-settings-block .mst-cp-card .checkbox_label span,
+body.ms-teams #user-settings-block .mst-cp-card .checkbox_label small {
+    font-size: var(--mst-text);
+    color: var(--mst-fg);
+}
+
+/* label and dropdown rows */
+body.ms-teams #user-settings-block .mst-cp-card :is(select, .text_pole) {
+    min-height: 32px;
+}
+
+body.ms-teams #user-settings-block .mst-cp-card .flex-container:has(> span + select),
+body.ms-teams #user-settings-block .mst-cp-card .flex-container:has(> label + select) {
+    gap: 12px;
+    align-items: center;
+}
+
+body.ms-teams #user-settings-block .mst-cp-card .inline-drawer {
+    margin-top: 8px;
+    border: 1px solid var(--mst-stroke-3);
+    border-radius: var(--mst-radius-lg);
+}
+
+/* the open section's columns step aside so its card can take the full width */
+body.ms-teams #user-settings-block[data-mst-show] #user-settings-block-content :has(> .mst-cp-card),
+body.ms-teams #user-settings-block[data-mst-show] #user-settings-block-content :has(.mst-cp-card) {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    max-width: none !important;
+}

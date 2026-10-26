@@ -447,6 +447,7 @@ function buildCopilot() {
     // show one section and hide everything around it, up to the settings' outer box
     const showSection = (section) => {
         content?.querySelectorAll('.mst-cp-hidden').forEach(x => x.classList.remove('mst-cp-hidden'));
+        content?.querySelectorAll('.mst-cp-card').forEach(x => x.classList.remove('mst-cp-card'));
         nav.querySelectorAll('.mst-copilot-thread').forEach(x => x.classList.toggle('mst-copilot-thread-on', x.dataset.section === section?.key));
         if (!section) {
             delete drawer.dataset.mstShow;
@@ -458,6 +459,8 @@ function buildCopilot() {
         }
         ask('');
         drawer.dataset.mstShow = section.key;
+        // the section reads as Copilot's answer: one card
+        target.classList.add('mst-cp-card');
         answerTitle.textContent = t(section.label);
         for (let node = target; node && node !== content; node = node.parentElement) {
             for (const sibling of node.parentElement.children) {

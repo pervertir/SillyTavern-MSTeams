@@ -1,0 +1,101 @@
+/* Sliders the Fluent way: the label on its own line, then the slider with its number box to
+   the right. SillyTavern builds its sliders two ways; both are laid out the same. */
+
+/* 1. a box holding a label, the slider and the number (often wrapped in a div) */
+body.ms-teams div:has(> .neo-range-slider) {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 76px;
+    column-gap: 12px;
+    row-gap: 4px;
+    align-items: center;
+    text-align: left;
+}
+
+body.ms-teams div:has(> .neo-range-slider) > :is(small, label, span, .range-block-title) {
+    grid-column: 1 / -1;
+    justify-self: start;
+    text-align: left;
+    font-size: var(--mst-text-sm);
+    font-weight: 600;
+    color: var(--mst-fg-2);
+}
+
+body.ms-teams div:has(> .neo-range-slider) > .neo-range-slider {
+    grid-column: 1;
+    margin: 0 !important;
+}
+
+body.ms-teams div:has(> .neo-range-slider) > :is(.neo-range-input, div:has(> .neo-range-input)) {
+    grid-column: 2;
+    width: 76px;
+}
+
+/* anything else in the box (checkboxes, notes) takes its own line */
+body.ms-teams div:has(> .neo-range-slider) > div:not(:has(> .neo-range-input)),
+body.ms-teams div:has(> .neo-range-slider) > :is(small, label) ~ :is(small, label):not(:first-child) {
+    grid-column: 1 / -1;
+}
+
+/* 2. SillyTavern's range blocks: a title, then the slider and counter side by side */
+body.ms-teams .range-block {
+    align-items: stretch;
+    text-align: left;
+}
+
+body.ms-teams .range-block-title {
+    justify-content: flex-start;
+    text-align: left;
+    font-size: var(--mst-text-sm);
+    font-weight: 600;
+    color: var(--mst-fg-2);
+}
+
+body.ms-teams .range-block-range-and-counter {
+    align-items: center;
+    gap: 12px;
+}
+
+body.ms-teams .range-block-range {
+    flex: 1;
+}
+
+body.ms-teams .range-block-counter {
+    flex: 0 0 76px;
+    margin: 0;
+}
+
+/* the number boxes: Fluent spin fields */
+body.ms-teams :is(.neo-range-input, .range-block-counter input) {
+    width: 76px;
+    height: 32px;
+    padding: 0 8px !important;
+    box-sizing: border-box;
+    border: 1px solid var(--mst-stroke) !important;
+    border-bottom-color: var(--mst-stroke-accessible) !important;
+    border-radius: var(--mst-radius) !important;
+    background: var(--mst-input) !important;
+    color: var(--mst-fg);
+    font-family: var(--mst-font);
+    font-size: var(--mst-text);
+    text-align: left;
+}
+
+body.ms-teams :is(.neo-range-input, .range-block-counter input):focus {
+    border-bottom-color: var(--mst-brand) !important;
+    box-shadow: inset 0 -1px 0 var(--mst-brand);
+}
+
+/* the slider's rail fills up to the thumb in brand color, like Fluent's */
+body.ms-teams .neo-range-slider {
+    margin: 0 !important;
+}
+
+/* one slider per line, full width, as Fluent forms lay them out */
+body.ms-teams div:has(> .neo-range-slider),
+body.ms-teams .range-block:has(.range-block-range-and-counter) {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0;
+    margin-bottom: 8px;
+}

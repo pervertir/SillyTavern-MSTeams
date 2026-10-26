@@ -508,3 +508,17 @@ body.ms-teams .drawer-content .menu_button:is(.redWarningBG, .red_button):is(.fa
 body.ms-teams :is(#rm_print_characters_pagination, #persona_pagination_container) :is(.paginationjs-pages, .paginationjs-nav, .paginationjs-size-changer) {
     display: none !important;
 }
+
+/* Profiles: a narrow list of profiles on the left, the open profile filling the rest */
+body.ms-teams #persona-management-block > .persona_management_left_column {
+    flex: 0 0 300px;
+    width: 300px;
+    max-width: 300px;
+    padding-right: 16px;
+    border-right: 1px solid var(--mst-stroke-2);
+}
+
+body.ms-teams #persona-management-block > .persona_management_right_column {
+    flex: 1 1 auto;
+    min-width: 0;
+}
