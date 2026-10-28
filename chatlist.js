@@ -497,6 +497,7 @@ export function createChatList() {
         { label: 'Expand all', icon: 'fa-solid fa-angles-down', run: () => setAllCollapsed(list, false) },
         { label: 'Collapse all', icon: 'fa-solid fa-angles-up', run: () => setAllCollapsed(list, true) },
         { label: 'Refresh', icon: 'fa-solid fa-arrows-rotate', run: () => refreshChatList() },
+        { label: 'Customize theme', icon: 'fa-solid fa-palette', run: () => onCustomize() },
     ], 'below-end'));
     const filterButton = iconButton('mst-list-search', 'Search', 'search');
     const newGroup = document.createElement('div');
@@ -610,6 +611,8 @@ const visited = [];
 let visitIndex = -1;
 let travelling = false;
 let onHistoryChange = () => {};
+/** Opens the Customize page */
+let onCustomize = () => {};
 
 function getCurrentPlace() {
     const context = SillyTavern.getContext();
@@ -688,8 +691,9 @@ export async function travel(step) {
  * @param {() => void} options.opened Called once a chat from the list is open
  */
 /** @returns {Promise<void>} Resolves once the list has its first chats. */
-export function initChatList({ settings, opened, historyChanged }) {
+export function initChatList({ settings, opened, historyChanged, customize }) {
     getSettings = settings;
+    onCustomize = customize ?? onCustomize;
     onOpen = opened;
     onHistoryChange = historyChanged ?? onHistoryChange;
     createChatList();

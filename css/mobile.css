@@ -195,7 +195,7 @@
     }
 
     body.ms-teams #chat .mes {
-        padding: 4px 12px;
+        padding: calc(var(--mst-mes-gap) * 2 / 3) calc(var(--mst-chat-pad) * 0.6);
         grid-template-columns: var(--mst-avatar-size) minmax(0, max-content) minmax(24px, 1fr);
     }
 
@@ -204,7 +204,7 @@
     }
 
     body.ms-teams #chat .mes .mes_block {
-        padding: 6px 12px 8px;
+        padding: calc(var(--mst-bubble-pad-y) * 0.75) calc(var(--mst-bubble-pad-x) * 0.75) var(--mst-bubble-pad-y);
     }
 
     /* no hover on touch screens: a tap on a message shows its actions in the header line */
@@ -291,7 +291,8 @@
         font-size: var(--mst-text-lg);
     }
 
-    body.ms-teams .mst-list-head :is(.mst-list-more, .mst-split-menu) {
+    /* the … stays: on phones it's the way to Customize */
+    body.ms-teams .mst-list-head .mst-split-menu {
         display: none;
     }
 
@@ -320,13 +321,13 @@
     }
 
     /* one-on-one chats show no picture or name beside the other person's messages */
-    body.ms-teams:not(.mst-channel) #chat .mes:not([is_user="true"]) {
+    body.ms-teams:not(.mst-in-channel) #chat .mes:not([is_user="true"]) {
         grid-template-columns: 0 minmax(0, max-content) minmax(32px, 1fr);
         column-gap: 0;
     }
 
-    body.ms-teams:not(.mst-channel) #chat .mes:not([is_user="true"]) .mesAvatarWrapper,
-    body.ms-teams:not(.mst-channel) #chat .mes .name_text {
+    body.ms-teams:not(.mst-in-channel) #chat .mes:not([is_user="true"]) .mesAvatarWrapper,
+    body.ms-teams:not(.mst-in-channel) #chat .mes .name_text {
         display: none;
     }
 

@@ -1,0 +1,530 @@
+/* Customize: the parts that can be hidden (body.mst-x-<flag>, set by customize.js), and the
+   Customize page itself with its live preview. Token changes need no rules here: they're set
+   on the body and every other file already reads them. */
+
+/* ---- Layout ---- */
+body.ms-teams.mst-x-hideLauncher .mst-waffle,
+body.ms-teams.mst-x-hideNav .mst-tb-nav,
+body.ms-teams.mst-x-hideSearch #mst-titlebar .mst-search,
+body.ms-teams.mst-x-hideMe #mst-me,
+body.ms-teams.mst-x-hideFavorites .mst-section[data-section="pinned"],
+body.ms-teams.mst-x-hideTeams .mst-section[data-section="teams"],
+body.ms-teams.mst-x-hidePreviews .mst-chat-preview,
+body.ms-teams.mst-x-hideTabs #mst-chat-head .mst-tabs,
+body.ms-teams.mst-x-hideCalls #mst-chat-head .mst-head-actions > :not(:last-child),
+body.ms-teams.mst-x-hideEmoji #extensionsMenuButton,
+body.ms-teams.mst-x-hidePlus #options_button {
+    display: none !important;
+}
+
+/* ---- Messages ---- */
+body.ms-teams.mst-x-hideAvatars #chat .mes .mesAvatarWrapper {
+    display: none;
+}
+
+body.ms-teams.mst-x-hideAvatars #chat .mes:not([is_user="true"]) {
+    grid-template-columns: 0 minmax(0, max-content) minmax(48px, 1fr);
+    column-gap: 0;
+}
+
+body.ms-teams.mst-x-hideNames #chat .mes .name_text,
+body.ms-teams.mst-x-hideTimes #chat .mes .timestamp,
+body.ms-teams.mst-x-hideSwipes #chat .mes :is(.swipe_left, .swipeRightBlock) {
+    display: none !important;
+}
+
+/* ---- Motion ---- */
+body.ms-teams.mst-x-noMotion *,
+body.ms-teams.mst-x-noMotion *::before,
+body.ms-teams.mst-x-noMotion *::after {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+}
+
+/* ---- The Customize page ---- */
+body.ms-teams dialog.popup.mst-cz-dialog {
+    width: min(1040px, 94vw);
+    max-width: none;
+    height: min(900px, 92dvh);
+    max-height: none;
+}
+
+body.ms-teams dialog.popup.mst-cz-dialog .popup-body {
+    flex: 1;
+    min-height: 0;
+}
+
+body.ms-teams dialog.popup.mst-cz-dialog .popup-content {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-top: 0;
+}
+
+body.ms-teams .mst-customize {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: left;
+    color: var(--mst-fg);
+    font-family: var(--mst-font);
+    font-size: var(--mst-text);
+}
+
+body.ms-teams .mst-cz-top {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-bottom: 12px;
+    background: var(--mst-raised);
+    border-bottom: 1px solid var(--mst-stroke-2);
+}
+
+body.ms-teams .mst-cz-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+body.ms-teams .mst-cz-heading h3 {
+    margin: 0;
+    flex: 1;
+    font-size: var(--mst-text-lg);
+    font-weight: 600;
+}
+
+body.ms-teams .mst-cz-tools {
+    display: flex;
+    gap: 8px;
+}
+
+body.ms-teams .mst-customize .menu_button.mst-cz-tool,
+body.ms-teams .mst-customize .menu_button.mst-cz-reset {
+    width: auto;
+    margin: 0;
+    padding: 4px 12px;
+    white-space: nowrap;
+}
+
+body.ms-teams .mst-cz-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    border: 1px solid var(--mst-stroke-2);
+    border-radius: var(--mst-radius-lg);
+    background: var(--mst-card);
+}
+
+body.ms-teams .mst-cz-section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+body.ms-teams .mst-cz-section-head h4 {
+    margin: 0;
+    font-size: var(--mst-text-md);
+    font-weight: 600;
+}
+
+body.ms-teams .mst-cz-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+    gap: 4px 24px;
+}
+
+body.ms-teams .mst-cz-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    min-height: 36px;
+}
+
+body.ms-teams .mst-cz-row.mst-cz-flag,
+body.ms-teams .mst-cz-row.mst-cz-css {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+body.ms-teams .mst-cz-row.mst-cz-css {
+    grid-column: 1 / -1;
+    gap: 6px;
+}
+
+body.ms-teams .mst-cz-label {
+    margin: 0;
+    color: var(--mst-fg-2);
+}
+
+body.ms-teams .mst-cz-changed .mst-cz-label {
+    color: var(--mst-fg);
+    font-weight: 600;
+}
+
+body.ms-teams .mst-cz-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+body.ms-teams .mst-customize input.mst-cz-color {
+    width: 32px;
+    height: 32px;
+    padding: 2px;
+    border: 1px solid var(--mst-stroke);
+    border-radius: var(--mst-radius);
+    background: var(--mst-input);
+    cursor: pointer;
+}
+
+body.ms-teams .mst-customize .text_pole.mst-cz-text {
+    width: 140px;
+    margin: 0;
+}
+
+body.ms-teams .mst-customize .text_pole.mst-cz-url {
+    width: 240px;
+}
+
+body.ms-teams .mst-customize input.mst-cz-range {
+    width: 120px;
+    margin: 0;
+}
+
+body.ms-teams .mst-customize .text_pole.mst-cz-number {
+    width: 64px;
+    margin: 0;
+}
+
+body.ms-teams .mst-customize .text_pole.mst-cz-select {
+    width: 180px;
+    margin: 0;
+}
+
+body.ms-teams .mst-cz-unit {
+    min-width: 20px;
+    color: var(--mst-fg-3);
+    font-size: var(--mst-text-sm);
+}
+
+body.ms-teams .mst-customize .mst-cz-clear {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    border-radius: var(--mst-radius);
+    background: none;
+    color: var(--mst-fg-3);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+body.ms-teams .mst-customize .mst-cz-clear:hover {
+    background: var(--mst-subtle-hover);
+    color: var(--mst-brand-fg);
+}
+
+body.ms-teams .mst-customize .mst-cz-clear[hidden] {
+    visibility: hidden;
+    display: inline-block;
+}
+
+body.ms-teams .mst-customize textarea.mst-cz-css {
+    width: 100%;
+    min-height: 140px;
+    margin: 0;
+    font-family: Menlo, Consolas, "Courier New", monospace;
+    font-size: var(--mst-text-sm);
+}
+
+body.ms-teams .mst-cz-note {
+    color: var(--mst-fg-3);
+}
+
+/* ---- Live preview: a small Teams window built from the same tokens ---- */
+body.ms-teams .mst-cz-preview {
+    display: flex;
+    flex-direction: column;
+    height: 240px;
+    overflow: hidden;
+    border: 1px solid var(--mst-stroke-2);
+    border-radius: var(--mst-radius-lg);
+    background: var(--mst-shell);
+    font-size: calc(var(--mst-text) * 0.86);
+    line-height: 1.35;
+    pointer-events: none;
+    user-select: none;
+}
+
+body.ms-teams .mst-pv-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: none;
+    height: calc(var(--mst-titlebar-h) * 0.66);
+    padding: 0 10px;
+}
+
+body.ms-teams .mst-pv-dots {
+    width: 12px;
+    height: 12px;
+    background: radial-gradient(circle, var(--mst-fg-3) 1.2px, transparent 1.6px) 0 0 / 4px 4px;
+}
+
+body.ms-teams.mst-x-hideLauncher .mst-pv-dots,
+body.ms-teams.mst-x-hideSearch .mst-pv-search,
+body.ms-teams.mst-x-hideMe .mst-pv-me,
+body.ms-teams.mst-x-hideTabs .mst-pv-tab,
+body.ms-teams.mst-x-hidePreviews .mst-pv-row small,
+body.ms-teams.mst-x-hideNames .mst-pv-name,
+body.ms-teams.mst-x-hideTimes .mst-pv-time,
+body.ms-teams.mst-x-hideAvatars .mst-pv-mes-av {
+    visibility: hidden;
+}
+
+body.ms-teams .mst-pv-search {
+    flex: 0 1 46%;
+    margin: 0 auto;
+    padding: 2px 8px;
+    border-radius: var(--mst-radius);
+    background: var(--mst-input);
+    color: var(--mst-fg-3);
+}
+
+body.ms-teams .mst-pv-me,
+body.ms-teams .mst-pv-av {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--mst-brand-soft);
+    color: var(--mst-brand-fg);
+    font-size: 9px;
+    font-weight: 600;
+}
+
+body.ms-teams .mst-pv-av2 {
+    background: color-mix(in srgb, var(--mst-success) 20%, var(--mst-card));
+    color: var(--mst-success);
+}
+
+body.ms-teams .mst-pv-body {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+}
+
+body.ms-teams .mst-pv-rail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    flex: none;
+    width: calc(var(--mst-rail-w) * 0.6);
+    padding-top: 8px;
+}
+
+body.ms-teams .mst-pv-app {
+    width: 18px;
+    height: 18px;
+    background: var(--mst-fg-3);
+    -webkit-mask: var(--mst-pv-icon) center / contain no-repeat;
+    mask: var(--mst-pv-icon) center / contain no-repeat;
+}
+
+body.ms-teams .mst-pv-app:nth-child(1) { --mst-pv-icon: var(--mst-icon-bell); }
+body.ms-teams .mst-pv-app:nth-child(2) { --mst-pv-icon: var(--mst-icon-calendar); }
+body.ms-teams .mst-pv-app:nth-child(3) { --mst-pv-icon: var(--mst-icon-chat-on); }
+body.ms-teams .mst-pv-app:nth-child(4) { --mst-pv-icon: var(--mst-icon-call); }
+
+body.ms-teams .mst-pv-app.mst-pv-on {
+    background: var(--mst-brand-fg);
+}
+
+body.ms-teams .mst-pv-list {
+    flex: none;
+    width: calc(var(--mst-list-w) * 0.6);
+    padding: 6px;
+    border-radius: var(--mst-radius-lg) 0 0 0;
+    background: var(--mst-list);
+}
+
+body.ms-teams .mst-pv-list-head {
+    padding: 2px 6px 6px;
+    font-size: var(--mst-text);
+    font-weight: 700;
+}
+
+body.ms-teams .mst-pv-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 6px;
+    border-radius: var(--mst-radius);
+}
+
+body.ms-teams .mst-pv-row.mst-pv-sel {
+    background: var(--mst-selected);
+    box-shadow: var(--mst-shadow-2);
+}
+
+body.ms-teams .mst-pv-row > span:last-child {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+body.ms-teams .mst-pv-row b {
+    font-weight: 600;
+}
+
+body.ms-teams .mst-pv-row small {
+    overflow: hidden;
+    color: var(--mst-fg-3);
+    font-size: var(--mst-text-sm);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+body.ms-teams .mst-pv-chat {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    background: var(--mst-canvas);
+}
+
+body.ms-teams .mst-pv-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: none;
+    height: calc(var(--mst-head-h) * 0.62);
+    padding: 0 12px;
+    border-bottom: 1px solid var(--mst-stroke-2);
+}
+
+body.ms-teams .mst-pv-tab {
+    padding: 0 2px 2px;
+    border-bottom: 2px solid var(--mst-brand-fg);
+    font-weight: 600;
+}
+
+body.ms-teams .mst-pv-messages {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+    gap: calc(var(--mst-mes-gap) * 1.2);
+    flex: 1;
+    min-height: 0;
+    padding: 8px calc(var(--mst-chat-pad) * 0.6);
+    background:
+        linear-gradient(color-mix(in srgb, var(--mst-chat-bg) var(--mst-chat-bg-dim), transparent), color-mix(in srgb, var(--mst-chat-bg) var(--mst-chat-bg-dim), transparent)),
+        var(--mst-chat-bg-image) center / var(--mst-chat-bg-size) no-repeat,
+        var(--mst-chat-bg);
+}
+
+body.ms-teams .mst-pv-mes {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+body.ms-teams .mst-pv-mes-av {
+    width: calc(var(--mst-mes-avatar) * 0.75);
+    height: calc(var(--mst-mes-avatar) * 0.75);
+    border-radius: var(--mst-avatar-radius);
+}
+
+body.ms-teams .mst-pv-mes.mst-pv-mine {
+    justify-content: flex-end;
+}
+
+body.ms-teams .mst-pv-bubble {
+    max-width: calc(var(--mst-bubble-max) * 0.8);
+    padding: calc(var(--mst-bubble-pad-y) * 0.75) calc(var(--mst-bubble-pad-x) * 0.75);
+    border-radius: var(--mst-bubble-radius);
+    background: var(--mst-bubble-in);
+}
+
+body.ms-teams .mst-pv-mine .mst-pv-bubble {
+    background: var(--mst-bubble-out);
+}
+
+body.ms-teams .mst-pv-meta {
+    color: var(--mst-fg-3);
+    font-size: var(--mst-text-sm);
+}
+
+body.ms-teams .mst-pv-text {
+    font-size: calc(var(--mst-mes-text) * 0.86);
+    line-height: calc(var(--mst-mes-line) * 0.86);
+}
+
+body.ms-teams .mst-pv-text i {
+    color: var(--mst-mes-em);
+}
+
+body.ms-teams .mst-pv-text q {
+    color: var(--mst-mes-quote);
+}
+
+body.ms-teams .mst-pv-compose {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: none;
+    margin: 0 10px 8px;
+    padding: 5px 10px;
+    border-bottom: 2px solid var(--mst-brand);
+    border-radius: var(--mst-radius);
+    background: var(--mst-input);
+    color: var(--mst-fg-3);
+}
+
+body.ms-teams .mst-pv-send {
+    width: 10px;
+    height: 10px;
+    background: var(--mst-brand-fg);
+    clip-path: polygon(0 0, 100% 50%, 0 100%, 20% 50%);
+}
+
+@media screen and (max-width: 1000px) {
+    body.ms-teams dialog.popup.mst-cz-dialog {
+        width: 100vw;
+        height: 100dvh;
+    }
+
+    body.ms-teams .mst-cz-preview {
+        height: 180px;
+    }
+
+    body.ms-teams .mst-pv-list {
+        display: none;
+    }
+
+    body.ms-teams .mst-cz-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    body.ms-teams .mst-cz-row:not(.mst-cz-flag, .mst-cz-css) {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 4px;
+        padding: 4px 0;
+    }
+
+    body.ms-teams .mst-cz-control {
+        flex-wrap: wrap;
+    }
+}

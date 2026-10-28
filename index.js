@@ -8,6 +8,7 @@ import { setDisguise, refreshTitle } from './disguise.js';
 import { initShortcuts } from './shortcuts.js';
 import { focusSearch, initShell, refreshHeader, refreshNavigation, refreshPersona, refreshRailToggle, setRailTooltips, startNewChat } from './shell.js';
 import { initTimes, labelMessages } from './times.js';
+import { applyCustomize, emptyCustomize, normalizeCustomize, openCustomize } from './customize.js';
 
 const MODULE_NAME = 'msTeamsTheme';
 /** Folder path under scripts/extensions/, e.g. third-party/SillyTavern-MSTeams */
@@ -31,6 +32,8 @@ const defaultSettings = Object.freeze({
     presence: true,
     shortTimes: true,
     recentMax: 50,
+    /** Customize page: { version, tokens, flags, css }, layered on the appearance */
+    customize: { version: 1, tokens: {}, flags: {}, css: '' },
 });
 
 const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -47,6 +50,9 @@ function getSettings() {
         if (!Object.hasOwn(settings, key)) {
             settings[key] = structuredClone(defaultSettings[key]);
         }
+    }
+    if (settings.customize?.version !== 1 || !settings.customize.tokens || !settings.customize.flags) {
+        settings.customize = normalizeCustomize(settings.customize);
     }
     return settings;
 }
@@ -74,6 +80,20 @@ function applySettings() {
     body.classList.toggle('mst-persona-monogram', !!settings.personaMonogram);
     body.classList.toggle('mst-presence-on', !!settings.presence);
     body.classList.toggle('mst-short-times', !!settings.shortTimes);
+    applyCustomize(settings.customize, !!settings.enabled);
+}
+
+/** Opens the Customize page; changes show at once and are saved as they're made. */
+function customizeTheme() {
+    const settings = getSettings();
+    return openCustomize({
+        get: () => settings.customize,
+        set: (value) => { settings.customize = value ?? emptyCustomize(); },
+        changed: () => {
+            applySettings();
+            saveSettings();
+        },
+    });
 }
 
 /** Phones show one pane at a time: the chat list, or the open chat. */
@@ -154,6 +174,7 @@ async function renderSettingsPanel() {
     bind(personaMonogram, 'personaMonogram', () => personaMonogram.checked);
     bind(presence, 'presence', () => presence.checked);
     bind(shortTimes, 'shortTimes', () => shortTimes.checked, () => labelMessages());
+    document.getElementById('mst_customize')?.addEventListener('click', () => customizeTheme());
     bind(recentMax, 'recentMax', () => Math.min(500, Math.max(5, Number(recentMax.value) || defaultSettings.recentMax)), () => scheduleRefresh());
 }
 
@@ -161,9 +182,9 @@ async function init() {
     applySettings();
     darkQuery.addEventListener('change', applySettings);
 
-    initShell({ toggleRail, setTheme });
+    initShell({ toggleRail, setTheme, customize: customizeTheme });
     initApps();
-    const listLoaded = initChatList({ settings: getSettings, opened: showChatOnPhone, historyChanged: refreshNavigation });
+    const listLoaded = initChatList({ settings: getSettings, opened: showChatOnPhone, historyChanged: refreshNavigation, customize: customizeTheme });
     applySettings();
     initTimes();
     initMonograms();
@@ -220,6 +241,9 @@ function bootLook() {
         return;
     }
     document.body.classList.add('mst-booting');
+    if (settings) {
+        applyCustomize(normalizeCustomize(settings.customize), true);
+    }
     // never leave the cover up if something fails on the way
     setTimeout(endBoot, 20000);
     document.body.classList.toggle('mst-dark', !!settings && isDark({ ...defaultSettings, ...settings }));

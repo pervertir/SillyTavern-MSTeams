@@ -161,6 +161,7 @@ function createTitlebar() {
     more.addEventListener('click', () => toggleFlyout(more, [
         { label: 'User Settings', icon: 'fa-solid fa-gear', run: () => toggleDrawer('user-settings-button') },
         { label: 'Keyboard shortcuts', icon: 'fa-regular fa-keyboard', run: showShortcuts },
+        { label: 'Customize theme', icon: 'fa-solid fa-palette', run: () => shellOptions.customize?.() },
         document.body.classList.contains('mst-dark')
             ? { label: 'Switch to light theme', icon: 'fa-regular fa-sun', run: () => shellOptions.setTheme('light') }
             : { label: 'Switch to dark theme', icon: 'fa-regular fa-moon', run: () => shellOptions.setTheme('dark') },
@@ -564,7 +565,7 @@ export function refreshHeader() {
     document.body.classList.toggle('mst-no-chat', !hasChat);
 
     head.classList.toggle('mst-head-channel', !!group);
-    document.body.classList.toggle('mst-channel', !!group);
+    document.body.classList.toggle('mst-in-channel', !!group);
     if (group) {
         // a group is a team and its chat a channel: the team's square picture, then "Team › Channel"
         avatar.append(buildTeamMonogram(group.name));

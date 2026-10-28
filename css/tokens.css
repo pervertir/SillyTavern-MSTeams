@@ -118,6 +118,26 @@ body.ms-teams {
     --mst-list-w: 320px;
     --mst-head-h: 56px;
 
+    /* Messages (each can be changed in Customize) */
+    --mst-mes-text: var(--mst-text);
+    --mst-mes-line: 20px;
+    --mst-mes-gap: 6px;
+    --mst-chat-pad: 20px;
+    --mst-mes-avatar: 32px;
+    --mst-avatar-radius: 50%;
+    --mst-bubble-radius: var(--mst-radius-md);
+    --mst-bubble-pad-y: 8px;
+    --mst-bubble-pad-x: 16px;
+    --mst-bubble-max: 100%;
+    --mst-mes-em: var(--mst-fg-3);
+    --mst-mes-quote: var(--mst-brand-fg);
+
+    /* Chat background */
+    --mst-chat-bg: var(--mst-canvas);
+    --mst-chat-bg-image: none;
+    --mst-chat-bg-size: cover;
+    --mst-chat-bg-dim: 0%;
+
     /* SillyTavern's theme variables, so its own panels follow the palette */
     --SmartThemeBodyColor: var(--mst-fg);
     --SmartThemeEmColor: var(--mst-fg-3);

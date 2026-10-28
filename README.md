@@ -66,6 +66,24 @@ SillyTavern draws its logo before any extension loads, so the theme alone can on
 
 That stylesheet doesn't know whether the theme is on, so delete the block (it's marked) if you go back to another look.
 
+## Customize
+
+Every part of the look can be changed from **Customize theme**: open it from the title bar's **…** menu, the chat list's **…** menu (also on phones), or the theme's settings. A small Teams window at the top shows each change as you make it, and the whole app changes with it, with no reload.
+
+| Section | What you can change |
+|---|---|
+| Colors | Accent, surfaces (window frame, side panels, main area, cards, menus, text boxes), text, borders and status colors |
+| Text | The font (Segoe UI, system, a few common ones, or any font you name) and every text size |
+| Shape | Corner rounding for buttons, cards, panels, tiles and message bubbles, and the shape of pictures |
+| Spacing | Title bar, app rail, chat list and header sizes, chat margins, space between messages, bubble padding |
+| Layout | Show or hide the app launcher, back and forward, search, your picture, Favorites, Teams and channels, chat previews, the Chat and Shared tabs, the video and call buttons, and the message box's emoji and + buttons |
+| Messages | Bubble colors, action and quote colors, text size, line height, picture size, bubble width, and hiding pictures, names, times or the reply pager |
+| Chat background | A color or a picture from a web address, how it fits, and how much it's faded |
+| Motion | Transition speeds, or no animations at all |
+| Advanced | Your own CSS, which only applies while the theme is on |
+
+Changes sit on top of Light or Dark, so switching appearance keeps them. Each section has **Reset section**, and the page has **Reset all**, **Export** and **Import** (a small JSON file, so you can keep a look or share it).
+
 ## Settings
 
 Find them under **Extensions** → **Microsoft Teams Theme**:
@@ -80,6 +98,7 @@ Find them under **Extensions** → **Microsoft Teams Theme**:
 | Show characters as Available | The green presence badge on pictures. |
 | Teams-style message times | Short times in place of SillyTavern's full dates. |
 | Chats in the list | How many recent chats to load (5 to 500). |
+| Customize theme… | Opens the Customize page (above). |
 
 ## Notes
 
