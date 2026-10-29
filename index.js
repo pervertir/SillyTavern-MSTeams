@@ -1,17 +1,17 @@
 // Microsoft Teams theme: toggles the scoped styles in style.css, builds the Teams frame
 // (title bar, app rail, chat list, chat header) and exposes a small settings panel.
 
-import { initChatList, markCurrentChat, scheduleRefresh, travel } from './chatlist.js';
 import { initApps, refreshCopilotGreeting } from './apps.js';
-import { initMonograms } from './monograms.js';
-import { setDisguise, refreshTitle } from './disguise.js';
+import { initChatList, markCurrentChat, scheduleRefresh, travel } from './chatlist.js';
+import { applyCustomize, emptyCustomize, normalizeCustomize, openCustomize } from './customize.js';
+import { refreshTitle, setDisguise } from './disguise.js';
+import { registerTheme } from './lib/theme-exclusive.js';
+import { initMonograms, monogramizeMessages } from './monograms.js';
+import { isOn, parkOwned, restoreOwned } from './own.js';
 import { initShortcuts } from './shortcuts.js';
 import { focusSearch, initShell, refreshDrawerState, refreshHeader, refreshNavigation, refreshPersona, refreshRailToggle, setRailTooltips, startNewChat } from './shell.js';
 import { initTimes, labelMessages } from './times.js';
-import { applyCustomize, emptyCustomize, normalizeCustomize, openCustomize } from './customize.js';
-import { registerTheme } from './lib/theme-exclusive.js';
-import { isOn, parkOwned, restoreOwned } from './own.js';
-import { monogramizeMessages } from './monograms.js';
+import { isPhone } from './util.js';
 
 const MODULE_NAME = 'msTeamsTheme';
 /** Folder path under scripts/extensions/, e.g. third-party/SillyTavern-MSTeams */
@@ -19,7 +19,6 @@ const EXTENSION_FOLDER = new URL('.', import.meta.url).pathname
     .replace(/^.*\/scripts\/extensions\//, '')
     .replace(/\/$/, '');
 const BODY_CLASS = 'ms-teams';
-const MOBILE_QUERY = '(max-width: 1000px)';
 
 const defaultSettings = Object.freeze({
     enabled: true,
@@ -81,30 +80,37 @@ function isDark(settings) {
     return settings.appearance === 'dark' || (settings.appearance === 'system' && darkQuery.matches);
 }
 
+/** Body classes that follow a setting while the theme is on */
+const SETTING_CLASSES = {
+    'mst-dark': isDark,
+    'mst-no-list': settings => !settings.chatList,
+    'mst-rail-labels': settings => settings.railLabels,
+    'mst-rail-hidden': settings => settings.railHidden,
+    'mst-persona-monogram': settings => settings.personaMonogram,
+    'mst-presence-on': settings => settings.presence,
+    'mst-short-times': settings => settings.shortTimes,
+};
+
 function applySettings() {
     const settings = getSettings();
-    const body = document.body;
-    body.classList.toggle(BODY_CLASS, !!settings.enabled);
-    document.documentElement.classList.toggle('mst-html', !!settings.enabled);
-    body.classList.toggle('mst-dark', !!settings.enabled && isDark(settings));
     const on = !!settings.enabled;
-    body.classList.toggle('mst-no-list', on && !settings.chatList);
-    body.classList.toggle('mst-rail-labels', on && !!settings.railLabels);
-    body.classList.toggle('mst-rail-hidden', on && !!settings.railHidden);
+    const body = document.body.classList;
+    body.toggle(BODY_CLASS, on);
+    document.documentElement.classList.toggle('mst-html', on);
+    for (const [name, test] of Object.entries(SETTING_CLASSES)) {
+        body.toggle(name, on && !!test(settings));
+    }
     refreshRailToggle(!!settings.railHidden);
-    setDisguise(!!settings.enabled);
-    setRailTooltips(!!settings.enabled);
-    body.classList.toggle('mst-persona-monogram', on && !!settings.personaMonogram);
-    body.classList.toggle('mst-presence-on', on && !!settings.presence);
-    body.classList.toggle('mst-short-times', on && !!settings.shortTimes);
+    setDisguise(on);
+    setRailTooltips(on);
     if (!on) {
         // the frame's own state classes (open menus, phone pane, group chat)
-        body.classList.remove(...[...body.classList].filter(name => name.startsWith('mst-') && name !== 'mst-booting' && name !== 'mst-boot-done'));
+        body.remove(...[...body].filter(name => name.startsWith('mst-') && name !== 'mst-booting' && name !== 'mst-boot-done'));
     }
-    applyCustomize(settings.customize, !!settings.enabled);
+    applyCustomize(settings.customize, on);
     // the Teams frame exists only while the theme is on: built the first time it's turned on,
     // taken out when it's switched off, and put back as it was when it's on again
-    if (!settings.enabled) {
+    if (!on) {
         parkOwned();
     } else if (built) {
         restoreOwned();
@@ -129,7 +135,7 @@ function customizeTheme() {
 
 /** Phones show one pane at a time: the chat list, or the open chat. */
 function showChatOnPhone() {
-    if (window.matchMedia(MOBILE_QUERY).matches) {
+    if (isPhone()) {
         document.body.classList.add('mst-m-chat');
     }
 }
@@ -175,45 +181,37 @@ async function renderSettingsPanel() {
     container.insertAdjacentHTML('beforeend', html);
 
     const settings = getSettings();
-    const enabled = /** @type {HTMLInputElement} */ (document.getElementById('mst_enabled'));
+    const checkbox = (id, key, after) => {
+        const input = /** @type {HTMLInputElement} */ (document.getElementById(id));
+        input.checked = !!settings[key];
+        return [input, key, () => input.checked, after];
+    };
     const appearance = /** @type {HTMLSelectElement} */ (document.getElementById('mst_appearance'));
-    const chatList = /** @type {HTMLInputElement} */ (document.getElementById('mst_chat_list'));
-    const railLabels = /** @type {HTMLInputElement} */ (document.getElementById('mst_rail_labels'));
-    const personaMonogram = /** @type {HTMLInputElement} */ (document.getElementById('mst_persona_monogram'));
-    const presence = /** @type {HTMLInputElement} */ (document.getElementById('mst_presence'));
-    const shortTimes = /** @type {HTMLInputElement} */ (document.getElementById('mst_short_times'));
-    const recentMax = /** @type {HTMLInputElement} */ (document.getElementById('mst_recent_max'));
-    const pauseUserTheme = /** @type {HTMLInputElement} */ (document.getElementById('mst_pause_user_theme'));
-
-    enabled.checked = settings.enabled;
     appearance.value = settings.appearance;
-    chatList.checked = settings.chatList;
-    railLabels.checked = settings.railLabels;
-    personaMonogram.checked = settings.personaMonogram;
-    presence.checked = settings.presence;
-    shortTimes.checked = settings.shortTimes;
+    const recentMax = /** @type {HTMLInputElement} */ (document.getElementById('mst_recent_max'));
     recentMax.value = String(settings.recentMax);
-    pauseUserTheme.checked = settings.pauseUserTheme;
 
-    const bind = (element, key, read, after) => {
+    const controls = [
+        // turning the theme on turns the other themes off
+        checkbox('mst_enabled', 'enabled', () => (settings.enabled ? exclusive.activated() : exclusive.changed())),
+        checkbox('mst_pause_user_theme', 'pauseUserTheme', () => exclusive.changed()),
+        [appearance, 'appearance', () => appearance.value],
+        checkbox('mst_chat_list', 'chatList'),
+        checkbox('mst_rail_labels', 'railLabels'),
+        checkbox('mst_persona_monogram', 'personaMonogram'),
+        checkbox('mst_presence', 'presence'),
+        checkbox('mst_short_times', 'shortTimes', () => labelMessages()),
+        [recentMax, 'recentMax', () => Math.min(500, Math.max(5, Number(recentMax.value) || defaultSettings.recentMax)), () => scheduleRefresh()],
+    ];
+    for (const [element, key, read, after] of controls) {
         element.addEventListener('input', () => {
             settings[key] = read();
             applySettings();
             saveSettings();
             after?.();
         });
-    };
-    // turning the theme on turns the other themes off
-    bind(enabled, 'enabled', () => enabled.checked, () => (settings.enabled ? exclusive.activated() : exclusive.changed()));
-    bind(pauseUserTheme, 'pauseUserTheme', () => pauseUserTheme.checked, () => exclusive.changed());
-    bind(appearance, 'appearance', () => appearance.value);
-    bind(chatList, 'chatList', () => chatList.checked);
-    bind(railLabels, 'railLabels', () => railLabels.checked);
-    bind(personaMonogram, 'personaMonogram', () => personaMonogram.checked);
-    bind(presence, 'presence', () => presence.checked);
-    bind(shortTimes, 'shortTimes', () => shortTimes.checked, () => labelMessages());
+    }
     document.getElementById('mst_customize')?.addEventListener('click', () => customizeTheme());
-    bind(recentMax, 'recentMax', () => Math.min(500, Math.max(5, Number(recentMax.value) || defaultSettings.recentMax)), () => scheduleRefresh());
 }
 
 async function init() {

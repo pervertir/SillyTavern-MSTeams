@@ -2,6 +2,8 @@
 // Teams tab with Teams' own icon, and the message box says "Type a message".
 // Turning the theme off puts the originals back.
 
+import { channelName, getChatOwner, t } from './util.js';
+
 const TITLE_SUFFIX = 'Microsoft Teams';
 /** Teams' own tab icon, linked from Microsoft's site rather than copied into the theme */
 const ICON = 'https://teams.microsoft.com/favicon.ico';
@@ -10,10 +12,6 @@ const PLACEHOLDER_ATTRS = ['placeholder', 'connected_text', 'no_connection_text'
 
 let original = null;
 let active = false;
-
-function t(text) {
-    return SillyTavern.getContext().translate(text);
-}
 
 function getIconLinks() {
     return [...document.querySelectorAll('link[rel~="icon"]')];
@@ -36,14 +34,10 @@ export function refreshTitle() {
     if (!active) {
         return;
     }
-    const context = SillyTavern.getContext();
-    const group = context.groupId ? context.groups.find(x => String(x.id) === String(context.groupId)) : null;
-    const character = !group && context.characterId !== undefined ? context.characters[context.characterId] : null;
+    const { group, character } = getChatOwner();
     if (group) {
         // a group is a team and its chat a channel, titled like a Teams channel tab
-        const chatId = context.getCurrentChatId() ?? '';
-        const prefix = `${group.name} - `;
-        const channel = chatId.startsWith(prefix) ? chatId.slice(prefix.length) : chatId;
+        const channel = channelName(group, SillyTavern.getContext().getCurrentChatId() ?? '');
         document.title = [channel, group.name, TITLE_SUFFIX].filter(Boolean).join(' | ');
         return;
     }

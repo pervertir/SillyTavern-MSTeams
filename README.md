@@ -108,6 +108,14 @@ Find them under **Extensions** → **Microsoft Teams Theme**:
 - The font is Segoe UI, as in Teams. Windows uses its installed copy; on macOS and elsewhere the theme loads it from Microsoft's font CDN (the same files Fluent UI web apps use), only while the theme is on.
 - This is an unofficial look-alike theme. It isn't made by or affiliated with Microsoft. Microsoft Teams is a trademark of Microsoft.
 
+## Development
+
+`tests/leak-check.js` turns the theme off, on and off again in a test SillyTavern with this extension installed, and fails if anything of the theme is left in the page while it's off. It needs Playwright:
+
+```sh
+node tests/leak-check.js http://127.0.0.1:8000/
+```
+
 ## License
 
 MIT

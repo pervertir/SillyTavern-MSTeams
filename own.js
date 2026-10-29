@@ -8,6 +8,7 @@ let parked = [];
 let marks = [];
 
 const OWN_ATTR = 'data-mst-own';
+const SETTINGS_PANEL = '.mst-settings';
 
 /** Whether the theme is on: watchers and listeners do nothing while it's off. */
 export function isOn() {
@@ -31,8 +32,11 @@ export function parkOwned() {
         node.remove();
     }
     // the marks left on SillyTavern's own elements (the body's own classes are the theme's
-    // settings, kept by index.js)
+    // settings, kept by index.js, and its settings panel stays as it is)
     for (const element of document.body.querySelectorAll('[class*="mst-"], [data-mst-label], [data-mst-icon], [data-mst-call], [data-mst-show], [data-mst-time], [data-mst-mono-for], [style*="--mst-"]')) {
+        if (element.closest(SETTINGS_PANEL)) {
+            continue;
+        }
         const classes = [...element.classList].filter(name => name.startsWith('mst-'));
         const attributes = [...element.attributes].filter(a => a.name.startsWith('data-mst-') && a.name !== OWN_ATTR).map(a => [a.name, a.value]);
         const styles = [...element.style].filter(name => name.startsWith('--mst-')).map(name => [name, element.style.getPropertyValue(name)]);

@@ -1,6 +1,9 @@
 // Teams-style message times: "10:42 AM" today, "Yesterday 10:42 AM", "10/21 3:15 PM" this year.
 // The short time goes in a data attribute on SillyTavern's own .timestamp; CSS shows it in place of the long date.
 
+import { isOn } from './own.js';
+import { t } from './util.js';
+
 /** Formats a message's send date the way Teams labels a message. */
 export function formatMessageTime(sendDate) {
     const { timestampToMoment } = SillyTavern.getContext();
@@ -13,7 +16,7 @@ export function formatMessageTime(sendDate) {
         return time.format('LT');
     }
     if (time.isSame(now.clone().subtract(1, 'day'), 'day')) {
-        return `${SillyTavern.getContext().translate('Yesterday')} ${time.format('LT')}`;
+        return `${t('Yesterday')} ${time.format('LT')}`;
     }
     if (time.isSame(now, 'year')) {
         return time.format('M/D LT');
@@ -56,7 +59,7 @@ function labelMessage(mes) {
 export function labelMessages(mesId) {
     const chat = document.getElementById('chat');
     // nothing is added to SillyTavern's messages while the theme is off
-    if (!chat || !document.body.classList.contains('ms-teams')) {
+    if (!chat || !isOn()) {
         return;
     }
     if (mesId !== undefined && mesId !== null && mesId !== '') {

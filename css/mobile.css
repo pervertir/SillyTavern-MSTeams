@@ -39,7 +39,7 @@
         overflow-x: auto;
         overflow-y: hidden;
         scrollbar-width: none;
-        background: var(--mst-list);
+        background: var(--mst-canvas);
         border-top: 1px solid var(--mst-stroke-2);
     }
 
@@ -82,24 +82,10 @@
         bottom: calc(var(--mst-tabbar-h) + 8px);
     }
 
-    /* the selected app's bar runs along the top edge */
+    /* Teams mobile marks the tab with a filled, colored icon, without a bar */
     body.ms-teams #top-settings-holder > .drawer > .drawer-toggle::before,
     body.ms-teams #top-settings-holder > .mst-app::before {
-        top: 0;
-        left: 50%;
-        width: 0;
-        height: 3px;
-        margin: 0;
-        border-radius: 0 0 2px 2px;
-        transition: width var(--mst-normal) var(--mst-ease), margin-left var(--mst-normal) var(--mst-ease);
-    }
-
-    body.ms-teams #top-settings-holder > .drawer.mst-open > .drawer-toggle::before,
-    body.ms-teams:not(.mst-menu-open) #mst-app-chat::before,
-    body.ms-teams.mst-phone-more-open #mst-app-more::before {
-        width: 24px;
-        height: 3px;
-        margin: 0 0 0 -12px;
+        display: none;
     }
 
     /* Menus fill the screen above the app bar */
@@ -256,16 +242,6 @@
     }
 
     body.ms-teams #top-settings-holder > .mst-more-drawer > .drawer-toggle {
-        display: none;
-    }
-
-    body.ms-teams #top-settings-holder {
-        background: var(--mst-canvas);
-    }
-
-    /* Teams mobile marks the tab with a filled, colored icon, without a bar */
-    body.ms-teams #top-settings-holder > .drawer > .drawer-toggle::before,
-    body.ms-teams #top-settings-holder > .mst-app::before {
         display: none;
     }
 

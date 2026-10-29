@@ -1,10 +1,11 @@
-// The Teams chat list: SillyTavern's recent chats (the same list as its welcome screen),
-// split into Pinned and Recent, with the open chat highlighted.
+// The Teams chat list: SillyTavern's recent chats (the same list as its welcome screen) as
+// Favorites and Chats, group chats as teams with their channels, and back/forward between chats.
 
-import { monogramizeAll } from './monograms.js';
-import { toggleFlyout } from './shell.js';
+import { createMonogram, monogramizeAll } from './monograms.js';
+import { toggleFlyout } from './flyout.js';
 import { formatListTime } from './times.js';
 import { isOn, own } from './own.js';
+import { button, channelName, el, fluentButton, iconButton, t, toggleDrawer } from './util.js';
 
 const LIST_ID = 'mst-list';
 /** SillyTavern's own pinned chats, kept in account storage by welcome-screen.js */
@@ -19,19 +20,7 @@ let filterText = '';
 let requestId = 0;
 let refreshTimer = 0;
 let onOpen = () => {};
-
-function t(text) {
-    return SillyTavern.getContext().translate(text);
-}
-
-function getPinned() {
-    try {
-        const value = SillyTavern.getContext().accountStorage.getItem(PINNED_KEY);
-        return value ? Object.values(JSON.parse(value)) : [];
-    } catch {
-        return [];
-    }
-}
+let onCustomize = () => {};
 
 /** Opens or closes every section and team in the list. */
 function setAllCollapsed(list, collapsed) {
@@ -52,6 +41,10 @@ function getPinState() {
     } catch {
         return {};
     }
+}
+
+function getPinned() {
+    return Object.values(getPinState());
 }
 
 function isFavorite(place) {
@@ -83,13 +76,7 @@ function openItemMenu(anchor, place) {
 }
 
 function moreButton() {
-    const more = document.createElement('button');
-    more.type = 'button';
-    more.className = 'mst-chat-more';
-    more.title = t('More options');
-    more.setAttribute('aria-label', t('More options'));
-    more.innerHTML = '<i class="fa-solid fa-ellipsis"></i>';
-    return more;
+    return iconButton('mst-chat-more', t('More options'), 'fa-solid fa-ellipsis');
 }
 
 function getCollapsed(key = COLLAPSED_KEY) {
@@ -132,8 +119,7 @@ function isCurrent(entry) {
 }
 
 function buildItem(entry) {
-    const item = document.createElement('div');
-    item.className = 'mst-chat';
+    const item = el('div', 'mst-chat');
     item.setAttribute('role', 'button');
     item.tabIndex = 0;
     item.dataset.key = entry.key;
@@ -143,62 +129,27 @@ function buildItem(entry) {
         item.setAttribute('aria-current', 'true');
     }
 
-    const avatar = document.createElement('span');
-    avatar.className = 'mst-avatar';
+    const avatar = el('span', 'mst-avatar');
     if (entry.group) {
         avatar.style.background = 'none';
-        avatar.append(buildTeamAvatar(entry.team));
+        avatar.append(createMonogram(entry.team, 'mst-team-avatar'));
     } else {
-        const img = document.createElement('img');
+        const img = /** @type {HTMLImageElement} */ (el('img'));
         img.width = img.height = 32;
         img.src = entry.thumb;
         img.alt = '';
         img.loading = 'lazy';
         img.decoding = 'async';
-        avatar.append(img);
-        const presence = document.createElement('span');
-        presence.className = 'mst-presence';
-        avatar.append(presence);
+        avatar.append(img, el('span', 'mst-presence'));
     }
 
-    const text = document.createElement('span');
-    text.className = 'mst-chat-text';
-    const top = document.createElement('span');
-    top.className = 'mst-chat-top';
-    const name = document.createElement('span');
-    name.className = 'mst-chat-name';
-    name.textContent = entry.name;
-    const time = document.createElement('span');
-    time.className = 'mst-chat-time';
-    time.textContent = entry.time;
-    top.append(name, time);
-    const preview = document.createElement('span');
-    preview.className = 'mst-chat-preview';
-    preview.textContent = entry.preview;
-    text.append(top, preview);
+    const top = el('span', 'mst-chat-top');
+    top.append(el('span', 'mst-chat-name', entry.name), el('span', 'mst-chat-time', entry.time));
+    const text = el('span', 'mst-chat-text');
+    text.append(top, el('span', 'mst-chat-preview', entry.preview));
 
     item.append(avatar, text, moreButton());
     return item;
-}
-
-/** Teams' square team picture: the group's initials on a color picked from its name */
-function buildTeamAvatar(name) {
-    const avatar = document.createElement('span');
-    avatar.className = 'mst-team-avatar mst-monogram';
-    const words = String(name).trim().split(/\s+/).filter(Boolean);
-    avatar.textContent = ((words[0]?.[0] ?? '?') + (words.length > 1 ? words[words.length - 1][0] : '')).toUpperCase();
-    let hash = 0;
-    for (const char of String(name)) {
-        hash = (hash * 31 + char.codePointAt(0)) >>> 0;
-    }
-    avatar.dataset.mstColor = String(hash % 10);
-    return avatar;
-}
-
-/** A channel's name: SillyTavern names a group's chats "<group> - <date>", so the group part goes. */
-function channelName(group, chatId) {
-    const prefix = `${group.name} - `;
-    return chatId.startsWith(prefix) ? chatId.slice(prefix.length) : chatId;
 }
 
 /** Each group is a team, and each of its chats a channel under it. */
@@ -215,30 +166,21 @@ function buildTeams(needle) {
             continue;
         }
         const id = String(group.id);
-        const team = document.createElement('div');
-        team.className = 'mst-team';
+        const team = el('div', 'mst-team');
         team.dataset.group = id;
         const isCollapsed = collapsed.has(id) && !needle;
         team.classList.toggle('mst-team-collapsed', isCollapsed);
 
-        const head = document.createElement('div');
-        head.className = 'mst-team-head';
+        const head = el('div', 'mst-team-head');
         head.setAttribute('role', 'button');
         head.tabIndex = 0;
         head.setAttribute('aria-expanded', String(!isCollapsed));
         head.title = group.name;
-        const chevron = document.createElement('i');
-        chevron.className = 'fa-solid fa-chevron-down mst-team-chevron';
-        const name = document.createElement('span');
-        name.className = 'mst-team-name';
-        name.textContent = group.name;
-        head.append(chevron, buildTeamAvatar(group.name), name);
+        head.append(el('i', 'fa-solid fa-chevron-down mst-team-chevron'), createMonogram(group.name, 'mst-team-avatar'), el('span', 'mst-team-name', group.name));
 
-        const list = document.createElement('div');
-        list.className = 'mst-channels';
+        const list = el('div', 'mst-channels');
         for (const chatId of channels) {
-            const channel = document.createElement('div');
-            channel.className = 'mst-channel';
+            const channel = el('div', 'mst-channel');
             channel.setAttribute('role', 'button');
             channel.tabIndex = 0;
             channel.dataset.group = id;
@@ -255,23 +197,15 @@ function buildTeams(needle) {
 
 function buildSection(id, label, items, children) {
     const collapsed = getCollapsed().includes(id);
-    const section = document.createElement('section');
-    section.className = 'mst-section';
+    const section = el('section', 'mst-section');
     section.dataset.section = id;
     section.classList.toggle('mst-section-collapsed', collapsed);
 
-    const head = document.createElement('button');
-    head.type = 'button';
-    head.className = 'mst-section-head';
+    const head = button('mst-section-head');
     head.setAttribute('aria-expanded', String(!collapsed));
-    const chevron = document.createElement('i');
-    chevron.className = 'fa-solid fa-chevron-down';
-    const title = document.createElement('span');
-    title.textContent = label;
-    head.append(chevron, title);
+    head.append(el('i', 'fa-solid fa-chevron-down'), el('span', '', label));
 
-    const body = document.createElement('div');
-    body.className = 'mst-section-items';
+    const body = el('div', 'mst-section-items');
     body.append(...(children ?? items.map(buildItem)));
     section.append(head, body);
     return section;
@@ -293,9 +227,7 @@ function render() {
     const teams = buildTeams(needle);
     const sections = [];
     // Favorites is always there, as in Teams
-    const hint = document.createElement('div');
-    hint.className = 'mst-list-hint';
-    hint.textContent = t('Use … on a chat to add it to Favorites.');
+    const hint = el('div', 'mst-list-hint', t('Use … on a chat to add it to Favorites.'));
     sections.push(buildSection('pinned', t('Favorites'), favorites, favorites.length ? undefined : [hint]));
     sections.push(buildSection('recent', t('Chats'), chats));
     if (teams.length) {
@@ -304,10 +236,7 @@ function render() {
     body.replaceChildren(...sections);
 
     if (!visible.length && !teams.length) {
-        const empty = document.createElement('div');
-        empty.className = 'mst-list-empty';
-        empty.textContent = needle ? t('No chats match your search') : t('No chats yet. Start one with the pen button above.');
-        body.append(empty);
+        body.append(el('div', 'mst-list-empty', needle ? t('No chats match your search') : t('No chats yet. Start one with the pen button above.')));
     }
     markCurrentChat();
     monogramizeAll(body, '.mst-chat .mst-avatar img', img => img.closest('.mst-chat')?.querySelector('.mst-chat-name')?.textContent ?? '');
@@ -427,8 +356,7 @@ export async function openEntry(entry) {
             if (String(context.groupId) !== String(entry.group)) {
                 // SillyTavern opens a group from a click on a .group_select card; a stand-in card
                 // reaches the same handlers when the real one is on another page of the list
-                const card = document.createElement('div');
-                card.className = 'group_select mst-hidden-card';
+                const card = el('div', 'group_select mst-hidden-card');
                 card.setAttribute('data-grid', entry.group);
                 document.body.append(own(card));
                 card.click();
@@ -465,51 +393,36 @@ export function createChatList() {
     if (list) {
         return list;
     }
-    list = document.createElement('aside');
+    list = el('aside');
     list.id = LIST_ID;
     list.setAttribute('aria-label', t('Chat'));
 
-    const head = document.createElement('div');
-    head.className = 'mst-list-head';
-    const title = document.createElement('h2');
-    title.textContent = t('Chat');
-    const actions = document.createElement('div');
-    actions.className = 'mst-list-actions';
+    const head = el('div', 'mst-list-head');
+    const title = el('h2', '', t('Chat'));
+    const actions = el('div', 'mst-list-actions');
 
-    const iconButton = (className, label, icon) => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = `mst-icon-button ${className}`;
-        button.title = t(label);
-        button.setAttribute('aria-label', t(label));
-        const glyph = document.createElement('i');
-        glyph.className = 'mst-fluent';
-        glyph.style.setProperty('--mst-glyph', `var(--mst-icon-${icon})`);
-        button.append(glyph);
-        return button;
-    };
+    const listButton = (className, label, icon) => fluentButton(`mst-icon-button ${className}`, t(label), icon);
     const openCharacters = (buttonId) => {
         const drawer = document.getElementById('right-nav-panel');
         if (drawer && !drawer.classList.contains('openDrawer')) {
-            document.querySelector('#rightNavHolder > .drawer-toggle')?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            toggleDrawer('rightNavHolder');
         }
         document.getElementById(buttonId)?.click();
     };
 
     // Teams' list header: Chat, then … , search, and new chat with its dropdown
-    const moreButton = iconButton('mst-list-more', 'More options', 'more');
-    moreButton.addEventListener('click', () => toggleFlyout(moreButton, [
+    const listMore = listButton('mst-list-more', 'More options', 'more');
+    listMore.addEventListener('click', () => toggleFlyout(listMore, [
         { label: 'Expand all', icon: 'fa-solid fa-angles-down', run: () => setAllCollapsed(list, false) },
         { label: 'Collapse all', icon: 'fa-solid fa-angles-up', run: () => setAllCollapsed(list, true) },
         { label: 'Refresh', icon: 'fa-solid fa-arrows-rotate', run: () => refreshChatList() },
         { label: 'Customize theme', icon: 'fa-solid fa-palette', run: () => onCustomize() },
     ], 'below-end'));
-    const filterButton = iconButton('mst-list-search', 'Search', 'search');
-    const newGroup = document.createElement('div');
-    newGroup.className = 'mst-split';
-    const newButton = iconButton('mst-split-main', 'New chat', 'compose');
+    const filterButton = listButton('mst-list-search', 'Search', 'search');
+    const newGroup = el('div', 'mst-split');
+    const newButton = listButton('mst-split-main', 'New chat', 'compose');
     newButton.addEventListener('click', () => openCharacters('rm_button_characters'));
-    const newMenu = iconButton('mst-split-menu', 'More ways to start a chat', 'chevron-down');
+    const newMenu = listButton('mst-split-menu', 'More ways to start a chat', 'chevron-down');
     newMenu.addEventListener('click', () => toggleFlyout(newMenu, [
         { label: 'New chat', icon: 'fa-regular fa-comment', run: () => openCharacters('rm_button_characters') },
         { label: 'New group chat', icon: 'fa-solid fa-user-group', run: () => openCharacters('rm_button_group_chats') },
@@ -517,22 +430,16 @@ export function createChatList() {
     ], 'below-end'));
     newGroup.append(newButton, newMenu);
 
-    actions.append(moreButton, filterButton, newGroup);
+    actions.append(listMore, filterButton, newGroup);
     // Teams mobile starts the bar with your picture, which opens your profiles
-    const me = document.createElement('button');
-    me.type = 'button';
-    me.className = 'mst-list-me';
-    me.title = t('Persona');
-    me.setAttribute('aria-label', t('Persona'));
+    const me = iconButton('mst-list-me', t('Persona'));
     me.addEventListener('click', () => document.getElementById('mst-me')?.click());
     head.append(me, title, actions);
 
-    const filterRow = document.createElement('div');
-    filterRow.className = 'mst-list-filter';
+    const filterRow = el('div', 'mst-list-filter');
     filterRow.hidden = true;
-    const filterInput = document.createElement('input');
+    const filterInput = /** @type {HTMLInputElement} */ (el('input', 'mst-input'));
     filterInput.type = 'search';
-    filterInput.className = 'mst-input';
     filterInput.placeholder = t('Filter by name or message');
     filterInput.addEventListener('input', () => filterChatList(filterInput.value));
     filterRow.append(filterInput);
@@ -547,8 +454,7 @@ export function createChatList() {
         }
     });
 
-    const body = document.createElement('div');
-    body.className = 'mst-list-body';
+    const body = el('div', 'mst-list-body');
     body.addEventListener('click', (event) => {
         const target = /** @type {HTMLElement} */ (event.target);
         const sectionHead = target.closest('.mst-section-head');
@@ -616,8 +522,6 @@ const visited = [];
 let visitIndex = -1;
 let travelling = false;
 let onHistoryChange = () => {};
-/** Opens the Customize page */
-let onCustomize = () => {};
 
 function getCurrentPlace() {
     const context = SillyTavern.getContext();
@@ -692,10 +596,11 @@ export async function travel(step) {
 /**
  * @param {object} options
  * @param {() => object} options.settings Returns the theme settings
- * @param {() => void} [options.historyChanged] Called when back/forward availability changes
  * @param {() => void} options.opened Called once a chat from the list is open
+ * @param {() => void} [options.historyChanged] Called when back/forward availability changes
+ * @param {() => void} [options.customize] Opens the Customize page
+ * @returns {Promise<void>} Resolves once the list has its first chats.
  */
-/** @returns {Promise<void>} Resolves once the list has its first chats. */
 export function initChatList({ settings, opened, historyChanged, customize }) {
     getSettings = settings;
     onCustomize = customize ?? onCustomize;

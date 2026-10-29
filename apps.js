@@ -3,55 +3,25 @@
 // calendar week with the connection as today's meeting, Calls (formatting) with the dial
 // pad, OneDrive (World Info) as My files, Copilot (user settings) with its greeting and a
 // prompt box that searches the settings, and Apps (extensions) as the app store.
-// Everything added here is hidden by CSS while the theme is off.
 
-import { getInitials, getMonogramColor } from './monograms.js';
+import { createMonogram, hashName } from './monograms.js';
 import { isOn, own } from './own.js';
+import { button, click, el, fluentIcon, t } from './util.js';
 
-function t(text) {
-    return SillyTavern.getContext().translate(text);
-}
-
-function el(tag, className, text) {
-    const element = document.createElement(tag);
-    if (className) {
-        element.className = className;
-    }
-    if (text !== undefined) {
-        element.textContent = text;
-    }
-    return element;
-}
-
-function fluentIcon(name, size = 20) {
-    const icon = el('i', 'mst-fluent');
-    icon.style.setProperty('--mst-glyph', `var(--mst-icon-${name})`);
-    if (size !== 20) {
-        icon.style.width = icon.style.height = `${size}px`;
-        icon.style.setProperty('mask-size', `${size}px ${size}px`);
-        icon.style.setProperty('-webkit-mask-size', `${size}px ${size}px`);
-    }
-    return icon;
-}
-
+/** A tool in an app's header: an icon with a label, or an icon alone (title it yourself). */
 function toolButton(label, icon, onClick, primary = false) {
-    const button = el('button', `mst-tool${primary ? ' mst-tool-primary' : ''}`);
-    button.type = 'button';
+    const tool = button(`mst-tool${primary ? ' mst-tool-primary' : ''}`);
     if (icon) {
-        button.append(fluentIcon(icon, 16));
+        tool.append(fluentIcon(icon, 16));
     }
     if (label) {
-        button.title = t(label);
-        button.append(el('span', '', t(label)));
+        tool.title = t(label);
+        tool.append(el('span', '', t(label)));
     } else {
-        button.classList.add('mst-tool-icon');
+        tool.classList.add('mst-tool-icon');
     }
-    button.addEventListener('click', onClick);
-    return button;
-}
-
-function click(selector) {
-    /** @type {HTMLElement} */ (document.querySelector(selector))?.click();
+    tool.addEventListener('click', onClick);
+    return tool;
 }
 
 /** The app's header bar: its name, then its own tools. */
@@ -154,8 +124,7 @@ function renderCalendar(stage, monthLabel) {
 
     if (todayIndex !== -1) {
         const { connected, apiName } = getConnection();
-        const event = el('button', `mst-cal-event mst-cal-connection${connected ? '' : ' mst-cal-event-off'}`);
-        event.type = 'button';
+        const event = button(`mst-cal-event mst-cal-connection${connected ? '' : ' mst-cal-event-off'}`);
         event.append(
             el('strong', '', connected ? apiName || t('Connected') : t('Not connected')),
             el('span', '', connected ? t('Connected') : t('Pick an API and connect')),
@@ -219,7 +188,7 @@ function buildCalendar() {
         new MutationObserver(render).observe(status, { attributes: true, attributeFilter: ['class'] });
     }
     setInterval(() => {
-        if (drawer.classList.contains('openDrawer') && document.body.classList.contains('ms-teams')) {
+        if (drawer.classList.contains('openDrawer') && isOn()) {
             render();
         }
     }, 60 * 1000);
@@ -248,8 +217,7 @@ const VOICEMAILS = [
 
 function callRow(name, when, detail, kind) {
     const row = el('div', `mst-call-row${kind === 'missed' ? ' mst-call-missed' : ''}`);
-    const avatar = el('span', 'mst-monogram mst-speed-avatar', getInitials(name));
-    avatar.dataset.mstColor = String(getMonogramColor(name));
+    const avatar = createMonogram(name, 'mst-speed-avatar');
     const text = el('span', 'mst-speed-text');
     const top = el('span', 'mst-call-top');
     top.append(el('span', 'mst-speed-name', name), el('span', 'mst-call-when', when));
@@ -312,16 +280,14 @@ function buildCalls() {
     const keys = el('div', 'mst-dial-keys');
     const labels = [['1', ''], ['2', 'ABC'], ['3', 'DEF'], ['4', 'GHI'], ['5', 'JKL'], ['6', 'MNO'], ['7', 'PQRS'], ['8', 'TUV'], ['9', 'WXYZ'], ['*', ''], ['0', '+'], ['#', '']];
     for (const [digit, letters] of labels) {
-        const key = el('button', 'mst-dial-key');
-        key.type = 'button';
+        const key = button('mst-dial-key');
         key.append(el('span', 'mst-dial-digit', digit), el('span', 'mst-dial-letters', letters));
         key.addEventListener('click', () => {
             number.value += digit;
         });
         keys.append(key);
     }
-    const call = el('button', 'mst-tool mst-tool-primary mst-dial-call');
-    call.type = 'button';
+    const call = button('mst-tool mst-tool-primary mst-dial-call');
     call.append(fluentIcon('call', 16), el('span', '', t('Call')));
     call.disabled = true;
     number.addEventListener('input', () => {
@@ -345,11 +311,9 @@ function buildCalls() {
         if (!card) {
             continue;
         }
-        const row = el('button', 'mst-speed-contact');
-        row.type = 'button';
+        const row = button('mst-speed-contact');
         row.dataset.call = key;
-        const avatar = el('span', 'mst-monogram mst-speed-avatar', getInitials(name));
-        avatar.dataset.mstColor = String(getMonogramColor(name));
+        const avatar = createMonogram(name, 'mst-speed-avatar');
         const text = el('span', 'mst-speed-text');
         const detail = el('span', 'mst-speed-detail');
         text.append(el('span', 'mst-speed-name', t(name)), detail);
@@ -391,6 +355,8 @@ function wordIcon(className = 'mst-doc-icon') {
     img.src = WORD_ICON;
     img.alt = '';
     img.decoding = 'async';
+    // the theme's own document icon when Microsoft's CDN can't be reached
+    img.addEventListener('error', () => icon.replaceChildren(fluentIcon('document', className.includes('mst-doc-icon-big') ? 48 : 24)), { once: true });
     icon.append(img);
     return icon;
 }
@@ -410,8 +376,7 @@ function renderDocuments(list, title) {
         return;
     }
     const items = [...select.options].filter(option => option.value !== '').map((option) => {
-        const item = el('button', 'mst-doc');
-        item.type = 'button';
+        const item = button('mst-doc');
         item.classList.toggle('mst-doc-active', option.selected);
         const icon = wordIcon();
         const text = el('span', 'mst-doc-text');
@@ -445,8 +410,7 @@ function buildOneDrive() {
 
     // My files: the lorebooks as documents
     const stage = el('div', 'mst-stage mst-drive');
-    const fresh = el('button', 'mst-tool mst-tool-primary mst-drive-new');
-    fresh.type = 'button';
+    const fresh = button('mst-tool mst-tool-primary mst-drive-new');
     fresh.append(fluentIcon('add', 16), el('span', '', t('New document')));
     fresh.addEventListener('click', () => click('#world_create_button'));
     const list = el('div', 'mst-docs');
@@ -463,8 +427,7 @@ function buildOneDrive() {
     tabs.prepend(docTitle);
     const commands = el('div', 'mst-ribbon-commands');
     // Word's ¶ button shows what's normally hidden: here, each entry's matching settings
-    const marks = el('button', 'mst-ribbon-command mst-ribbon-marks');
-    marks.type = 'button';
+    const marks = button('mst-ribbon-command mst-ribbon-marks');
     marks.title = t('Show/Hide ¶');
     marks.append(el('i', 'fa-solid fa-paragraph'), el('span', '', t('Entry settings')));
     marks.addEventListener('click', () => {
@@ -472,11 +435,10 @@ function buildOneDrive() {
         marks.classList.toggle('mst-ribbon-on', on);
     });
     const command = (label, icon, selector) => {
-        const button = el('button', 'mst-ribbon-command');
-        button.type = 'button';
-        button.append(el('i', icon), el('span', '', t(label)));
-        button.addEventListener('click', () => click(selector));
-        return button;
+        const command = button('mst-ribbon-command');
+        command.append(el('i', icon), el('span', '', t(label)));
+        command.addEventListener('click', () => click(selector));
+        return command;
     };
     commands.append(
         command('New paragraph', 'fa-solid fa-plus', '#world_popup_new'),
@@ -546,7 +508,12 @@ function buildCopilot() {
     if (!drawer) {
         return;
     }
-    const prompt = el('input');
+    const prompt = /** @type {HTMLInputElement} */ (el('input'));
+    /** Back to the greeting: no section open */
+    const closeSection = () => {
+        delete drawer.dataset.mstShow;
+        drawer.querySelectorAll('.mst-cp-hidden, .mst-copilot-thread-on').forEach(x => x.classList.remove('mst-cp-hidden', 'mst-copilot-thread-on'));
+    };
     // the prompt box is SillyTavern's settings search
     const ask = (text) => {
         prompt.value = text;
@@ -557,25 +524,18 @@ function buildCopilot() {
         }
         drawer.classList.toggle('mst-copilot-asking', !!text.trim());
         if (text.trim() && drawer.dataset.mstShow) {
-            delete drawer.dataset.mstShow;
-            drawer.querySelectorAll('.mst-cp-hidden, .mst-copilot-thread-on').forEach(x => x.classList.remove('mst-cp-hidden', 'mst-copilot-thread-on'));
+            closeSection();
         }
     };
     header(drawer, 'User Settings', [toolButton('New chat', 'compose', () => {
         ask('');
-        delete drawer.dataset.mstShow;
-        drawer.querySelectorAll('.mst-cp-hidden, .mst-copilot-thread-on').forEach(x => x.classList.remove('mst-cp-hidden', 'mst-copilot-thread-on'));
+        closeSection();
     })]);
 
     // left: Copilot's conversation list, here the settings' sections
     const nav = el('nav', 'mst-stage mst-copilot-nav');
-    const fresh = el('button', 'mst-tool mst-copilot-new');
-    fresh.type = 'button';
+    const fresh = button('mst-tool mst-copilot-new');
     fresh.append(fluentIcon('compose', 16), el('span', '', t('New chat')));
-    fresh.addEventListener('click', () => {
-        ask('');
-        drawer.scrollTo({ top: 0, behavior: 'smooth' });
-    });
     nav.append(fresh, el('h3', 'mst-dial-section', t('Recent')));
     const content = document.getElementById('user-settings-block-content');
     const answerTitle = el('h2', 'mst-copilot-answer-title');
@@ -614,14 +574,17 @@ function buildCopilot() {
         if (!document.querySelector(`#user-settings-block ${section.selector}`)) {
             continue;
         }
-        const item = el('button', 'mst-copilot-thread');
-        item.type = 'button';
+        const item = button('mst-copilot-thread');
         item.dataset.section = section.key;
         item.append(fluentIcon(section.icon, 16), el('span', '', t(section.label)));
         item.addEventListener('click', () => showSection(section));
         nav.append(item);
     }
-    fresh.addEventListener('click', () => showSection(null));
+    fresh.addEventListener('click', () => {
+        ask('');
+        drawer.scrollTo({ top: 0, behavior: 'smooth' });
+        showSection(null);
+    });
     drawer.append(own(nav));
 
     // center: the greeting and prompt suggestions
@@ -631,8 +594,7 @@ function buildCopilot() {
     const sub = el('p', 'mst-copilot-sub', t('Here are some things I can help you with in your settings.'));
     const cards = el('div', 'mst-copilot-cards');
     for (const [title, detail, query, icon] of COPILOT_PROMPTS) {
-        const card = el('button', 'mst-copilot-card');
-        card.type = 'button';
+        const card = button('mst-copilot-card');
         card.append(fluentIcon(icon, 20), el('strong', '', t(title)), el('span', '', t(detail)));
         card.addEventListener('click', () => ask(query));
         cards.append(card);
@@ -654,8 +616,7 @@ function buildCopilot() {
             ask('');
         }
     });
-    const send = el('button', 'mst-copilot-send');
-    send.type = 'button';
+    const send = button('mst-copilot-send');
     send.title = t('Send');
     send.append(fluentIcon('send', 18));
     send.addEventListener('click', () => ask(prompt.value));
@@ -706,12 +667,8 @@ function decorateApps(drawer) {
         }
         const name = head.textContent.trim().replace(/\s+/g, ' ');
         const icon = APP_ICONS.find(([pattern]) => pattern.test(name))?.[1] ?? 'apps';
-        let hash = 0;
-        for (const char of name) {
-            hash = (hash * 31 + char.codePointAt(0)) >>> 0;
-        }
         const tile = el('span', 'mst-app-tile');
-        tile.style.setProperty('--mst-tile', APP_TILE_COLORS[hash % APP_TILE_COLORS.length]);
+        tile.style.setProperty('--mst-tile', APP_TILE_COLORS[hashName(name) % APP_TILE_COLORS.length]);
         tile.append(fluentIcon(icon, 20));
         head.prepend(own(tile));
     }
@@ -738,11 +695,10 @@ function buildApps() {
 
     const nav = el('nav', 'mst-stage mst-store-nav');
     const item = (label, icon, onClick, active = false) => {
-        const button = el('button', `mst-store-link${active ? ' mst-store-active' : ''}`);
-        button.type = 'button';
-        button.append(fluentIcon(icon, 18), el('span', '', t(label)));
-        button.addEventListener('click', onClick);
-        return button;
+        const link = button(`mst-store-link${active ? ' mst-store-active' : ''}`);
+        link.append(fluentIcon(icon, 18), el('span', '', t(label)));
+        link.addEventListener('click', onClick);
+        return link;
     };
     nav.append(
         item('Extensions', 'apps', () => drawer.scrollTo({ top: 0, behavior: 'smooth' }), true),
@@ -807,7 +763,7 @@ function endlessScroll(drawer, pagerSelector) {
     const check = () => {
         const pager = /** @type {HTMLElement} */ (document.querySelector(pagerSelector));
         const select = /** @type {HTMLSelectElement} */ (pager?.querySelector('select'));
-        if (busy || !pager || !select || !document.body.classList.contains('ms-teams') || !drawer.classList.contains('openDrawer')) {
+        if (busy || !pager || !select || !isOn() || !drawer.classList.contains('openDrawer')) {
             return;
         }
         const $ = /** @type {any} */ (window).jQuery;
