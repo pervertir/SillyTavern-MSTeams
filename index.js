@@ -9,6 +9,7 @@ import { initShortcuts } from './shortcuts.js';
 import { focusSearch, initShell, refreshHeader, refreshNavigation, refreshPersona, refreshRailToggle, setRailTooltips, startNewChat } from './shell.js';
 import { initTimes, labelMessages } from './times.js';
 import { applyCustomize, emptyCustomize, normalizeCustomize, openCustomize } from './customize.js';
+import { registerTheme } from './lib/theme-exclusive.js';
 
 const MODULE_NAME = 'msTeamsTheme';
 /** Folder path under scripts/extensions/, e.g. third-party/SillyTavern-MSTeams */
@@ -32,12 +33,16 @@ const defaultSettings = Object.freeze({
     presence: true,
     shortTimes: true,
     recentMax: 50,
+    /** While the theme is on, SillyTavern's own UI theme preset and Custom CSS are paused */
+    pauseUserTheme: true,
     /** Customize page: { version, tokens, flags, css }, layered on the appearance */
     customize: { version: 1, tokens: {}, flags: {}, css: '' },
 });
 
 const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
 let customizeChecked = false;
+/** One theme at a time: set up in init() */
+let exclusive = { activated: () => {}, changed: () => {} };
 
 function getSettings() {
     const { extensionSettings } = SillyTavern.getContext();
@@ -152,6 +157,7 @@ async function renderSettingsPanel() {
     const presence = /** @type {HTMLInputElement} */ (document.getElementById('mst_presence'));
     const shortTimes = /** @type {HTMLInputElement} */ (document.getElementById('mst_short_times'));
     const recentMax = /** @type {HTMLInputElement} */ (document.getElementById('mst_recent_max'));
+    const pauseUserTheme = /** @type {HTMLInputElement} */ (document.getElementById('mst_pause_user_theme'));
 
     enabled.checked = settings.enabled;
     appearance.value = settings.appearance;
@@ -161,6 +167,7 @@ async function renderSettingsPanel() {
     presence.checked = settings.presence;
     shortTimes.checked = settings.shortTimes;
     recentMax.value = String(settings.recentMax);
+    pauseUserTheme.checked = settings.pauseUserTheme;
 
     const bind = (element, key, read, after) => {
         element.addEventListener('input', () => {
@@ -170,7 +177,9 @@ async function renderSettingsPanel() {
             after?.();
         });
     };
-    bind(enabled, 'enabled', () => enabled.checked);
+    // turning the theme on turns the other themes off
+    bind(enabled, 'enabled', () => enabled.checked, () => (settings.enabled ? exclusive.activated() : exclusive.changed()));
+    bind(pauseUserTheme, 'pauseUserTheme', () => pauseUserTheme.checked, () => exclusive.changed());
     bind(appearance, 'appearance', () => appearance.value);
     bind(chatList, 'chatList', () => chatList.checked);
     bind(railLabels, 'railLabels', () => railLabels.checked);
@@ -182,6 +191,24 @@ async function renderSettingsPanel() {
 }
 
 async function init() {
+    exclusive = registerTheme({
+        id: 'msteams',
+        name: 'Microsoft Teams',
+        folder: EXTENSION_FOLDER.split('/').pop(),
+        settingsKey: MODULE_NAME,
+        bodyClass: BODY_CLASS,
+        isEnabled: () => !!getSettings().enabled,
+        disable: () => {
+            getSettings().enabled = false;
+            applySettings();
+            const toggle = /** @type {HTMLInputElement|null} */ (document.getElementById('mst_enabled'));
+            if (toggle) {
+                toggle.checked = false;
+            }
+            saveSettings();
+        },
+        pauseUserTheme: () => !!getSettings().pauseUserTheme,
+    });
     applySettings();
     darkQuery.addEventListener('change', applySettings);
 

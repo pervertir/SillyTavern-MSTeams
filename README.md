@@ -54,7 +54,7 @@ SillyTavern's background image is hidden while the theme is on.
 
 1. In SillyTavern, open **Extensions** → **Install extension**.
 2. Paste `https://github.com/pervertir/SillyTavern-MSTeams` and install.
-3. Turn off any other UI theme extension (such as Moonlit Echoes) so the two don't fight.
+3. That's it: turning the theme on turns off other theme extensions (our Discord, iMessage and Yodayo Tavern themes right away; others such as Moonlit Echoes after a reload, with a button for it). While it's on, SillyTavern's own UI theme preset and Custom CSS are paused, not changed; turn that off in the settings if you want them on top.
 
 ## No SillyTavern logo at startup
 
@@ -98,6 +98,7 @@ Find them under **Extensions** → **Microsoft Teams Theme**:
 | Show characters as Available | The green presence badge on pictures. |
 | Teams-style message times | Short times in place of SillyTavern's full dates. |
 | Chats in the list | How many recent chats to load (5 to 500). |
+| Pause my Custom CSS and UI theme | On by default: SillyTavern's own UI theme preset and Custom CSS step aside while the theme is on, and come back when it's off. |
 | Customize theme… | Opens the Customize page (above). |
 
 ## Notes
