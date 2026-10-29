@@ -1,4 +1,5 @@
-import { own } from './own.js';
+import { isOn, own } from './own.js';
+import { el } from './util.js';
 
 // Teams shows a colored monogram wherever someone has no picture. SillyTavern copies its
 // default pictures into new characters and personas, so a placeholder is found by how it
@@ -59,6 +60,7 @@ export function isPlaceholder(src) {
     return verdicts.get(src);
 }
 
+/** Initials the way Teams shows them: first and last word, or one letter for a single word. */
 export function getInitials(name) {
     const words = String(name ?? '').trim().split(/\s+/).filter(Boolean);
     if (!words.length) {
@@ -69,19 +71,33 @@ export function getInitials(name) {
     return (first + last).toUpperCase();
 }
 
-export function getMonogramColor(name) {
+/** A stable number for a name, so the same name always gets the same color. */
+export function hashName(name) {
     let hash = 0;
     for (const char of String(name ?? '')) {
         hash = (hash * 31 + char.codePointAt(0)) >>> 0;
     }
-    return hash % MONOGRAM_COLORS;
+    return hash;
+}
+
+/** Writes a name's initials and color into a monogram element. */
+export function paintMonogram(element, name) {
+    element.textContent = getInitials(name);
+    element.dataset.mstColor = String(hashName(name) % MONOGRAM_COLORS);
+}
+
+/** A new monogram for a name, e.g. a team's square picture (className 'mst-team-avatar'). */
+export function createMonogram(name, className = '') {
+    const monogram = el('span', `mst-monogram${className ? ` ${className}` : ''}`);
+    paintMonogram(monogram, name);
+    return monogram;
 }
 
 /** Puts a monogram over a placeholder picture (the picture stays, hidden, for SillyTavern). */
 export async function monogramize(img, name) {
     const holder = img?.parentElement;
     // nothing is added to SillyTavern's pictures while the theme is off
-    if (!holder || !document.body.classList.contains('ms-teams')) {
+    if (!holder || !isOn()) {
         return;
     }
     const src = img.getAttribute('src') ?? '';
@@ -102,13 +118,11 @@ export async function monogramize(img, name) {
         return;
     }
     if (!monogram) {
-        monogram = document.createElement('span');
-        monogram.className = 'mst-monogram mst-mono-mark';
+        monogram = el('span', 'mst-monogram mst-mono-mark');
         monogram.setAttribute('aria-hidden', 'true');
         holder.append(own(monogram));
     }
-    monogram.textContent = getInitials(name);
-    monogram.dataset.mstColor = String(getMonogramColor(name));
+    paintMonogram(monogram, name);
     holder.classList.add('mst-mono');
 }
 

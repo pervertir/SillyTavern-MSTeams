@@ -289,6 +289,7 @@ body.ms-teams #chat .mes .mes_block {
 }
 
 body.ms-teams #chat .mes[is_user="true"] .mes_block {
+    grid-column: 2;
     background: var(--mst-bubble-out);
 }
 
@@ -299,10 +300,6 @@ body.ms-teams #chat .mes[is_user="true"] {
 
 body.ms-teams #chat .mes[is_user="true"] .mesAvatarWrapper {
     display: none;
-}
-
-body.ms-teams #chat .mes[is_user="true"] .mes_block {
-    grid-column: 2;
 }
 
 body.ms-teams.hideChatAvatars #chat .mes {
@@ -541,12 +538,6 @@ body.ms-teams #chat .mes .swipeRightBlock {
     pointer-events: auto;
 }
 
-body.ms-teams #chat .mes .swipe_left {
-    width: 24px;
-    height: 24px;
-    font-size: 12px;
-}
-
 body.ms-teams #chat .mes .swipeRightBlock {
     display: flex;
     flex-direction: row-reverse;
@@ -555,14 +546,11 @@ body.ms-teams #chat .mes .swipeRightBlock {
     margin-left: 28px;
 }
 
+body.ms-teams #chat .mes .swipe_left,
 body.ms-teams #chat .mes .swipe_right {
     width: 24px;
     height: 24px;
     font-size: 12px;
-}
-
-body.ms-teams #chat .mes .swipe_left,
-body.ms-teams #chat .mes .swipe_right {
     border-radius: var(--mst-radius);
     color: var(--mst-fg-3);
     opacity: 1;

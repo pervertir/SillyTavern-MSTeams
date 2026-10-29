@@ -2,9 +2,11 @@
 // SillyTavern's own menu buttons, and the chat header above the messages.
 
 import { canGoBack, canGoForward, filterChatList, travel } from './chatlist.js';
-import { isPlaceholder, monogramize } from './monograms.js';
+import { closeFlyout, toggleFlyout } from './flyout.js';
+import { createMonogram, isPlaceholder, monogramize, paintMonogram } from './monograms.js';
 import { RAIL_SHORTCUTS, SHORTCUTS, showShortcuts, withShortcut } from './shortcuts.js';
 import { isOn, own } from './own.js';
+import { button, channelName, el, fluentButton, getChatOwner, iconButton, isPhone, t, toggleDrawer } from './util.js';
 
 const TITLEBAR_ID = 'mst-titlebar';
 const CHAT_APP_ID = 'mst-app-chat';
@@ -37,33 +39,8 @@ const PHONE_MORE_APPS = [
 
 const MORE_APP_ID = 'mst-app-more';
 
-function t(text) {
-    return SillyTavern.getContext().translate(text);
-}
-
-/** An icon button drawn with one of the theme's Fluent icons (--mst-icon-<name>). */
-function fluentButton(className, title, iconName) {
-    const element = button(className, title, 'mst-fluent');
-    element.querySelector('i').style.setProperty('--mst-glyph', `var(--mst-icon-${iconName})`);
-    return element;
-}
-
-function button(className, title, icon) {
-    const element = document.createElement('button');
-    element.type = 'button';
-    element.className = className;
-    element.title = title;
-    element.setAttribute('aria-label', title);
-    const glyph = document.createElement('i');
-    glyph.className = icon;
-    element.append(glyph);
-    return element;
-}
-
-/** Clicks a SillyTavern drawer's toggle, the way its own top bar does. */
-function toggleDrawer(drawerId) {
-    document.querySelector(`#${drawerId} > .drawer-toggle`)?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-}
+/** What the frame asks index.js to do; set by initShell */
+let shellOptions = { toggleRail: () => {}, setTheme: (_appearance) => {}, customize: () => {} };
 
 /** Closes every open drawer. */
 export function closeDrawers() {
@@ -89,16 +66,14 @@ function createTitlebar() {
     if (document.getElementById(TITLEBAR_ID)) {
         return;
     }
-    const bar = document.createElement('header');
+    const bar = el('header');
     bar.id = TITLEBAR_ID;
 
-    const left = document.createElement('div');
-    left.className = 'mst-tb-left';
+    const left = el('div', 'mst-tb-left');
     const railToggle = fluentButton('mst-icon-button mst-tb-rail', t('Hide app bar'), 'panel');
     railToggle.id = 'mst-rail-toggle';
     railToggle.addEventListener('click', () => shellOptions.toggleRail());
-    const nav = document.createElement('div');
-    nav.className = 'mst-tb-nav';
+    const nav = el('div', 'mst-tb-nav');
     const back = fluentButton('mst-icon-button', withShortcut(t('Back'), SHORTCUTS.back), 'arrow-left');
     back.id = 'mst-nav-back';
     back.addEventListener('click', () => travel(-1));
@@ -107,14 +82,7 @@ function createTitlebar() {
     forward.addEventListener('click', () => travel(1));
     nav.append(back, forward);
     // Microsoft's app launcher: every app, rail or not
-    const waffle = document.createElement('button');
-    waffle.type = 'button';
-    waffle.className = 'mst-icon-button mst-waffle';
-    waffle.title = t('App launcher');
-    waffle.setAttribute('aria-label', t('App launcher'));
-    for (let i = 0; i < 9; i++) {
-        waffle.append(document.createElement('span'));
-    }
+    const waffle = iconButton('mst-icon-button mst-waffle', t('App launcher'), ...Array.from({ length: 9 }, () => el('span')));
     waffle.addEventListener('click', () => toggleFlyout(waffle, [
         { label: 'AI Config', icon: 'fa-regular fa-bell', run: () => toggleDrawer('ai-config-button') },
         { label: 'API', icon: 'fa-regular fa-calendar', run: () => toggleDrawer('sys-settings-button') },
@@ -127,16 +95,13 @@ function createTitlebar() {
         { label: 'Response Format', icon: 'fa-solid fa-phone', run: () => toggleDrawer('advanced-formatting-button') },
         ...PHONE_MORE_APPS.map(({ id, label, icon }) => ({ label, icon, run: () => toggleDrawer(id) })),
     ], 'beside'));
-    const leftTools = document.createElement('div');
-    leftTools.className = 'mst-tb-launch';
+    const leftTools = el('div', 'mst-tb-launch');
     leftTools.append(waffle, railToggle);
     left.append(leftTools, nav);
 
-    const search = document.createElement('label');
-    search.className = 'mst-search';
-    const icon = document.createElement('i');
-    icon.className = 'fa-solid fa-magnifying-glass';
-    const input = document.createElement('input');
+    const search = el('label', 'mst-search');
+    const icon = el('i', 'fa-solid fa-magnifying-glass');
+    const input = /** @type {HTMLInputElement} */ (el('input'));
     input.type = 'search';
     input.id = 'mst-search-input';
     input.placeholder = withShortcut(t('Search'), SHORTCUTS.search);
@@ -156,70 +121,30 @@ function createTitlebar() {
     });
     search.append(icon, input);
 
-    const right = document.createElement('div');
-    right.className = 'mst-tb-right';
+    const right = el('div', 'mst-tb-right');
     const more = fluentButton('mst-icon-button', t('Settings and more'), 'more');
     more.addEventListener('click', () => toggleFlyout(more, [
         { label: 'User Settings', icon: 'fa-solid fa-gear', run: () => toggleDrawer('user-settings-button') },
         { label: 'Keyboard shortcuts', icon: 'fa-regular fa-keyboard', run: showShortcuts },
-        { label: 'Customize theme', icon: 'fa-solid fa-palette', run: () => shellOptions.customize?.() },
+        { label: 'Customize theme', icon: 'fa-solid fa-palette', run: () => shellOptions.customize() },
         document.body.classList.contains('mst-dark')
             ? { label: 'Switch to light theme', icon: 'fa-regular fa-sun', run: () => shellOptions.setTheme('light') }
             : { label: 'Switch to dark theme', icon: 'fa-regular fa-moon', run: () => shellOptions.setTheme('dark') },
     ], 'below-end'));
-    const me = document.createElement('button');
-    me.type = 'button';
-    me.id = 'mst-me';
-    me.title = t('Persona');
-    me.setAttribute('aria-label', t('Persona'));
-    const meAvatar = document.createElement('span');
-    meAvatar.className = 'mst-avatar';
-    const meImg = document.createElement('img');
+    const meAvatar = el('span', 'mst-avatar');
+    const meImg = /** @type {HTMLImageElement} */ (el('img'));
     meImg.alt = '';
     meImg.width = meImg.height = 32;
-    const presence = document.createElement('span');
-    presence.className = 'mst-presence mst-presence-on';
-    const monogram = document.createElement('span');
-    monogram.className = 'mst-monogram';
+    const monogram = el('span', 'mst-monogram');
     monogram.setAttribute('aria-hidden', 'true');
-    meAvatar.append(meImg, monogram, presence);
-    me.append(meAvatar);
+    meAvatar.append(meImg, monogram, el('span', 'mst-presence mst-presence-on'));
+    const me = iconButton('', t('Persona'), meAvatar);
+    me.id = 'mst-me';
     me.addEventListener('click', () => toggleDrawer('persona-management-button'));
     right.append(more, me);
 
     bar.append(left, search, right);
     document.body.append(own(bar));
-}
-
-/** Teams' square team picture with the team's initials */
-function buildTeamMonogram(name) {
-    const monogram = document.createElement('span');
-    monogram.className = 'mst-monogram mst-team-avatar';
-    monogram.textContent = getInitials(name);
-    monogram.dataset.mstColor = String(getMonogramColor(name));
-    return monogram;
-}
-
-/** Teams' colorful avatar palette; a name always gets the same color */
-const MONOGRAM_COLORS = 10;
-
-/** Initials the way Teams shows them: first and last word, or one letter for a single word. */
-export function getInitials(name) {
-    const words = String(name ?? '').trim().split(/\s+/).filter(Boolean);
-    if (!words.length) {
-        return '?';
-    }
-    const first = [...words[0]][0] ?? '';
-    const last = words.length > 1 ? [...words[words.length - 1]][0] ?? '' : '';
-    return (first + last).toUpperCase();
-}
-
-function getMonogramColor(name) {
-    let hash = 0;
-    for (const char of String(name ?? '')) {
-        hash = (hash * 31 + char.codePointAt(0)) >>> 0;
-    }
-    return hash % MONOGRAM_COLORS;
 }
 
 /** Shows the user's persona in the title bar: a monogram of its name, or its picture. */
@@ -231,8 +156,7 @@ export function refreshPersona(avatarId) {
     const name = SillyTavern.getContext().name1;
     const monogram = /** @type {HTMLElement} */ (document.querySelector('#mst-me .mst-monogram'));
     if (monogram) {
-        monogram.textContent = getInitials(name);
-        monogram.dataset.mstColor = String(getMonogramColor(name));
+        paintMonogram(monogram, name);
     }
     const me = document.getElementById('mst-me');
     me.title = name ? `${name} (${t('Persona')})` : t('Persona');
@@ -267,19 +191,13 @@ function mirrorPersona() {
 
 /** A rail app of the theme's own (Chat, More), built like SillyTavern's drawer toggles. */
 function railApp(id, label, icon, onClick) {
-    const app = document.createElement('div');
+    const app = el('div', 'mst-app');
     app.id = id;
-    app.className = 'mst-app';
     app.setAttribute('role', 'button');
     app.tabIndex = 0;
     app.title = railTooltip(id, label);
     app.dataset.mstIcon = icon;
-    const glyph = document.createElement('i');
-    glyph.className = 'mst-app-icon';
-    const text = document.createElement('span');
-    text.className = 'mst-app-label';
-    text.textContent = t(label);
-    app.append(glyph, text);
+    app.append(el('i', 'mst-app-icon'), el('span', 'mst-app-label', t(label)));
     app.addEventListener('click', onClick);
     app.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' || event.key === ' ') {
@@ -288,82 +206,6 @@ function railApp(id, label, icon, onClick) {
         }
     });
     return app;
-}
-
-const FLYOUT_ID = 'mst-flyout';
-let flyoutAnchor = null;
-
-function closeFlyout() {
-    const flyout = document.getElementById(FLYOUT_ID);
-    if (flyout) {
-        flyout.hidden = true;
-    }
-    flyoutAnchor?.classList.remove('mst-app-open');
-    flyoutAnchor = null;
-}
-
-function getFlyout() {
-    let flyout = document.getElementById(FLYOUT_ID);
-    if (flyout) {
-        return flyout;
-    }
-    flyout = document.createElement('div');
-    flyout.id = FLYOUT_ID;
-    flyout.setAttribute('role', 'menu');
-    flyout.hidden = true;
-    document.body.append(own(flyout));
-    document.addEventListener('pointerdown', (event) => {
-        const target = /** @type {Node} */ (event.target);
-        if (!flyout.hidden && !flyout.contains(target) && !flyoutAnchor?.contains(target)) {
-            closeFlyout();
-        }
-    });
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && !flyout.hidden) {
-            closeFlyout();
-        }
-    });
-    return flyout;
-}
-
-/**
- * Opens a Teams menu next to a button, or closes it when it's already open there.
- * @param {HTMLElement} anchor
- * @param {{label: string, icon: string, run: () => void}[]} items
- * @param {'beside'|'below-end'} placement
- */
-export function toggleFlyout(anchor, items, placement) {
-    const flyout = getFlyout();
-    if (!flyout.hidden && flyoutAnchor === anchor) {
-        closeFlyout();
-        return;
-    }
-    closeFlyout();
-    flyout.replaceChildren(...items.map(({ label, icon, run }) => {
-        const item = document.createElement('button');
-        item.type = 'button';
-        item.className = 'mst-more-item';
-        item.setAttribute('role', 'menuitem');
-        const glyph = document.createElement('i');
-        glyph.className = icon;
-        const text = document.createElement('span');
-        text.textContent = t(label);
-        item.append(glyph, text);
-        item.addEventListener('click', () => {
-            closeFlyout();
-            run();
-        });
-        return item;
-    }));
-    flyout.dataset.placement = placement;
-    flyout.hidden = false;
-    flyoutAnchor = anchor;
-    anchor.classList.add('mst-app-open');
-    const box = anchor.getBoundingClientRect();
-    flyout.style.setProperty('--mst-flyout-top', `${Math.round(placement === 'beside' ? box.top : box.bottom + 4)}px`);
-    flyout.style.setProperty('--mst-flyout-left', `${Math.round(box.right + 4)}px`);
-    flyout.style.setProperty('--mst-flyout-right', `${Math.round(window.innerWidth - box.right)}px`);
-    /** @type {HTMLElement} */ (flyout.querySelector('.mst-more-item'))?.focus();
 }
 
 /** Ctrl+Alt+E / ⌘⌥E: the title bar's search, or the list's filter on phones where the bar is hidden. */
@@ -400,8 +242,7 @@ const MORE_APPS = PHONE_MORE_APPS.filter(({ id }) => ['backgrounds-button', 'per
 /** More: the menus without a rail icon of their own (on phones, everything past the first four) */
 function toggleMoreMenu() {
     const app = document.getElementById(MORE_APP_ID);
-    const phone = window.matchMedia('(max-width: 1000px)').matches;
-    const items = (phone ? PHONE_MORE_APPS : MORE_APPS)
+    const items = (isPhone() ? PHONE_MORE_APPS : MORE_APPS)
         .filter(({ id }) => document.getElementById(id))
         .map(({ id, label, icon }) => ({
             label,
@@ -494,39 +335,26 @@ function createHeader() {
     if (!sheld || document.getElementById(HEADER_ID)) {
         return;
     }
-    const head = document.createElement('div');
+    const head = el('div');
     head.id = HEADER_ID;
 
-    const back = button('mst-icon-button mst-back', t('Back'), 'fa-solid fa-arrow-left');
+    const back = iconButton('mst-icon-button mst-back', t('Back'), 'fa-solid fa-arrow-left');
     back.addEventListener('click', () => document.body.classList.remove('mst-m-chat'));
 
-    const who = document.createElement('button');
-    who.type = 'button';
-    who.className = 'mst-head-who';
+    const who = button('mst-head-who');
     who.title = t('View profile');
-    const avatar = document.createElement('span');
-    avatar.className = 'mst-avatar';
-    const name = document.createElement('span');
-    name.className = 'mst-head-name';
-    who.append(avatar, name);
+    who.append(el('span', 'mst-avatar'), el('span', 'mst-head-name'));
     who.addEventListener('click', openProfile);
 
-    const tabs = document.createElement('nav');
-    tabs.className = 'mst-tabs';
-    const tab = document.createElement('span');
-    tab.className = 'mst-tab mst-tab-active';
-    tab.textContent = t('Chat');
-    const shared = document.createElement('button');
-    shared.type = 'button';
-    shared.className = 'mst-tab';
-    shared.textContent = t('Shared');
+    const tabs = el('nav', 'mst-tabs');
+    const tab = el('span', 'mst-tab mst-tab-active', t('Chat'));
+    const shared = button('mst-tab', t('Shared'));
     shared.addEventListener('click', openProfile);
     const add = fluentButton('mst-tab mst-tab-add', t('Add a tab'), 'add');
     add.addEventListener('click', () => toggleDrawer('extensions-settings-button'));
     tabs.append(tab, shared, add);
 
-    const actions = document.createElement('div');
-    actions.className = 'mst-head-actions';
+    const actions = el('div', 'mst-head-actions');
     const fresh = fluentButton('mst-icon-button', withShortcut(t('New chat'), SHORTCUTS.newChat), 'video');
     fresh.addEventListener('click', () => clickOption('option_start_new_chat'));
     const history = fluentButton('mst-icon-button', t('Chat history'), 'call');
@@ -561,8 +389,7 @@ export function refreshHeader() {
     avatar.replaceChildren();
     avatar.classList.remove('mst-avatar-group');
 
-    const group = context.groupId ? context.groups.find(x => String(x.id) === String(context.groupId)) : null;
-    const character = !group && context.characterId !== undefined ? context.characters[context.characterId] : null;
+    const { group, character } = getChatOwner();
     const hasChat = !!(group || character);
     document.body.classList.toggle('mst-no-chat', !hasChat);
 
@@ -570,23 +397,15 @@ export function refreshHeader() {
     document.body.classList.toggle('mst-in-channel', !!group);
     if (group) {
         // a group is a team and its chat a channel: the team's square picture, then "Team › Channel"
-        avatar.append(buildTeamMonogram(group.name));
-        const chatId = context.getCurrentChatId() ?? '';
-        const prefix = `${group.name} - `;
-        const team = document.createElement('span');
-        team.className = 'mst-head-team';
-        team.textContent = group.name;
-        const channel = document.createElement('span');
-        channel.textContent = chatId.startsWith(prefix) ? chatId.slice(prefix.length) : chatId;
-        name.replaceChildren(team, channel);
+        avatar.append(createMonogram(group.name, 'mst-team-avatar'));
+        const channel = channelName(group, context.getCurrentChatId() ?? '');
+        name.replaceChildren(el('span', 'mst-head-team', group.name), el('span', '', channel));
     } else if (character) {
-        const img = document.createElement('img');
+        const img = /** @type {HTMLImageElement} */ (el('img'));
         img.alt = '';
         img.width = img.height = 32;
         img.src = context.getThumbnailUrl('avatar', character.avatar);
-        const presence = document.createElement('span');
-        presence.className = 'mst-presence';
-        avatar.append(img, presence);
+        avatar.append(img, el('span', 'mst-presence'));
         name.textContent = character.name;
         monogramize(img, character.name);
     } else {
@@ -600,21 +419,13 @@ function createEmptyState() {
     if (!sheld || document.getElementById('mst-empty')) {
         return;
     }
-    const empty = document.createElement('div');
+    const empty = el('div');
     empty.id = 'mst-empty';
-    const art = document.createElement('div');
-    art.className = 'mst-empty-art';
+    const art = el('div', 'mst-empty-art');
     art.setAttribute('aria-hidden', 'true');
-    const title = document.createElement('h2');
-    title.textContent = t('Start a new chat');
-    const text = document.createElement('p');
-    text.textContent = t('Pick a conversation from the list, or start a new one.');
-    const action = document.createElement('button');
-    action.type = 'button';
-    action.className = 'menu_button mst-primary';
-    action.textContent = t('New chat');
+    const action = button('menu_button mst-primary', t('New chat'));
     action.addEventListener('click', openProfile);
-    empty.append(art, title, text, action);
+    empty.append(art, el('h2', '', t('Start a new chat')), el('p', '', t('Pick a conversation from the list, or start a new one.')), action);
     sheld.append(own(empty));
 }
 
@@ -641,50 +452,51 @@ export function refreshRailToggle(hidden) {
     }
 }
 
-let shellOptions = { toggleRail: () => {}, setTheme: (_appearance) => {} };
+/** SillyTavern's drawers on the rail, watched for opening and closing */
+let drawers = [];
 
-/**
- * @param {object} options
- * @param {() => void} options.toggleRail Hides or shows the app rail
- * @param {(appearance: string) => void} options.setTheme Switches between light and dark
- */
 /**
  * Mirrors which menus are open as classes (drawer.mst-open; body.mst-menu-open, mst-more-open,
  * mst-phone-more-open), so the styles don't need page-wide :has() checks, which make the browser
  * re-check the whole page on every change (each streamed word of a reply, for one).
+ * Also re-run after the frame is put back.
  */
-/** Re-reads which menus are open (after the frame was put back) */
-export let refreshDrawerState = () => {};
+export function refreshDrawerState() {
+    if (!isOn()) {
+        return;
+    }
+    let any = false, more = false, phoneMore = false;
+    for (const drawer of drawers) {
+        const open = !!drawer.querySelector(':scope > .drawer-content.openDrawer');
+        drawer.classList.toggle('mst-open', open);
+        any ||= open;
+        more ||= open && drawer.classList.contains('mst-more-only');
+        phoneMore ||= open && drawer.classList.contains('mst-more-drawer');
+    }
+    const body = document.body.classList;
+    body.toggle('mst-menu-open', any);
+    body.toggle('mst-more-open', more);
+    body.toggle('mst-phone-more-open', phoneMore);
+}
 
 function trackDrawers() {
-    const drawers = [...document.querySelectorAll('#top-settings-holder > .drawer')];
-    const update = refreshDrawerState = () => {
-        if (!isOn()) {
-            return;
-        }
-        let any = false, more = false, phoneMore = false;
-        for (const drawer of drawers) {
-            const open = !!drawer.querySelector(':scope > .drawer-content.openDrawer');
-            drawer.classList.toggle('mst-open', open);
-            any ||= open;
-            more ||= open && drawer.classList.contains('mst-more-only');
-            phoneMore ||= open && drawer.classList.contains('mst-more-drawer');
-        }
-        const body = document.body.classList;
-        body.toggle('mst-menu-open', any);
-        body.toggle('mst-more-open', more);
-        body.toggle('mst-phone-more-open', phoneMore);
-    };
-    const observer = new MutationObserver(update);
+    drawers = [...document.querySelectorAll('#top-settings-holder > .drawer')];
+    const observer = new MutationObserver(refreshDrawerState);
     for (const drawer of drawers) {
         const content = drawer.querySelector(':scope > .drawer-content');
         if (content) {
             observer.observe(content, { attributes: true, attributeFilter: ['class'] });
         }
     }
-    update();
+    refreshDrawerState();
 }
 
+/**
+ * @param {object} options
+ * @param {() => void} options.toggleRail Hides or shows the app rail
+ * @param {(appearance: string) => void} options.setTheme Switches between light and dark
+ * @param {() => void} options.customize Opens the Customize page
+ */
 export function initShell(options) {
     shellOptions = options;
     createTitlebar();

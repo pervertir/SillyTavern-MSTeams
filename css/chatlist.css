@@ -20,7 +20,7 @@ body.ms-teams .mst-list-head h2 {
 
 body.ms-teams .mst-list-actions {
     display: flex;
-    gap: 4px;
+    gap: 2px;
 }
 
 body.ms-teams .mst-list-filter {
@@ -339,8 +339,4 @@ body.ms-teams .mst-split .mst-split-menu .mst-fluent {
     height: 12px;
     -webkit-mask-size: 12px 12px;
     mask-size: 12px 12px;
-}
-
-body.ms-teams .mst-list-actions {
-    gap: 2px;
 }

@@ -3,6 +3,8 @@
 // "Ctrl+Shift+1" on Windows and Linux, "⌘⇧1" on macOS. Tooltips show them, they work, and
 // Ctrl+. / ⌘. lists them all, as in Teams.
 
+import { el, t } from './util.js';
+
 export const IS_MAC = /Mac|iPhone|iPad|iPod/i.test(navigator.userAgentData?.platform || navigator.platform || navigator.userAgent);
 
 const MAC_KEYS = { Mod: '⌘', Shift: '⇧', Alt: '⌥', Ctrl: '⌃', Enter: '↩', Left: '←', Right: '→', Esc: 'esc', '.': '.' };
@@ -41,10 +43,6 @@ export function withShortcut(label, keys) {
     return `${label} (${formatKeys(keys)})`;
 }
 
-function t(text) {
-    return SillyTavern.getContext().translate(text);
-}
-
 function matches(event, keys) {
     const wantMod = keys.includes('Mod');
     const mod = IS_MAC ? event.metaKey : event.ctrlKey;
@@ -79,34 +77,38 @@ function openRailApp(id) {
     target?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 }
 
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
 /** Teams' "Keyboard shortcuts" dialog. */
 export async function showShortcuts() {
     const { callGenericPopup, POPUP_TYPE } = SillyTavern.getContext();
-    const rows = (items) => items.map(([label, keys]) => `<tr><td>${escapeHtml(t(label))}</td><td><kbd>${escapeHtml(formatKeys(keys))}</kbd></td></tr>`).join('');
-    const section = (title, items) => `<h4>${escapeHtml(t(title))}</h4><table>${rows(items)}</table>`;
-    const html = `<div class="mst-shortcuts">
-        <h3>${escapeHtml(t('Keyboard shortcuts'))}</h3>
-        ${section('General', [
+    const section = (title, items) => {
+        const table = el('table');
+        for (const [label, keys] of items) {
+            const row = el('tr');
+            const shortcut = el('td');
+            shortcut.append(el('kbd', '', formatKeys(keys)));
+            row.append(el('td', '', t(label)), shortcut);
+            table.append(row);
+        }
+        return [el('h4', '', t(title)), table];
+    };
+    const dialog = el('div', 'mst-shortcuts');
+    dialog.append(
+        el('h3', '', t('Keyboard shortcuts')),
+        ...section('General', [
             ['Show keyboard shortcuts', SHORTCUTS.shortcuts],
             ['Go to Search', SHORTCUTS.search],
             ['Start a new chat', SHORTCUTS.newChat],
             ['Go back', SHORTCUTS.back],
             ['Go forward', SHORTCUTS.forward],
-        ])}
-        ${section('Navigation', RAIL_SHORTCUTS.map(app => [`Open ${app.label}`, app.keys]))}
-        ${section('Messaging', [
+        ]),
+        ...section('Navigation', RAIL_SHORTCUTS.map(app => [`Open ${app.label}`, app.keys])),
+        ...section('Messaging', [
             ['Send a message', ['Enter']],
             ['Start a new line', ['Shift', 'Enter']],
             ['Close a menu or dialog', ['Esc']],
-        ])}
-    </div>`;
-    await callGenericPopup(html, POPUP_TYPE.TEXT, '', { wide: false, allowVerticalScrolling: true });
+        ]),
+    );
+    await callGenericPopup(dialog, POPUP_TYPE.TEXT, '', { wide: false, allowVerticalScrolling: true });
 }
 
 /**

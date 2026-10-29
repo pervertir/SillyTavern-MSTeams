@@ -386,10 +386,6 @@ body.ms-teams.mst-rail-labels #top-settings-holder > .mst-app {
 }
 
 /* name under the icon */
-body.ms-teams #top-settings-holder > .drawer > .drawer-toggle::after {
-    content: attr(data-mst-label);
-}
-
 body.ms-teams #top-settings-holder > .drawer > .drawer-toggle::after,
 body.ms-teams #top-settings-holder > .mst-app .mst-app-label {
     display: none;
@@ -404,7 +400,7 @@ body.ms-teams #top-settings-holder > .mst-app .mst-app-label {
 
 /* SillyTavern's full names take up to two lines */
 body.ms-teams #top-settings-holder > .drawer > .drawer-toggle::after {
-    display: none;
+    content: attr(data-mst-label);
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     white-space: normal;
@@ -702,13 +698,10 @@ body.ms-teams .mst-mono > .mst-mono-mark {
     font-size: clamp(10px, 38cqw, 32px);
     font-weight: 600;
     pointer-events: none;
-}
-
-/* the presence badge stays on top of a monogram */
-body.ms-teams .mst-mono > .mst-mono-mark {
     z-index: 1;
 }
 
+/* the presence badge stays on top of a monogram */
 body.ms-teams .mst-avatar > .mst-presence {
     z-index: 2;
 }
