@@ -405,6 +405,15 @@ body.ms-teams #Backgrounds .bg_example {
     overflow: hidden;
 }
 
+/* Full-size pictures where a thumbnail would be drawn bigger than it is (sharp.js) */
+body.ms-teams img[style*="--mst-full"] {
+    content: var(--mst-full);
+}
+
+body.ms-teams .thumbnail-clipper[style*="--mst-full"] {
+    background-image: var(--mst-full) !important;
+}
+
 body.ms-teams #Backgrounds .bg_example:hover {
     border-color: var(--mst-stroke-accessible);
 }
