@@ -1,3 +1,5 @@
+import { own } from './own.js';
+
 // Teams shows a colored monogram wherever someone has no picture. SillyTavern copies its
 // default pictures into new characters and personas, so a placeholder is found by how it
 // looks: a tiny version of the picture is compared with a tiny version of the defaults.
@@ -78,7 +80,8 @@ export function getMonogramColor(name) {
 /** Puts a monogram over a placeholder picture (the picture stays, hidden, for SillyTavern). */
 export async function monogramize(img, name) {
     const holder = img?.parentElement;
-    if (!holder) {
+    // nothing is added to SillyTavern's pictures while the theme is off
+    if (!holder || !document.body.classList.contains('ms-teams')) {
         return;
     }
     const src = img.getAttribute('src') ?? '';
@@ -102,7 +105,7 @@ export async function monogramize(img, name) {
         monogram = document.createElement('span');
         monogram.className = 'mst-monogram mst-mono-mark';
         monogram.setAttribute('aria-hidden', 'true');
-        holder.append(monogram);
+        holder.append(own(monogram));
     }
     monogram.textContent = getInitials(name);
     monogram.dataset.mstColor = String(getMonogramColor(name));

@@ -4,6 +4,7 @@
 import { canGoBack, canGoForward, filterChatList, travel } from './chatlist.js';
 import { isPlaceholder, monogramize } from './monograms.js';
 import { RAIL_SHORTCUTS, SHORTCUTS, showShortcuts, withShortcut } from './shortcuts.js';
+import { own } from './own.js';
 
 const TITLEBAR_ID = 'mst-titlebar';
 const CHAT_APP_ID = 'mst-app-chat';
@@ -186,7 +187,7 @@ function createTitlebar() {
     right.append(more, me);
 
     bar.append(left, search, right);
-    document.body.append(bar);
+    document.body.append(own(bar));
 }
 
 /** Teams' square team picture with the team's initials */
@@ -309,7 +310,7 @@ function getFlyout() {
     flyout.id = FLYOUT_ID;
     flyout.setAttribute('role', 'menu');
     flyout.hidden = true;
-    document.body.append(flyout);
+    document.body.append(own(flyout));
     document.addEventListener('pointerdown', (event) => {
         const target = /** @type {Node} */ (event.target);
         if (!flyout.hidden && !flyout.contains(target) && !flyoutAnchor?.contains(target)) {
@@ -458,14 +459,14 @@ function createRail() {
         return;
     }
     if (!document.getElementById(CHAT_APP_ID)) {
-        holder.prepend(railApp(CHAT_APP_ID, 'Chat', 'chat', () => {
+        holder.prepend(own(railApp(CHAT_APP_ID, 'Chat', 'chat', () => {
             closeDrawers();
             closeFlyout();
             document.body.classList.remove('mst-m-chat');
-        }));
+        })));
     }
     if (!document.getElementById(MORE_APP_ID)) {
-        holder.append(railApp(MORE_APP_ID, 'More', 'more', toggleMoreMenu));
+        holder.append(own(railApp(MORE_APP_ID, 'More', 'more', toggleMoreMenu)));
     }
     for (const { id, label, icon, order } of RAIL_APPS) {
         const drawer = document.getElementById(id);
@@ -544,7 +545,7 @@ function createHeader() {
     actions.append(fresh, history, more);
 
     head.append(back, who, tabs, actions);
-    sheld.prepend(head);
+    sheld.prepend(own(head));
 }
 
 /** Puts the open chat's character or group in the header. */
@@ -612,7 +613,7 @@ function createEmptyState() {
     action.textContent = t('New chat');
     action.addEventListener('click', openProfile);
     empty.append(art, title, text, action);
-    sheld.append(empty);
+    sheld.append(own(empty));
 }
 
 /** Enables back/forward to match the chat history. */
@@ -650,9 +651,12 @@ let shellOptions = { toggleRail: () => {}, setTheme: (_appearance) => {} };
  * mst-phone-more-open), so the styles don't need page-wide :has() checks, which make the browser
  * re-check the whole page on every change (each streamed word of a reply, for one).
  */
+/** Re-reads which menus are open (after the frame was put back) */
+export let refreshDrawerState = () => {};
+
 function trackDrawers() {
     const drawers = [...document.querySelectorAll('#top-settings-holder > .drawer')];
-    const update = () => {
+    const update = refreshDrawerState = () => {
         let any = false, more = false, phoneMore = false;
         for (const drawer of drawers) {
             const open = !!drawer.querySelector(':scope > .drawer-content.openDrawer');

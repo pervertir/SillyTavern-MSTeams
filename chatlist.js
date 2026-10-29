@@ -4,6 +4,7 @@
 import { monogramizeAll } from './monograms.js';
 import { toggleFlyout } from './shell.js';
 import { formatListTime } from './times.js';
+import { own } from './own.js';
 
 const LIST_ID = 'mst-list';
 /** SillyTavern's own pinned chats, kept in account storage by welcome-screen.js */
@@ -425,7 +426,7 @@ export async function openEntry(entry) {
                 const card = document.createElement('div');
                 card.className = 'group_select mst-hidden-card';
                 card.setAttribute('data-grid', entry.group);
-                document.body.append(card);
+                document.body.append(own(card));
                 card.click();
                 card.remove();
                 await new Promise((resolve) => {
@@ -602,7 +603,7 @@ export function createChatList() {
     });
 
     list.append(head, filterRow, body);
-    document.body.append(list);
+    document.body.append(own(list));
     return list;
 }
 

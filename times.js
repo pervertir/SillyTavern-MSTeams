@@ -55,7 +55,8 @@ function labelMessage(mes) {
 /** Labels one message by id, or every message in the chat. */
 export function labelMessages(mesId) {
     const chat = document.getElementById('chat');
-    if (!chat) {
+    // nothing is added to SillyTavern's messages while the theme is off
+    if (!chat || !document.body.classList.contains('ms-teams')) {
         return;
     }
     if (mesId !== undefined && mesId !== null && mesId !== '') {

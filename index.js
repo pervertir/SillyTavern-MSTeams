@@ -6,10 +6,12 @@ import { initApps, refreshCopilotGreeting } from './apps.js';
 import { initMonograms } from './monograms.js';
 import { setDisguise, refreshTitle } from './disguise.js';
 import { initShortcuts } from './shortcuts.js';
-import { focusSearch, initShell, refreshHeader, refreshNavigation, refreshPersona, refreshRailToggle, setRailTooltips, startNewChat } from './shell.js';
+import { focusSearch, initShell, refreshDrawerState, refreshHeader, refreshNavigation, refreshPersona, refreshRailToggle, setRailTooltips, startNewChat } from './shell.js';
 import { initTimes, labelMessages } from './times.js';
 import { applyCustomize, emptyCustomize, normalizeCustomize, openCustomize } from './customize.js';
 import { registerTheme } from './lib/theme-exclusive.js';
+import { parkOwned, restoreOwned } from './own.js';
+import { monogramizeMessages } from './monograms.js';
 
 const MODULE_NAME = 'msTeamsTheme';
 /** Folder path under scripts/extensions/, e.g. third-party/SillyTavern-MSTeams */
@@ -41,6 +43,12 @@ const defaultSettings = Object.freeze({
 
 const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
 let customizeChecked = false;
+/** init() has run, so the frame may be built */
+let ready = false;
+/** The frame has been built (it may be parked while the theme is off) */
+let built = false;
+/** @type {Promise<void>|null} */
+let building = null;
 /** One theme at a time: set up in init() */
 let exclusive = { activated: () => {}, changed: () => {} };
 
@@ -79,16 +87,31 @@ function applySettings() {
     body.classList.toggle(BODY_CLASS, !!settings.enabled);
     document.documentElement.classList.toggle('mst-html', !!settings.enabled);
     body.classList.toggle('mst-dark', !!settings.enabled && isDark(settings));
-    body.classList.toggle('mst-no-list', !settings.chatList);
-    body.classList.toggle('mst-rail-labels', !!settings.railLabels);
-    body.classList.toggle('mst-rail-hidden', !!settings.railHidden);
+    const on = !!settings.enabled;
+    body.classList.toggle('mst-no-list', on && !settings.chatList);
+    body.classList.toggle('mst-rail-labels', on && !!settings.railLabels);
+    body.classList.toggle('mst-rail-hidden', on && !!settings.railHidden);
     refreshRailToggle(!!settings.railHidden);
     setDisguise(!!settings.enabled);
     setRailTooltips(!!settings.enabled);
-    body.classList.toggle('mst-persona-monogram', !!settings.personaMonogram);
-    body.classList.toggle('mst-presence-on', !!settings.presence);
-    body.classList.toggle('mst-short-times', !!settings.shortTimes);
+    body.classList.toggle('mst-persona-monogram', on && !!settings.personaMonogram);
+    body.classList.toggle('mst-presence-on', on && !!settings.presence);
+    body.classList.toggle('mst-short-times', on && !!settings.shortTimes);
+    if (!on) {
+        // the frame's own state classes (open menus, phone pane, group chat)
+        body.classList.remove(...[...body.classList].filter(name => name.startsWith('mst-') && name !== 'mst-booting' && name !== 'mst-boot-done'));
+    }
     applyCustomize(settings.customize, !!settings.enabled);
+    // the Teams frame exists only while the theme is on: built the first time it's turned on,
+    // taken out when it's switched off, and put back as it was when it's on again
+    if (!settings.enabled) {
+        parkOwned();
+    } else if (built) {
+        restoreOwned();
+        refreshFrame();
+    } else if (ready) {
+        build();
+    }
 }
 
 /** Opens the Customize page; changes show at once and are saved as they're made. */
@@ -209,9 +232,29 @@ async function init() {
         },
         pauseUserTheme: () => !!getSettings().pauseUserTheme,
     });
-    applySettings();
     darkQuery.addEventListener('change', applySettings);
+    ready = true;
+    applySettings();
+    if (building) {
+        await building;
+    }
+    endBoot();
 
+    try {
+        await renderSettingsPanel();
+    } catch (error) {
+        console.error('[MS Teams] Could not render the settings panel', error);
+    }
+}
+
+/** Builds the Teams frame around SillyTavern; once, the first time the theme is on. */
+function build() {
+    built = true;
+    building = buildFrame();
+    return building;
+}
+
+async function buildFrame() {
     initShell({ toggleRail, setTheme, customize: customizeTheme });
     initApps();
     const listLoaded = initChatList({ settings: getSettings, opened: showChatOnPhone, historyChanged: refreshNavigation, customize: customizeTheme });
@@ -239,13 +282,19 @@ async function init() {
     onChatChanged(SillyTavern.getContext().getCurrentChatId());
     markCurrentChat();
     await Promise.race([listLoaded, delay(3000)]);
-    endBoot();
+}
 
-    try {
-        await renderSettingsPanel();
-    } catch (error) {
-        console.error('[MS Teams] Could not render the settings panel', error);
-    }
+/** Brings the frame up to date after it was put back (things may have changed while it was out). */
+function refreshFrame() {
+    refreshDrawerState();
+    refreshHeader();
+    refreshPersona();
+    refreshNavigation();
+    refreshTitle();
+    markCurrentChat();
+    scheduleRefresh(0);
+    monogramizeMessages();
+    labelMessages();
 }
 
 function delay(ms) {

@@ -17,6 +17,12 @@
     display: none !important;
 }
 
+/* while the theme is off its parts are taken out of the page (own.js); this keeps any that
+   appear in between out of sight */
+body:not(.ms-teams) [data-mst-own] {
+    display: none !important;
+}
+
 body.ms-teams {
     --mst-content-left: calc(var(--mst-rail-w) + var(--mst-list-w));
 }

@@ -6,6 +6,7 @@
 // Everything added here is hidden by CSS while the theme is off.
 
 import { getInitials, getMonogramColor } from './monograms.js';
+import { own } from './own.js';
 
 function t(text) {
     return SillyTavern.getContext().translate(text);
@@ -62,7 +63,7 @@ function header(drawer, title, tools = [], middle = []) {
     const right = el('div', 'mst-app-tools mst-app-tools-end');
     right.append(...tools);
     bar.append(name, left, right);
-    drawer.prepend(bar);
+    drawer.prepend(own(bar));
     return bar;
 }
 
@@ -208,7 +209,7 @@ function buildCalendar() {
         /** @type {HTMLElement} */ (document.getElementById('main_api'))?.focus();
     }, true);
     header(drawer, 'API', [view, add], [today, prev, next, month]);
-    drawer.append(stage);
+    drawer.append(own(stage));
     render();
 
     // redraw when the menu opens, so "now" and the connection are current
@@ -292,7 +293,7 @@ function buildCallFillers(drawer) {
         row.querySelector('.mst-speed-text')?.append(text);
         voicemail.append(row);
     }
-    grid.prepend(history, voicemail);
+    grid.prepend(own(history), own(voicemail));
 }
 
 function buildCalls() {
@@ -373,7 +374,7 @@ function buildCalls() {
     stage.append(el('h3', 'mst-dial-section', t('Make a call')), number, keys, call, speed, dial);
     pick('context');
     buildCallFillers(drawer);
-    drawer.append(stage);
+    drawer.append(own(stage));
 }
 
 /* OneDrive ------------------------------------------------------------------------------ */
@@ -448,7 +449,7 @@ function buildOneDrive() {
     fresh.addEventListener('click', () => click('#world_create_button'));
     const list = el('div', 'mst-docs');
     stage.append(el('h3', 'mst-dial-section', t('Documents')), fresh, list);
-    drawer.append(stage);
+    drawer.append(own(stage));
 
     // Word: a ribbon of the document's commands over the page
     const ribbon = el('div', 'mst-ribbon');
@@ -493,12 +494,12 @@ function buildOneDrive() {
     const findRow = document.getElementById('world_info_search')?.parentElement;
     pickRow?.classList.add('mst-wi-pickrow');
     findRow?.classList.add('mst-wi-findrow');
-    (findRow ?? entries)?.before(ribbon);
+    (findRow ?? entries)?.before(own(ribbon));
 
     // a note on the empty page, until a document is open
     const blank = el('div', 'mst-doc-blank');
     blank.append(wordIcon('mst-doc-icon mst-doc-icon-big'), el('h2', '', t('Open a document')), el('p', '', t('Pick one from My files, or create a new one.')));
-    entries?.before(blank);
+    entries?.before(own(blank));
 
     const select = document.querySelector(WORLD_SELECT);
     const render = () => {
@@ -616,7 +617,7 @@ function buildCopilot() {
         nav.append(item);
     }
     fresh.addEventListener('click', () => showSection(null));
-    drawer.append(nav);
+    drawer.append(own(nav));
 
     // center: the greeting and prompt suggestions
     const intro = el('div', 'mst-copilot-intro');
@@ -632,10 +633,10 @@ function buildCopilot() {
         cards.append(card);
     }
     intro.append(logo, hello, sub, cards);
-    drawer.querySelector('.mst-app-header')?.after(intro);
+    drawer.querySelector('.mst-app-header')?.after(own(intro));
     const answer = el('div', 'mst-copilot-answer');
     answer.append(el('span', 'mst-copilot-logo mst-copilot-logo-small'), answerTitle);
-    intro.after(answer);
+    intro.after(own(answer));
 
     // bottom: the "Message Copilot" box, docked like Copilot's
     const dock = el('div', 'mst-copilot-dock');
@@ -655,7 +656,7 @@ function buildCopilot() {
     send.addEventListener('click', () => ask(prompt.value));
     box.append(fluentIcon('plus-circle', 18), prompt, send);
     dock.append(box, el('p', 'mst-copilot-note', t('AI-generated content may be incorrect')));
-    drawer.append(dock);
+    drawer.append(own(dock));
     refreshCopilotGreeting();
 }
 
@@ -704,7 +705,7 @@ function decorateApps(drawer) {
         const tile = el('span', 'mst-app-tile');
         tile.style.setProperty('--mst-tile', APP_TILE_COLORS[hash % APP_TILE_COLORS.length]);
         tile.append(fluentIcon(icon, 20));
-        head.prepend(tile);
+        head.prepend(own(tile));
     }
 }
 
@@ -740,7 +741,7 @@ function buildApps() {
         item('Manage your apps', 'gear', () => click('#extensions_details')),
         item('Get more apps', 'arrow-down', () => click('#third_party_extension_button')),
     );
-    drawer.append(nav);
+    drawer.append(own(nav));
 
     // tiles for every app, including ones added after start-up
     decorateApps(drawer);
