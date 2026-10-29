@@ -6,7 +6,7 @@
     "js": "index.js",
     "css": "style.css",
     "author": "pervertir",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "license": "MIT",
     "homepage": "https://github.com/pervertir/SillyTavern-MSTeams",
     "auto_update": true,

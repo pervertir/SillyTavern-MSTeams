@@ -2,8 +2,8 @@
 // Run before every push against a test SillyTavern with this extension installed:
 //   node tests/leak-check.js [http://127.0.0.1:8000/]
 // Needs Playwright. It turns the theme off through its own switch, checks the page, reloads with
-// it off, checks again, opens a chat while off, checks again, then turns it on, off and on again
-// and checks that it comes back whole and leaves nothing the second time either.
+// it off, checks again, opens a chat while off, checks again, then turns it on (the page reloads),
+// off and on again and checks that it comes back whole and leaves nothing the second time either.
 // Exits with 1 and lists what it found when anything of the theme is left.
 
 const { chromium } = require('playwright');
@@ -54,13 +54,29 @@ function scan() {
     return found;
 }
 
+async function waitForApp(page, settle) {
+    await page.waitForSelector('#mst_enabled', { state: 'attached', timeout: 60000 });
+    await page.waitForTimeout(settle);
+}
+
+/** Turning the theme on reloads the page once the settings are saved; turning it off doesn't. */
 async function setTheme(page, on) {
+    const wasOn = await page.evaluate(() => !!document.getElementById('mst_enabled').checked);
+    if (on === wasOn) {
+        return;
+    }
+    const reloaded = on ? page.waitForEvent('load', { timeout: 15000 }) : null;
     await page.evaluate((on) => {
         const box = document.getElementById('mst_enabled');
         box.checked = on;
         box.dispatchEvent(new Event('input', { bubbles: true }));
     }, on);
-    await page.waitForTimeout(2000);
+    if (reloaded) {
+        await reloaded;
+        await waitForApp(page, 4000);
+    } else {
+        await page.waitForTimeout(2000);
+    }
 }
 
 (async () => {
@@ -69,16 +85,14 @@ async function setTheme(page, on) {
     const errors = [];
     page.on('pageerror', (error) => errors.push(error.message));
     await page.goto(URL);
-    await page.waitForSelector('#mst_enabled', { state: 'attached', timeout: 60000 });
-    await page.waitForTimeout(3000);
+    await waitForApp(page, 3000);
     await setTheme(page, true);
 
     const results = {};
     await setTheme(page, false);
     results['turned off'] = await page.evaluate(scan);
     await page.reload();
-    await page.waitForSelector('#mst_enabled', { state: 'attached', timeout: 60000 });
-    await page.waitForTimeout(4000);
+    await waitForApp(page, 4000);
     results['loaded while off'] = await page.evaluate(scan);
     await page.evaluate(async () => {
         const context = SillyTavern.getContext();

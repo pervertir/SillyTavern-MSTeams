@@ -5,7 +5,7 @@ import { initApps, refreshCopilotGreeting } from './apps.js';
 import { initChatList, markCurrentChat, scheduleRefresh, travel } from './chatlist.js';
 import { applyCustomize, emptyCustomize, normalizeCustomize, openCustomize } from './customize.js';
 import { refreshTitle, setDisguise } from './disguise.js';
-import { registerTheme } from './lib/theme-exclusive.js';
+import { registerTheme, reloadPage } from './lib/theme-exclusive.js';
 import { initMonograms, monogramizeMessages } from './monograms.js';
 import { isOn, parkOwned, restoreOwned } from './own.js';
 import { initShortcuts } from './shortcuts.js';
@@ -192,8 +192,15 @@ async function renderSettingsPanel() {
     recentMax.value = String(settings.recentMax);
 
     const controls = [
-        // turning the theme on turns the other themes off
-        checkbox('mst_enabled', 'enabled', () => (settings.enabled ? exclusive.activated() : exclusive.changed())),
+        // turning the theme on turns the other themes off and reloads the page; off applies live
+        checkbox('mst_enabled', 'enabled', () => {
+            if (settings.enabled) {
+                exclusive.activated();
+                reloadWhenOn('Microsoft Teams is on.');
+            } else {
+                exclusive.changed();
+            }
+        }),
         checkbox('mst_pause_user_theme', 'pauseUserTheme', () => exclusive.changed()),
         [appearance, 'appearance', () => appearance.value],
         checkbox('mst_chat_list', 'chatList'),
@@ -335,35 +342,27 @@ function bootLook() {
 }
 
 /**
- * Reloads the page once SillyTavern has saved its settings (or after a few seconds if no save
- * reports back), so the page starts over with the theme in place.
+ * Reloads the page once the settings are saved, so the theme starts from a fresh page whenever
+ * it's loaded into one that's already running. Called on a user's action only (installing,
+ * turning on, updating), so it can't repeat by itself.
  */
-function reloadAfterSave(message) {
-    const { eventSource, eventTypes, saveSettingsDebounced, translate } = SillyTavern.getContext();
-    toastr.info(translate(message), 'Microsoft Teams Theme');
-    let reloading = false;
-    const reload = () => {
-        if (!reloading) {
-            reloading = true;
-            location.reload();
-        }
-    };
-    eventSource.once(eventTypes.SETTINGS_UPDATED, reload);
-    saveSettingsDebounced();
-    setTimeout(reload, 4000);
+function reloadWhenOn(message) {
+    if (getSettings().enabled) {
+        reloadPage(SillyTavern.getContext().translate(message), { stillWanted: () => !!getSettings().enabled });
+    }
+}
+
+/** SillyTavern calls this right after installing the extension and loading it (manifest "hooks"). */
+export function onInstall() {
+    reloadWhenOn('Microsoft Teams is installed.');
 }
 
 /**
- * SillyTavern calls these (manifest "hooks") right after it installs or updates the extension.
- * Each reloads the page once, so the theme starts with a fresh page; neither runs again on the
- * reloaded page, so they can't loop.
+ * SillyTavern calls this after updating the extension. The running code is the old version, so
+ * the page reloads to load the new one.
  */
-export function onInstall() {
-    reloadAfterSave('Reloading to finish installing…');
-}
-
 export function onUpdate() {
-    reloadAfterSave('Reloading to finish the update…');
+    reloadWhenOn('Microsoft Teams was updated.');
 }
 
 bootLook();
