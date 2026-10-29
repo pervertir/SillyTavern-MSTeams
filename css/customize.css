@@ -3,40 +3,50 @@
    on the body and every other file already reads them. */
 
 /* ---- Layout ---- */
-body.ms-teams.mst-x-hideLauncher .mst-waffle,
-body.ms-teams.mst-x-hideNav .mst-tb-nav,
-body.ms-teams.mst-x-hideSearch #mst-titlebar .mst-search,
-body.ms-teams.mst-x-hideMe #mst-me,
-body.ms-teams.mst-x-hideFavorites .mst-section[data-section="pinned"],
-body.ms-teams.mst-x-hideTeams .mst-section[data-section="teams"],
-body.ms-teams.mst-x-hidePreviews .mst-chat-preview,
-body.ms-teams.mst-x-hideTabs #mst-chat-head .mst-tabs,
-body.ms-teams.mst-x-hideCalls #mst-chat-head .mst-head-actions > :not(:last-child),
-body.ms-teams.mst-x-hideEmoji #extensionsMenuButton,
-body.ms-teams.mst-x-hidePlus #options_button {
+body.ms-teams.mst-x-hide-launcher .mst-waffle,
+body.ms-teams.mst-x-hide-nav .mst-tb-nav,
+body.ms-teams.mst-x-hide-search #mst-titlebar .mst-search,
+body.ms-teams.mst-x-hide-me #mst-me,
+body.ms-teams.mst-x-hide-favorites .mst-section[data-section="pinned"],
+body.ms-teams.mst-x-hide-teams .mst-section[data-section="teams"],
+body.ms-teams.mst-x-hide-previews .mst-chat-preview,
+body.ms-teams.mst-x-hide-tabs #mst-chat-head .mst-tabs,
+body.ms-teams.mst-x-hide-calls #mst-chat-head .mst-head-actions > :not(:last-child),
+body.ms-teams.mst-x-hide-emoji #extensionsMenuButton,
+body.ms-teams.mst-x-hide-plus #options_button {
     display: none !important;
 }
 
 /* ---- Messages ---- */
-body.ms-teams.mst-x-hideAvatars #chat .mes .mesAvatarWrapper {
+body.ms-teams.mst-x-hide-avatars #chat .mes .mesAvatarWrapper {
     display: none;
 }
 
-body.ms-teams.mst-x-hideAvatars #chat .mes:not([is_user="true"]) {
+body.ms-teams.mst-x-hide-avatars #chat .mes:not([is_user="true"]) {
     grid-template-columns: 0 minmax(0, max-content) minmax(48px, 1fr);
     column-gap: 0;
 }
 
-body.ms-teams.mst-x-hideNames #chat .mes .name_text,
-body.ms-teams.mst-x-hideTimes #chat .mes .timestamp,
-body.ms-teams.mst-x-hideSwipes #chat .mes :is(.swipe_left, .swipeRightBlock) {
+body.ms-teams.mst-x-hide-names #chat .mes .name_text,
+body.ms-teams.mst-x-hide-timestamps #chat .mes .timestamp,
+body.ms-teams.mst-x-hide-swipes #chat .mes :is(.swipe_left, .swipeRightBlock) {
     display: none !important;
 }
 
 /* ---- Motion ---- */
-body.ms-teams.mst-x-noMotion *,
-body.ms-teams.mst-x-noMotion *::before,
-body.ms-teams.mst-x-noMotion *::after {
+/* Reduced: no animations, and transitions quick */
+body.ms-teams.mst-x-motion-reduced *,
+body.ms-teams.mst-x-motion-reduced *::before,
+body.ms-teams.mst-x-motion-reduced *::after {
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 50ms !important;
+}
+
+/* Off: nothing moves */
+body.ms-teams.mst-x-motion-off *,
+body.ms-teams.mst-x-motion-off *::before,
+body.ms-teams.mst-x-motion-off *::after {
     transition-duration: 0s !important;
     animation-duration: 0s !important;
     animation-iteration-count: 1 !important;
@@ -148,7 +158,11 @@ body.ms-teams .mst-cz-row {
     min-height: 36px;
 }
 
-body.ms-teams .mst-cz-row.mst-cz-flag,
+body.ms-teams .mst-cz-row[hidden] {
+    display: none;
+}
+
+body.ms-teams .mst-cz-row.mst-cz-check,
 body.ms-teams .mst-cz-row.mst-cz-css {
     grid-template-columns: minmax(0, 1fr);
 }
@@ -278,14 +292,14 @@ body.ms-teams .mst-pv-dots {
     background: radial-gradient(circle, var(--mst-fg-3) 1.2px, transparent 1.6px) 0 0 / 4px 4px;
 }
 
-body.ms-teams.mst-x-hideLauncher .mst-pv-dots,
-body.ms-teams.mst-x-hideSearch .mst-pv-search,
-body.ms-teams.mst-x-hideMe .mst-pv-me,
-body.ms-teams.mst-x-hideTabs .mst-pv-tab,
-body.ms-teams.mst-x-hidePreviews .mst-pv-row small,
-body.ms-teams.mst-x-hideNames .mst-pv-name,
-body.ms-teams.mst-x-hideTimes .mst-pv-time,
-body.ms-teams.mst-x-hideAvatars .mst-pv-mes-av {
+body.ms-teams.mst-x-hide-launcher .mst-pv-dots,
+body.ms-teams.mst-x-hide-search .mst-pv-search,
+body.ms-teams.mst-x-hide-me .mst-pv-me,
+body.ms-teams.mst-x-hide-tabs .mst-pv-tab,
+body.ms-teams.mst-x-hide-previews .mst-pv-row small,
+body.ms-teams.mst-x-hide-names .mst-pv-name,
+body.ms-teams.mst-x-hide-timestamps .mst-pv-time,
+body.ms-teams.mst-x-hide-avatars .mst-pv-mes-av {
     visibility: hidden;
 }
 
@@ -518,7 +532,7 @@ body.ms-teams .mst-pv-send {
         grid-template-columns: minmax(0, 1fr);
     }
 
-    body.ms-teams .mst-cz-row:not(.mst-cz-flag, .mst-cz-css) {
+    body.ms-teams .mst-cz-row:not(.mst-cz-check, .mst-cz-css) {
         grid-template-columns: minmax(0, 1fr);
         gap: 4px;
         padding: 4px 0;

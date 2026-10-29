@@ -37,6 +37,7 @@ const defaultSettings = Object.freeze({
 });
 
 const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+let customizeChecked = false;
 
 function getSettings() {
     const { extensionSettings } = SillyTavern.getContext();
@@ -51,8 +52,10 @@ function getSettings() {
             settings[key] = structuredClone(defaultSettings[key]);
         }
     }
-    if (settings.customize?.version !== 1 || !settings.customize.tokens || !settings.customize.flags) {
+    // cleaned once per load (older flag names, hand edits)
+    if (!customizeChecked) {
         settings.customize = normalizeCustomize(settings.customize);
+        customizeChecked = true;
     }
     return settings;
 }

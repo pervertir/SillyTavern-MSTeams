@@ -68,21 +68,21 @@ That stylesheet doesn't know whether the theme is on, so delete the block (it's 
 
 ## Customize
 
-Every part of the look can be changed from **Customize theme**: open it from the title bar's **…** menu, the chat list's **…** menu (also on phones), or the theme's settings. A small Teams window at the top shows each change as you make it, and the whole app changes with it, with no reload.
+Every part of the look can be changed from **Customize** (the menus call it Customize theme): open it from the title bar's **…** menu, the chat list's **…** menu (also on phones), or the theme's settings. A small Teams window at the top shows each change as you make it, and the whole app changes with it, with no reload.
 
 | Section | What you can change |
 |---|---|
 | Colors | Accent, surfaces (window frame, side panels, main area, cards, menus, text boxes), text, borders and status colors |
 | Text | The font (Segoe UI, system, a few common ones, or any font you name) and every text size |
-| Shape | Corner rounding for buttons, cards, panels, tiles and message bubbles, and the shape of pictures |
-| Spacing | Title bar, app rail, chat list and header sizes, chat margins, space between messages, bubble padding |
+| Shape | The shape of pictures (circle, rounded square or square) and corner rounding for buttons, cards, panels, tiles and message bubbles |
+| Spacing | Density (compact, default or roomy), title bar, app rail, chat list and header sizes, chat margins, space between messages, bubble padding |
 | Layout | Show or hide the app launcher, back and forward, search, your picture, Favorites, Teams and channels, chat previews, the Chat and Shared tabs, the video and call buttons, and the message box's emoji and + buttons |
 | Messages | Bubble colors, action and quote colors, text size, line height, picture size, bubble width, and hiding pictures, names, times or the reply pager |
-| Chat background | A color or a picture from a web address, how it fits, and how much it's faded |
-| Motion | Transition speeds, or no animations at all |
+| Chat Background | The theme's own, a color, a gradient (two colors and an angle), or a picture from a web address with how much it's faded |
+| Motion | Full, reduced or no animation, and transition speeds |
 | Advanced | Your own CSS, which only applies while the theme is on |
 
-Changes sit on top of Light or Dark, so switching appearance keeps them. Each section has **Reset section**, and the page has **Reset all**, **Export** and **Import** (a small JSON file, so you can keep a look or share it).
+Changes sit on top of Light or Dark, so switching appearance keeps them. Each section has **Reset section**, and the page has **Reset All** (it asks first), **Export Theme** and **Import Theme**. Import takes the file or its pasted text. The file format is shared with our Discord and iMessage themes, so a look made in one opens in another and keeps the options this theme has.
 
 ## Settings
 

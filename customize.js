@@ -1,13 +1,16 @@
-// Customize: every part of the theme can be changed from one page, live. Each option is a CSS
-// custom property on body.ms-teams (set inline, so it wins over both Light and Dark), or a flag
-// that shows or hides a part of the frame. Everything lives in one object in the extension's
-// settings, layered on the chosen appearance:
-//   customize = { version: 1, tokens: { '--mst-brand': '#…', … }, flags: { hideSearch: true, … }, css: '' }
-// Export and Import use the same object plus themeId, so a look can move between installs.
+// Customize: every part of the theme can be changed from one page, live. The format is the one
+// all our themes share (shared/customize-spec.md), so a look exported from one opens in another
+// and keeps whatever this theme understands:
+//   customize = { tokens: { '--mst-brand': '#…', … }, flags: { 'hide-search': true, density: 'compact', … }, css: '' }
+// Tokens are CSS custom properties, set inline on the body so they sit on top of Light and Dark.
+// hide-<part> flags become body classes (mst-x-hide-<part>); the other flags are options that
+// set tokens or classes of their own. The custom CSS is nested inside body.ms-teams.
 
 const VERSION = 1;
 const THEME_ID = 'msteams';
 const CSS_ID = 'mst-custom-css';
+const TOKEN_NAME = /^--[a-zA-Z0-9-]+$/;
+const BAD_VALUE = /[;{}<>]/;
 
 const FONTS = [
     ['', 'Segoe UI (Teams)'],
@@ -19,8 +22,9 @@ const FONTS = [
 ];
 
 /**
- * The page's sections in order. Items are tokens (type color, size, select, font, image, css)
- * or flags (type flag: a body class mst-x-<name>).
+ * The page's sections in order. An item edits a token (token) or a flag (flag), as one of
+ * these controls: color, size, select, font, url, check (a true/false flag) or css.
+ * Flag items carry their default, which is never stored.
  */
 const SECTIONS = [
     {
@@ -61,20 +65,24 @@ const SECTIONS = [
     },
     {
         id: 'shape', title: 'Shape', items: [
+            {
+                flag: 'avatarShape', label: 'Pictures', type: 'select', default: 'round',
+                options: [['round', 'Circle'], ['squircle', 'Rounded square'], ['square', 'Square']],
+            },
             { token: '--mst-radius-sm', label: 'Small corners', type: 'size', min: 0, max: 12 },
             { token: '--mst-radius', label: 'Buttons and fields', type: 'size', min: 0, max: 16 },
             { token: '--mst-radius-md', label: 'Cards', type: 'size', min: 0, max: 20 },
             { token: '--mst-radius-lg', label: 'Panels and dialogs', type: 'size', min: 0, max: 24 },
             { token: '--mst-radius-xl', label: 'Large tiles', type: 'size', min: 0, max: 32 },
             { token: '--mst-bubble-radius', label: 'Message bubbles', type: 'size', min: 0, max: 24 },
-            {
-                token: '--mst-avatar-radius', label: 'Pictures in messages', type: 'select',
-                options: [['50%', 'Circle'], ['25%', 'Rounded square'], ['4px', 'Square']],
-            },
         ],
     },
     {
         id: 'spacing', title: 'Spacing', items: [
+            {
+                flag: 'density', label: 'Density', type: 'select', default: 'default',
+                options: [['compact', 'Compact'], ['default', 'Default'], ['roomy', 'Roomy']],
+            },
             { token: '--mst-titlebar-h', label: 'Title bar height', type: 'size', min: 36, max: 72 },
             { token: '--mst-rail-w', label: 'App rail width', type: 'size', min: 48, max: 100 },
             { token: '--mst-list-w', label: 'Chat list width', type: 'size', min: 220, max: 480 },
@@ -87,17 +95,17 @@ const SECTIONS = [
     },
     {
         id: 'layout', title: 'Layout', items: [
-            { flag: 'hideLauncher', label: 'Hide the app launcher (9 dots)', type: 'flag' },
-            { flag: 'hideNav', label: 'Hide back and forward', type: 'flag' },
-            { flag: 'hideSearch', label: 'Hide search', type: 'flag' },
-            { flag: 'hideMe', label: 'Hide your picture in the title bar', type: 'flag' },
-            { flag: 'hideFavorites', label: 'Hide Favorites in the chat list', type: 'flag' },
-            { flag: 'hideTeams', label: 'Hide Teams and channels in the chat list', type: 'flag' },
-            { flag: 'hidePreviews', label: 'Hide message previews in the chat list', type: 'flag' },
-            { flag: 'hideTabs', label: 'Hide the Chat and Shared tabs', type: 'flag' },
-            { flag: 'hideCalls', label: 'Hide the video and call buttons', type: 'flag' },
-            { flag: 'hideEmoji', label: 'Hide the emoji button in the message box (extensions menu)', type: 'flag' },
-            { flag: 'hidePlus', label: 'Hide the + button in the message box (chat options)', type: 'flag' },
+            { flag: 'hide-launcher', label: 'Hide the app launcher (9 dots)', type: 'check' },
+            { flag: 'hide-nav', label: 'Hide back and forward', type: 'check' },
+            { flag: 'hide-search', label: 'Hide search', type: 'check' },
+            { flag: 'hide-me', label: 'Hide your picture in the title bar', type: 'check' },
+            { flag: 'hide-favorites', label: 'Hide Favorites in the chat list', type: 'check' },
+            { flag: 'hide-teams', label: 'Hide Teams and channels in the chat list', type: 'check' },
+            { flag: 'hide-previews', label: 'Hide message previews in the chat list', type: 'check' },
+            { flag: 'hide-tabs', label: 'Hide the Chat and Shared tabs', type: 'check' },
+            { flag: 'hide-calls', label: 'Hide the video and call buttons', type: 'check' },
+            { flag: 'hide-emoji', label: 'Hide the emoji button in the message box (extensions menu)', type: 'check' },
+            { flag: 'hide-plus', label: 'Hide the + button in the message box (chat options)', type: 'check' },
         ],
     },
     {
@@ -110,28 +118,34 @@ const SECTIONS = [
             { token: '--mst-mes-line', label: 'Line height', type: 'size', min: 14, max: 36 },
             { token: '--mst-mes-avatar', label: 'Picture size', type: 'size', min: 20, max: 64 },
             { token: '--mst-bubble-max', label: 'Bubble width', type: 'size', unit: '%', min: 40, max: 100 },
-            { flag: 'hideAvatars', label: 'Hide pictures beside messages', type: 'flag' },
-            { flag: 'hideNames', label: 'Hide names', type: 'flag' },
-            { flag: 'hideTimes', label: 'Hide times', type: 'flag' },
-            { flag: 'hideSwipes', label: 'Hide the reply pager (swipes)', type: 'flag' },
+            { flag: 'hide-avatars', label: 'Hide pictures beside messages', type: 'check' },
+            { flag: 'hide-names', label: 'Hide names', type: 'check' },
+            { flag: 'hide-timestamps', label: 'Hide times', type: 'check' },
+            { flag: 'hide-swipes', label: 'Hide the reply pager (swipes)', type: 'check' },
         ],
     },
     {
-        id: 'background', title: 'Chat background', items: [
-            { token: '--mst-chat-bg', label: 'Color', type: 'color' },
-            { token: '--mst-chat-bg-image', label: 'Picture (web address)', type: 'image' },
+        id: 'background', title: 'Chat Background', items: [
             {
-                token: '--mst-chat-bg-size', label: 'Picture fit', type: 'select',
-                options: [['cover', 'Fill'], ['contain', 'Fit'], ['auto', 'Actual size']],
+                flag: 'bgMode', label: 'Background', type: 'select', default: 'none',
+                options: [['none', 'Theme default'], ['color', 'Color'], ['gradient', 'Gradient'], ['image', 'Picture']],
             },
-            { token: '--mst-chat-bg-dim', label: 'Fade the picture', type: 'size', unit: '%', min: 0, max: 100 },
+            { flag: 'bgColor', label: 'Color', type: 'color', default: '#ffffff', when: 'color' },
+            { flag: 'bgFrom', label: 'From', type: 'color', default: '#e8ebfa', when: 'gradient' },
+            { flag: 'bgTo', label: 'To', type: 'color', default: '#ffffff', when: 'gradient' },
+            { flag: 'bgAngle', label: 'Angle', type: 'size', unit: 'deg', min: 0, max: 360, step: 5, default: '180', when: 'gradient' },
+            { flag: 'bgImage', label: 'Picture (web address)', type: 'url', default: '', when: 'image' },
+            { flag: 'bgDim', label: 'Fade the picture', type: 'size', unit: '%', min: 0, max: 100, default: '0', when: 'image' },
         ],
     },
     {
         id: 'motion', title: 'Motion', items: [
+            {
+                flag: 'motion', label: 'Animations', type: 'select', default: 'full',
+                options: [['full', 'Full'], ['reduced', 'Reduced'], ['off', 'Off']],
+            },
             { token: '--mst-fast', label: 'Quick transitions', type: 'size', unit: 'ms', min: 0, max: 500, step: 10 },
             { token: '--mst-normal', label: 'Transitions', type: 'size', unit: 'ms', min: 0, max: 800, step: 10 },
-            { flag: 'noMotion', label: 'Turn off animations', type: 'flag' },
         ],
     },
     {
@@ -141,8 +155,21 @@ const SECTIONS = [
     },
 ];
 
-const FLAGS = SECTIONS.flatMap(s => s.items.filter(i => i.flag).map(i => i.flag));
-const TOKENS = SECTIONS.flatMap(s => s.items.filter(i => i.token).map(i => i.token));
+const ITEMS = SECTIONS.flatMap(s => s.items);
+const FLAG_ITEMS = new Map(ITEMS.filter(i => i.flag).map(i => [i.flag, i]));
+const HIDE_FLAGS = ITEMS.filter(i => i.type === 'check').map(i => i.flag);
+/** Flag names from the first version of this page */
+const OLD_FLAGS = {
+    hideLauncher: 'hide-launcher', hideNav: 'hide-nav', hideSearch: 'hide-search', hideMe: 'hide-me',
+    hideFavorites: 'hide-favorites', hideTeams: 'hide-teams', hidePreviews: 'hide-previews', hideTabs: 'hide-tabs',
+    hideCalls: 'hide-calls', hideEmoji: 'hide-emoji', hidePlus: 'hide-plus', hideAvatars: 'hide-avatars',
+    hideNames: 'hide-names', hideTimes: 'hide-timestamps', hideSwipes: 'hide-swipes',
+};
+const AVATAR_RADIUS = { squircle: '30%', square: '4px' };
+const DENSITY = {
+    compact: { '--mst-mes-gap': '2px', '--mst-bubble-pad-y': '5px', '--mst-bubble-pad-x': '12px' },
+    roomy: { '--mst-mes-gap': '12px', '--mst-bubble-pad-y': '11px', '--mst-bubble-pad-x': '20px' },
+};
 
 /** Tokens set on the body by the last apply, so they can be taken off again */
 let applied = [];
@@ -155,24 +182,81 @@ export function emptyCustomize() {
     return { version: VERSION, tokens: {}, flags: {}, css: '' };
 }
 
-/** The stored object, repaired if it's missing parts (older settings, hand edits). */
+function validToken(name, value) {
+    return TOKEN_NAME.test(name) && typeof value === 'string' && !!value.trim() && !BAD_VALUE.test(value);
+}
+
+function validFlag(item, value) {
+    if (item.type === 'check') {
+        return value === true;
+    }
+    if (typeof value !== 'string' || BAD_VALUE.test(value) || value === item.default) {
+        return false;
+    }
+    if (item.type === 'select') {
+        return item.options.some(([option]) => option === value);
+    }
+    if (item.type === 'color') {
+        return CSS.supports('color', value);
+    }
+    if (item.type === 'size') {
+        return Number.isFinite(Number(value));
+    }
+    if (item.type === 'url') {
+        return /^(https?:\/\/|\/)[^\s"'()\\]+$/.test(value);
+    }
+    return false;
+}
+
+/**
+ * The stored object, cleaned: only this theme's valid tokens and the flags it knows are kept
+ * (so a file from another of our themes keeps what fits), and nothing that could break CSS.
+ */
 export function normalizeCustomize(value) {
     const result = emptyCustomize();
     if (!value || typeof value !== 'object') {
         return result;
     }
-    for (const [key, val] of Object.entries(value.tokens ?? {})) {
-        if (TOKENS.includes(key) && typeof val === 'string' && val.trim()) {
-            result.tokens[key] = val.trim();
+    for (const [name, val] of Object.entries(value.tokens ?? {})) {
+        if (name.startsWith('--mst-') && validToken(name, val)) {
+            result.tokens[name] = val.trim();
         }
     }
-    for (const [key, val] of Object.entries(value.flags ?? {})) {
-        if (FLAGS.includes(key) && val === true) {
-            result.flags[key] = true;
+    for (const [name, val] of Object.entries(value.flags ?? {})) {
+        const key = OLD_FLAGS[name] ?? name;
+        const item = FLAG_ITEMS.get(key);
+        const stored = typeof val === 'number' ? String(val) : val;
+        if (item && validFlag(item, stored)) {
+            result.flags[key] = stored;
         }
     }
     result.css = typeof value.css === 'string' ? value.css : '';
     return result;
+}
+
+function flagValue(customize, name) {
+    return customize.flags[name] ?? FLAG_ITEMS.get(name)?.default;
+}
+
+/** Tokens the options stand for (pictures' shape, density, chat background). */
+function optionTokens(customize) {
+    const tokens = {};
+    const radius = AVATAR_RADIUS[customize.flags.avatarShape];
+    if (radius) {
+        tokens['--mst-avatar-radius'] = radius;
+    }
+    Object.assign(tokens, DENSITY[customize.flags.density] ?? {});
+    const mode = customize.flags.bgMode;
+    if (mode === 'color') {
+        tokens['--mst-chat-bg'] = flagValue(customize, 'bgColor');
+    } else if (mode === 'gradient') {
+        tokens['--mst-chat-bg-image'] = `linear-gradient(${Number(flagValue(customize, 'bgAngle'))}deg, ${flagValue(customize, 'bgFrom')}, ${flagValue(customize, 'bgTo')})`;
+        tokens['--mst-chat-bg-size'] = 'cover';
+    } else if (mode === 'image' && customize.flags.bgImage) {
+        tokens['--mst-chat-bg-image'] = `url("${customize.flags.bgImage}")`;
+        tokens['--mst-chat-bg-dim'] = `${Number(flagValue(customize, 'bgDim'))}%`;
+    }
+    return tokens;
 }
 
 /** Puts the customization on the page (or takes it off when the theme is off). */
@@ -182,17 +266,24 @@ export function applyCustomize(customize, enabled) {
         body.style.removeProperty(token);
     }
     applied = [];
-    for (const flag of FLAGS) {
-        body.classList.toggle(`mst-x-${flag}`, !!enabled && !!customize?.flags?.[flag]);
+    const on = !!enabled && !!customize;
+    for (const flag of HIDE_FLAGS) {
+        body.classList.toggle(`mst-x-${flag}`, on && customize.flags[flag] === true);
     }
+    const motion = on ? customize.flags.motion : undefined;
+    body.classList.toggle('mst-x-motion-reduced', motion === 'reduced');
+    body.classList.toggle('mst-x-motion-off', motion === 'off');
     let style = document.getElementById(CSS_ID);
-    if (!enabled || !customize) {
+    if (!on) {
         style?.remove();
         return;
     }
-    for (const [token, value] of Object.entries(customize.tokens)) {
-        body.style.setProperty(token, value);
-        applied.push(token);
+    // options first, so a token set by hand wins over the option it overlaps
+    for (const [token, value] of Object.entries({ ...optionTokens(customize), ...customize.tokens })) {
+        if (validToken(token, value)) {
+            body.style.setProperty(token, value);
+            applied.push(token);
+        }
     }
     const css = customize.css.trim();
     if (css) {
@@ -230,15 +321,6 @@ function baseValue(token) {
         body.style.setProperty(token, own);
     }
     return value;
-}
-
-function currentValue(customize, token) {
-    return customize.tokens[token] ?? baseValue(token);
-}
-
-function imageUrl(value) {
-    const match = String(value ?? '').match(/^url\("(.*)"\)$/);
-    return match ? match[1].replace(/\\"/g, '"') : '';
 }
 
 function el(tag, className, text) {
@@ -289,6 +371,29 @@ function buildPreview() {
 }
 
 /**
+ * Reads an exported look. Refuses anything that isn't one; a look from another of our themes
+ * is taken with a note, keeping what this theme understands.
+ * @returns {object|null}
+ */
+function readLook(text) {
+    let data;
+    try {
+        data = JSON.parse(text);
+    } catch {
+        toastr.error(t('That isn\'t a theme file.'));
+        return null;
+    }
+    if (!data || typeof data !== 'object' || !data.themeId || typeof data.tokens !== 'object') {
+        toastr.error(t('That isn\'t a theme file.'));
+        return null;
+    }
+    if (data.themeId !== THEME_ID) {
+        toastr.info(t('That look was made for another theme; the options this theme has were kept.'));
+    }
+    return normalizeCustomize(data);
+}
+
+/**
  * Opens the Customize page.
  * @param {object} options
  * @param {() => object} options.get The stored customization (live object)
@@ -296,15 +401,15 @@ function buildPreview() {
  * @param {() => void} options.changed Apply and save
  */
 export async function openCustomize({ get, set, changed }) {
-    const { callGenericPopup, POPUP_TYPE } = SillyTavern.getContext();
+    const { callGenericPopup, POPUP_TYPE, POPUP_RESULT } = SillyTavern.getContext();
     const page = el('div', 'mst-customize');
     const top = el('div', 'mst-cz-top');
     const heading = el('div', 'mst-cz-heading');
-    heading.append(el('h3', '', t('Customize theme')));
+    heading.append(el('h3', '', t('Customize')));
     const tools = el('div', 'mst-cz-tools');
-    const exportButton = el('button', 'menu_button mst-cz-tool', t('Export'));
-    const importButton = el('button', 'menu_button mst-cz-tool', t('Import'));
-    const resetAll = el('button', 'menu_button mst-cz-tool', t('Reset all'));
+    const exportButton = el('button', 'menu_button mst-cz-tool', t('Export Theme'));
+    const importButton = el('button', 'menu_button mst-cz-tool', t('Import Theme'));
+    const resetAll = el('button', 'menu_button mst-cz-tool', t('Reset All'));
     for (const button of [exportButton, importButton, resetAll]) {
         button.type = 'button';
     }
@@ -352,7 +457,8 @@ export async function openCustomize({ get, set, changed }) {
     }
 
     exportButton.addEventListener('click', () => {
-        const data = { themeId: THEME_ID, ...normalizeCustomize(get()) };
+        const { tokens, flags, css } = normalizeCustomize(get());
+        const data = { themeId: THEME_ID, version: VERSION, tokens, flags, css };
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
@@ -360,33 +466,40 @@ export async function openCustomize({ get, set, changed }) {
         link.click();
         setTimeout(() => URL.revokeObjectURL(link.href), 1000);
     });
-    importButton.addEventListener('click', () => {
+    importButton.addEventListener('click', async () => {
+        // paste the file's text, or leave the box empty and pick the file
+        const text = await callGenericPopup(t('Paste a theme file\'s text, or leave this empty to choose the file.'), POPUP_TYPE.INPUT, '', { rows: 6, okButton: t('Import'), cancelButton: t('Cancel') });
+        if (text === null || text === false || text === undefined) {
+            return;
+        }
+        const apply = (look) => {
+            if (look) {
+                set(look);
+                commit();
+                toastr.success(t('Look imported.'));
+            }
+        };
+        if (String(text).trim()) {
+            apply(readLook(String(text)));
+            return;
+        }
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = 'application/json,.json';
         input.addEventListener('change', async () => {
             const file = input.files?.[0];
-            if (!file) {
-                return;
-            }
-            try {
-                const data = JSON.parse(await file.text());
-                if (data?.themeId && data.themeId !== THEME_ID) {
-                    toastr.warning(t('That file is for a different theme.'));
-                    return;
-                }
-                set(normalizeCustomize(data));
-                commit();
-                toastr.success(t('Look imported.'));
-            } catch {
-                toastr.error(t('That file could not be read.'));
+            if (file) {
+                apply(readLook(await file.text()));
             }
         });
         input.click();
     });
-    resetAll.addEventListener('click', () => {
-        set(emptyCustomize());
-        commit();
+    resetAll.addEventListener('click', async () => {
+        const answer = await callGenericPopup(t('Put every part of the theme back to how it was?'), POPUP_TYPE.CONFIRM, '', { okButton: t('Reset All'), cancelButton: t('Cancel') });
+        if (answer === POPUP_RESULT.AFFIRMATIVE) {
+            set(emptyCustomize());
+            commit();
+        }
     });
 
     refreshAll();
@@ -398,25 +511,34 @@ export async function openCustomize({ get, set, changed }) {
 function buildControl(item, get, commit, refreshers) {
     const row = el('div', `mst-cz-row mst-cz-${item.type}`);
     const id = `mst_cz_${(item.token ?? item.flag ?? 'css').replace(/[^a-z0-9]/gi, '_')}`;
+    const isFlag = !!item.flag;
 
-    if (item.type === 'flag') {
+    /** What's stored for this item, or undefined */
+    const stored = () => (isFlag ? get().flags[item.flag] : get().tokens[item.token]);
+    /** What it shows: the stored value, or the default (the flag's, or the base theme's) */
+    const shown = () => stored() ?? (isFlag ? item.default : baseValue(item.token));
+    const store = (value) => {
+        const customize = get();
+        const bag = isFlag ? customize.flags : customize.tokens;
+        const key = isFlag ? item.flag : item.token;
+        if (value === '' || value === null || value === undefined || (isFlag && value === item.default)) {
+            delete bag[key];
+        } else {
+            bag[key] = value;
+        }
+        commit();
+    };
+
+    if (item.type === 'check') {
         const label = el('label', 'checkbox_label');
         label.htmlFor = id;
         const box = /** @type {HTMLInputElement} */ (el('input'));
         box.type = 'checkbox';
         box.id = id;
-        box.addEventListener('input', () => {
-            const customize = get();
-            if (box.checked) {
-                customize.flags[item.flag] = true;
-            } else {
-                delete customize.flags[item.flag];
-            }
-            commit();
-        });
+        box.addEventListener('input', () => store(box.checked ? true : undefined));
         label.append(box, el('span', '', t(item.label)));
         row.append(label);
-        refreshers.push(() => { box.checked = !!get().flags[item.flag]; });
+        refreshers.push(() => { box.checked = stored() === true; });
         return row;
     }
 
@@ -448,19 +570,7 @@ function buildControl(item, get, commit, refreshers) {
     const clear = el('button', 'mst-cz-clear fa-solid fa-rotate-left');
     clear.type = 'button';
     clear.title = t('Back to default');
-    clear.addEventListener('click', () => {
-        delete get().tokens[item.token];
-        commit();
-    });
-    const setToken = (value) => {
-        const customize = get();
-        if (value === '' || value === null) {
-            delete customize.tokens[item.token];
-        } else {
-            customize.tokens[item.token] = value;
-        }
-        commit();
-    };
+    clear.addEventListener('click', () => store(undefined));
     /** @type {() => void} */
     let refresh;
 
@@ -471,18 +581,18 @@ function buildControl(item, get, commit, refreshers) {
         const text = /** @type {HTMLInputElement} */ (el('input', 'text_pole mst-cz-text'));
         text.type = 'text';
         text.spellcheck = false;
-        picker.addEventListener('input', () => setToken(picker.value));
+        picker.addEventListener('input', () => store(picker.value));
         text.addEventListener('change', () => {
             const value = text.value.trim();
-            if (!value || CSS.supports('color', value)) {
-                setToken(value);
+            if (!value || (CSS.supports('color', value) && !BAD_VALUE.test(value))) {
+                store(value);
             } else {
                 refresh();
             }
         });
         control.append(picker, text);
         refresh = () => {
-            const value = currentValue(get(), item.token);
+            const value = shown();
             picker.value = toHex(value);
             if (document.activeElement !== text) {
                 text.value = value;
@@ -500,81 +610,86 @@ function buildControl(item, get, commit, refreshers) {
             input.max = String(item.max);
             input.step = String(item.step ?? 1);
         }
-        const unitText = el('span', 'mst-cz-unit', unit);
-        range.addEventListener('input', () => setToken(`${range.value}${unit}`));
+        // tokens hold CSS ("14px"); flags hold the bare number as a string ("180")
+        const write = (value) => store(isFlag ? String(value) : `${value}${unit}`);
+        range.addEventListener('input', () => write(range.value));
         number.addEventListener('change', () => {
             const value = Number(number.value);
             if (Number.isFinite(value)) {
-                setToken(`${value}${unit}`);
+                write(value);
             }
         });
-        control.append(range, number, unitText);
+        control.append(range, number, el('span', 'mst-cz-unit', unit === 'deg' ? '°' : unit));
         refresh = () => {
-            const value = parseFloat(currentValue(get(), item.token));
-            const shown = Number.isFinite(value) ? value : item.min;
-            range.value = String(shown);
+            const value = parseFloat(shown());
+            const current = Number.isFinite(value) ? value : item.min;
+            range.value = String(current);
             if (document.activeElement !== number) {
-                number.value = String(shown);
+                number.value = String(current);
             }
         };
-    } else if (item.type === 'select' || item.type === 'font') {
+    } else if (item.type === 'select') {
         const select = /** @type {HTMLSelectElement} */ (el('select', 'text_pole mst-cz-select'));
         select.id = id;
-        const options = item.type === 'font' ? FONTS : item.options;
-        for (const [value, name] of options) {
+        for (const [value, name] of item.options) {
             const option = /** @type {HTMLOptionElement} */ (el('option', '', t(name)));
             option.value = value;
             select.append(option);
         }
+        select.addEventListener('input', () => store(select.value));
         control.append(select);
-        let custom;
-        if (item.type === 'font') {
-            const other = /** @type {HTMLOptionElement} */ (el('option', '', t('Another font…')));
-            other.value = '__custom';
-            select.append(other);
-            custom = /** @type {HTMLInputElement} */ (el('input', 'text_pole mst-cz-text'));
-            custom.type = 'text';
-            custom.placeholder = t('Font name, e.g. Inter');
-            custom.addEventListener('change', () => {
-                const name = custom.value.trim().replace(/[;{}]/g, '');
-                setToken(name ? `${/\s/.test(name) && !/[,"']/.test(name) ? `"${name}"` : name}, sans-serif` : '');
-            });
-            control.append(custom);
+        refresh = () => { select.value = shown(); };
+    } else if (item.type === 'font') {
+        const select = /** @type {HTMLSelectElement} */ (el('select', 'text_pole mst-cz-select'));
+        select.id = id;
+        for (const [value, name] of [...FONTS, ['__custom', 'Another font…']]) {
+            const option = /** @type {HTMLOptionElement} */ (el('option', '', t(name)));
+            option.value = value;
+            select.append(option);
         }
+        const custom = /** @type {HTMLInputElement} */ (el('input', 'text_pole mst-cz-text'));
+        custom.type = 'text';
+        custom.placeholder = t('Font name, e.g. Inter');
+        custom.addEventListener('change', () => {
+            const name = custom.value.trim().replace(/[;{}<>]/g, '');
+            store(name ? `${/\s/.test(name) && !/[,"']/.test(name) ? `"${name}"` : name}, sans-serif` : '');
+        });
         select.addEventListener('input', () => {
             if (select.value === '__custom') {
                 custom.hidden = false;
                 custom.focus();
                 return;
             }
-            setToken(select.value);
+            store(select.value);
         });
+        control.append(select, custom);
         refresh = () => {
-            const stored = get().tokens[item.token];
-            if (item.type === 'font') {
-                const known = FONTS.some(([value]) => value === (stored ?? ''));
-                select.value = known ? (stored ?? '') : '__custom';
-                custom.hidden = known;
-                if (!known && document.activeElement !== custom) {
-                    custom.value = stored.replace(/, sans-serif$/, '').replace(/^"|"$/g, '');
-                }
-            } else {
-                select.value = currentValue(get(), item.token);
+            const value = stored() ?? '';
+            const known = FONTS.some(([font]) => font === value);
+            select.value = known ? value : '__custom';
+            custom.hidden = known;
+            if (!known && document.activeElement !== custom) {
+                custom.value = value.replace(/, sans-serif$/, '').replace(/^"|"$/g, '');
             }
         };
-    } else if (item.type === 'image') {
+    } else if (item.type === 'url') {
         const text = /** @type {HTMLInputElement} */ (el('input', 'text_pole mst-cz-text mst-cz-url'));
         text.type = 'url';
         text.id = id;
         text.placeholder = 'https://…';
         text.addEventListener('change', () => {
             const url = text.value.trim();
-            setToken(url ? `url("${url.replace(/["\\\n]/g, encodeURIComponent)}")` : '');
+            if (!url || validFlag(item, url)) {
+                store(url);
+            } else {
+                toastr.warning(t('Use a web address starting with https:// (or a path on this site).'));
+                refresh();
+            }
         });
         control.append(text);
         refresh = () => {
             if (document.activeElement !== text) {
-                text.value = imageUrl(get().tokens[item.token]);
+                text.value = stored() ?? '';
             }
         };
     }
@@ -583,8 +698,13 @@ function buildControl(item, get, commit, refreshers) {
     row.append(label, control);
     refreshers.push(() => {
         refresh();
-        clear.hidden = !(item.token in get().tokens);
-        row.classList.toggle('mst-cz-changed', item.token in get().tokens);
+        const changed = stored() !== undefined;
+        clear.hidden = !changed;
+        row.classList.toggle('mst-cz-changed', changed);
+        // background details show only for the background they belong to
+        if (item.when) {
+            row.hidden = flagValue(get(), 'bgMode') !== item.when;
+        }
     });
     return row;
 }
