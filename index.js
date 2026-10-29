@@ -334,6 +334,16 @@ function bootLook() {
     }
 }
 
+/**
+ * SillyTavern calls this (manifest "hooks") after it updates the extension from its update button,
+ * where it would otherwise ask for a manual reload. The page reloads once, after pending settings
+ * are saved, so the new version runs; an up-to-date extension isn't updated again, so it can't loop.
+ */
+export function onUpdate() {
+    toastr.info(SillyTavern.getContext().translate('Reloading to finish the update…'), 'Microsoft Teams Theme');
+    setTimeout(() => location.reload(), 2000);
+}
+
 bootLook();
 
 const { eventSource, eventTypes } = SillyTavern.getContext();
