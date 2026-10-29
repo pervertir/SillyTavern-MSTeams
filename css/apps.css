@@ -1787,3 +1787,60 @@ body.ms-teams #right-nav-panel:has(#rm_characters_block[style*="display: none"])
 body.ms-teams #right-nav-panel :is(#rm_button_back, #rm_button_back_from_group, #rm_button_characters) {
     display: none !important;
 }
+
+/* New group: SillyTavern's check mark becomes a labelled Create button, with a note below */
+body.ms-teams #right-nav-panel #GroupFavDelOkBack #rm_group_submit.menu_button {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    width: auto !important;
+    min-width: 0;
+    height: 32px;
+    aspect-ratio: auto !important;
+    gap: 6px;
+    padding: 0 14px !important;
+    border: 1px solid var(--mst-brand) !important;
+    border-radius: var(--mst-radius);
+    background: var(--mst-brand) !important;
+    color: var(--mst-on-brand) !important;
+}
+
+body.ms-teams #right-nav-panel #GroupFavDelOkBack #rm_group_submit.menu_button:hover {
+    background: var(--mst-brand-hover) !important;
+}
+
+body.ms-teams #right-nav-panel #GroupFavDelOkBack #rm_group_submit.menu_button::after {
+    content: 'Create group';
+    font-family: var(--mst-font);
+    font-size: var(--mst-text);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* the group's other buttons aren't there yet; let Create sit on its own line */
+body.ms-teams #right-nav-panel #GroupFavDelOkBack:has(#rm_group_scenario[style*="none"]) {
+    flex-wrap: wrap;
+}
+
+body.ms-teams .mst-group-note {
+    display: none;
+    margin: 4px 0 8px;
+    color: var(--mst-fg-3);
+    font-size: var(--mst-text-sm);
+}
+
+body.ms-teams #rm_group_chats_block:has(#rm_group_scenario[style*="none"]) .mst-group-note {
+    display: block;
+}
+
+/* The member lists: Teams cards instead of SillyTavern's dark film */
+body.ms-teams :is(#rm_group_members, #rm_group_add_members) {
+    border: 1px solid var(--mst-stroke-2);
+    border-radius: var(--mst-radius-md);
+    background: var(--mst-card);
+    color: var(--mst-fg-3);
+}
+
+body.ms-teams :is(#rm_group_members, #rm_group_add_members) .group_member:hover {
+    background: var(--mst-subtle-hover);
+}

@@ -884,6 +884,18 @@ function buildPeople() {
     back.title = t('Back');
     back.setAttribute('aria-label', t('Back'));
     drawer.querySelector('.mst-app-header')?.prepend(back);
+
+    // a new group: SillyTavern's save is a small check mark; the styles make it a labelled
+    // Create button, Enter in the name creates it, and a note says what comes after
+    const note = el('p', 'mst-group-note', t('Add a scenario and other group settings once the group is created.'));
+    document.getElementById('GroupFavDelOkBack')?.after(own(note));
+    document.getElementById('rm_group_chat_name')?.addEventListener('keydown', (event) => {
+        const submit = /** @type {HTMLElement|null} */ (document.getElementById('rm_group_submit'));
+        if (isOn() && event.key === 'Enter' && !event.isComposing && submit && submit.offsetParent) {
+            event.preventDefault();
+            submit.click();
+        }
+    });
     document.getElementById('rm_print_characters_block')?.classList.add('mst-endless');
     endlessScroll(drawer, '#rm_print_characters_pagination');
 }
