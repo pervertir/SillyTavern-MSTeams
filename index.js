@@ -335,13 +335,35 @@ function bootLook() {
 }
 
 /**
- * SillyTavern calls this (manifest "hooks") after it updates the extension from its update button,
- * where it would otherwise ask for a manual reload. The page reloads once, after pending settings
- * are saved, so the new version runs; an up-to-date extension isn't updated again, so it can't loop.
+ * Reloads the page once SillyTavern has saved its settings (or after a few seconds if no save
+ * reports back), so the page starts over with the theme in place.
  */
+function reloadAfterSave(message) {
+    const { eventSource, eventTypes, saveSettingsDebounced, translate } = SillyTavern.getContext();
+    toastr.info(translate(message), 'Microsoft Teams Theme');
+    let reloading = false;
+    const reload = () => {
+        if (!reloading) {
+            reloading = true;
+            location.reload();
+        }
+    };
+    eventSource.once(eventTypes.SETTINGS_UPDATED, reload);
+    saveSettingsDebounced();
+    setTimeout(reload, 4000);
+}
+
+/**
+ * SillyTavern calls these (manifest "hooks") right after it installs or updates the extension.
+ * Each reloads the page once, so the theme starts with a fresh page; neither runs again on the
+ * reloaded page, so they can't loop.
+ */
+export function onInstall() {
+    reloadAfterSave('Reloading to finish installing…');
+}
+
 export function onUpdate() {
-    toastr.info(SillyTavern.getContext().translate('Reloading to finish the update…'), 'Microsoft Teams Theme');
-    setTimeout(() => location.reload(), 2000);
+    reloadAfterSave('Reloading to finish the update…');
 }
 
 bootLook();

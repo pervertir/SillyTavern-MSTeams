@@ -6,11 +6,12 @@
     "js": "index.js",
     "css": "style.css",
     "author": "pervertir",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "license": "MIT",
     "homepage": "https://github.com/pervertir/SillyTavern-MSTeams",
     "auto_update": true,
     "hooks": {
+        "install": "onInstall",
         "update": "onUpdate"
     }
 }
