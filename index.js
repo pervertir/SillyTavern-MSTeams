@@ -8,6 +8,7 @@ import { refreshTitle, setDisguise } from './disguise.js';
 import { registerTheme, reloadPage } from './lib/theme-exclusive.js';
 import { initMonograms, monogramizeMessages } from './monograms.js';
 import { isOn, parkOwned, restoreOwned } from './own.js';
+import { initSharpImages } from './sharp.js';
 import { initShortcuts } from './shortcuts.js';
 import { focusSearch, initShell, refreshDrawerState, refreshHeader, refreshNavigation, refreshPersona, refreshRailToggle, setRailTooltips, startNewChat } from './shell.js';
 import { initTimes, labelMessages } from './times.js';
@@ -269,6 +270,7 @@ async function buildFrame() {
     applySettings();
     initTimes();
     initMonograms();
+    initSharpImages();
     initShortcuts({
         enabled: () => !!getSettings().enabled,
         focusSearch,
