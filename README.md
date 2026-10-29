@@ -54,7 +54,7 @@ SillyTavern's background image is hidden while the theme is on.
 
 1. In SillyTavern, open **Extensions** → **Install extension**.
 2. Paste `https://github.com/pervertir/SillyTavern-MSTeams` and install.
-3. That's it: turning the theme on turns off other theme extensions (our Discord, iMessage and Yodayo Tavern themes right away; others such as Moonlit Echoes after a reload, with a button for it). While it's on, SillyTavern's own UI theme preset and Custom CSS are paused, not changed; turn that off in the settings if you want them on top.
+3. That's it: turning the theme on turns off other theme extensions (our Discord, iMessage and Yodayo Tavern themes right away; others such as Moonlit Echoes by reloading the page once). While it's on, SillyTavern's own UI theme preset and Custom CSS are paused, not changed; turn that off in the settings if you want them on top.
 
 ## No SillyTavern logo at startup
 
@@ -104,7 +104,7 @@ Find them under **Extensions** → **Microsoft Teams Theme**:
 ## Notes
 
 - Needs SillyTavern 1.19.0 or newer.
-- No reload needed: installing the theme or switching it on applies it at once, and updating it from Manage Extensions reloads the page by itself once the update is in (from version 1.0.2 on).
+- No manual reload: installing or updating the theme reloads the page by itself once it's in, and switching it on in its settings applies it at once.
 - Every rule is scoped under `body.ms-teams`, so your own Custom CSS can still override it.
 - The font is Segoe UI, as in Teams. Windows uses its installed copy; on macOS and elsewhere the theme loads it from Microsoft's font CDN (the same files Fluent UI web apps use), only while the theme is on.
 - This is an unofficial look-alike theme. It isn't made by or affiliated with Microsoft. Microsoft Teams is a trademark of Microsoft.
