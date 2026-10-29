@@ -877,6 +877,13 @@ function buildPeople() {
     const [add, importer] = drawer.querySelectorAll('.mst-app-header .mst-tool-icon');
     add.title = t('Add contact');
     importer.title = t('Import contact');
+    // Teams' back arrow before the title while a contact or group is open (SillyTavern's own
+    // way back is a list icon, hidden here); it returns to the list
+    const back = toolButton('', 'arrow-left', () => click('#rm_button_characters'));
+    back.classList.add('mst-people-back');
+    back.title = t('Back');
+    back.setAttribute('aria-label', t('Back'));
+    drawer.querySelector('.mst-app-header')?.prepend(back);
     document.getElementById('rm_print_characters_block')?.classList.add('mst-endless');
     endlessScroll(drawer, '#rm_print_characters_pagination');
 }

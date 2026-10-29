@@ -1771,3 +1771,19 @@ body.ms-teams #user-settings-block .mst-cp-card .flex-container:has(> :is(span, 
 body.ms-teams #user-settings-block .mst-cp-card div:has(> .neo-range-slider) {
     max-width: 560px !important;
 }
+
+/* Characters: Teams' back arrow in the header while a contact or group is open, in place of
+   SillyTavern's own back buttons */
+body.ms-teams #right-nav-panel .mst-people-back {
+    display: none;
+    flex: none;
+    margin-right: 4px;
+}
+
+body.ms-teams #right-nav-panel:has(#rm_characters_block[style*="display: none"]) .mst-people-back {
+    display: inline-flex;
+}
+
+body.ms-teams #right-nav-panel :is(#rm_button_back, #rm_button_back_from_group, #rm_button_characters) {
+    display: none !important;
+}
