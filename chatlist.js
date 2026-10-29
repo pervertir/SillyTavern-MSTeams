@@ -4,7 +4,7 @@
 import { monogramizeAll } from './monograms.js';
 import { toggleFlyout } from './shell.js';
 import { formatListTime } from './times.js';
-import { own } from './own.js';
+import { isOn, own } from './own.js';
 
 const LIST_ID = 'mst-list';
 /** SillyTavern's own pinned chats, kept in account storage by welcome-screen.js */
@@ -150,6 +150,7 @@ function buildItem(entry) {
         avatar.append(buildTeamAvatar(entry.team));
     } else {
         const img = document.createElement('img');
+        img.width = img.height = 32;
         img.src = entry.thumb;
         img.alt = '';
         img.loading = 'lazy';
@@ -391,6 +392,9 @@ export async function refreshChatList() {
 /** Refreshes after a pause, so a burst of events costs one request. */
 export function scheduleRefresh(delay = 600) {
     clearTimeout(refreshTimer);
+    if (!isOn()) {
+        return;
+    }
     refreshTimer = setTimeout(refreshChatList, delay);
 }
 

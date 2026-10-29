@@ -9,6 +9,11 @@ let marks = [];
 
 const OWN_ATTR = 'data-mst-own';
 
+/** Whether the theme is on: watchers and listeners do nothing while it's off. */
+export function isOn() {
+    return document.body.classList.contains('ms-teams');
+}
+
 /** Marks a node the theme added to the page. */
 export function own(node) {
     node.dataset.mstOwn = '';

@@ -10,7 +10,7 @@ import { focusSearch, initShell, refreshDrawerState, refreshHeader, refreshNavig
 import { initTimes, labelMessages } from './times.js';
 import { applyCustomize, emptyCustomize, normalizeCustomize, openCustomize } from './customize.js';
 import { registerTheme } from './lib/theme-exclusive.js';
-import { parkOwned, restoreOwned } from './own.js';
+import { isOn, parkOwned, restoreOwned } from './own.js';
 import { monogramizeMessages } from './monograms.js';
 
 const MODULE_NAME = 'msTeamsTheme';
@@ -153,6 +153,9 @@ function toggleRail() {
 }
 
 function onChatChanged(chatId) {
+    if (!isOn()) {
+        return;
+    }
     refreshHeader();
     refreshTitle();
     if (chatId) {

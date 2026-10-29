@@ -6,7 +6,7 @@
 // Everything added here is hidden by CSS while the theme is off.
 
 import { getInitials, getMonogramColor } from './monograms.js';
-import { own } from './own.js';
+import { isOn, own } from './own.js';
 
 function t(text) {
     return SillyTavern.getContext().translate(text);
@@ -184,7 +184,7 @@ function buildCalendar() {
     }
     const stage = el('div', 'mst-stage mst-calendar');
     const month = el('span', 'mst-cal-month');
-    const render = () => renderCalendar(stage, month);
+    const render = () => isOn() && renderCalendar(stage, month);
     const today = toolButton('Today', 'calendar', () => {
         weekOffset = 0;
         render();
@@ -386,6 +386,8 @@ const WORD_ICON = 'https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.0
 function wordIcon(className = 'mst-doc-icon') {
     const icon = el('span', className);
     const img = el('img');
+    // a fixed size, so it can never show at full size without the theme's styles
+    img.width = img.height = 48;
     img.src = WORD_ICON;
     img.alt = '';
     img.decoding = 'async';
@@ -503,6 +505,9 @@ function buildOneDrive() {
 
     const select = document.querySelector(WORLD_SELECT);
     const render = () => {
+        if (!isOn()) {
+            return;
+        }
         renderDocuments(list, docTitle);
         here.textContent = docTitle.textContent;
     };
@@ -692,6 +697,9 @@ const APP_TILE_COLORS = ['#5b5fc7', '#0f6cbd', '#038387', '#107c10', '#c239b3', 
 
 /** Puts a Teams-style app tile (colored square, white icon) in front of each app's name. */
 function decorateApps(drawer) {
+    if (!isOn()) {
+        return;
+    }
     for (const head of drawer.querySelectorAll('.extensions_block .inline-drawer > .inline-drawer-header')) {
         if (head.querySelector(':scope > .mst-app-tile')) {
             continue;

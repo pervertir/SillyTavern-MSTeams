@@ -4,7 +4,7 @@
 import { canGoBack, canGoForward, filterChatList, travel } from './chatlist.js';
 import { isPlaceholder, monogramize } from './monograms.js';
 import { RAIL_SHORTCUTS, SHORTCUTS, showShortcuts, withShortcut } from './shortcuts.js';
-import { own } from './own.js';
+import { isOn, own } from './own.js';
 
 const TITLEBAR_ID = 'mst-titlebar';
 const CHAT_APP_ID = 'mst-app-chat';
@@ -176,6 +176,7 @@ function createTitlebar() {
     meAvatar.className = 'mst-avatar';
     const meImg = document.createElement('img');
     meImg.alt = '';
+    meImg.width = meImg.height = 32;
     const presence = document.createElement('span');
     presence.className = 'mst-presence mst-presence-on';
     const monogram = document.createElement('span');
@@ -581,6 +582,7 @@ export function refreshHeader() {
     } else if (character) {
         const img = document.createElement('img');
         img.alt = '';
+        img.width = img.height = 32;
         img.src = context.getThumbnailUrl('avatar', character.avatar);
         const presence = document.createElement('span');
         presence.className = 'mst-presence';
@@ -657,6 +659,9 @@ export let refreshDrawerState = () => {};
 function trackDrawers() {
     const drawers = [...document.querySelectorAll('#top-settings-holder > .drawer')];
     const update = refreshDrawerState = () => {
+        if (!isOn()) {
+            return;
+        }
         let any = false, more = false, phoneMore = false;
         for (const drawer of drawers) {
             const open = !!drawer.querySelector(':scope > .drawer-content.openDrawer');
