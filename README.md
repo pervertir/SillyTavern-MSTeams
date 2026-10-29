@@ -104,7 +104,7 @@ Find them under **Extensions** → **Microsoft Teams Theme**:
 ## Notes
 
 - Needs SillyTavern 1.19.0 or newer.
-- No manual reload: installing or updating the theme reloads the page by itself once it's in, and switching it on in its settings applies it at once.
+- No manual reload: installing the theme, switching it on, or updating it reloads the page by itself, once. Switching it off applies at once.
 - Every rule is scoped under `body.ms-teams`, so your own Custom CSS can still override it.
 - The font is Segoe UI, as in Teams. Windows uses its installed copy; on macOS and elsewhere the theme loads it from Microsoft's font CDN (the same files Fluent UI web apps use), only while the theme is on.
 - This is an unofficial look-alike theme. It isn't made by or affiliated with Microsoft. Microsoft Teams is a trademark of Microsoft.
