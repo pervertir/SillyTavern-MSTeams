@@ -390,7 +390,8 @@ export function refreshHeader() {
     avatar.classList.remove('mst-avatar-group');
 
     const { group, character } = getChatOwner();
-    const hasChat = !!(group || character);
+    const temporary = !group && !character && isTemporaryChat();
+    const hasChat = !!(group || character || temporary);
     document.body.classList.toggle('mst-no-chat', !hasChat);
 
     head.classList.toggle('mst-head-channel', !!group);
@@ -408,9 +409,24 @@ export function refreshHeader() {
         avatar.append(img, el('span', 'mst-presence'));
         name.textContent = character.name;
         monogramize(img, character.name);
+    } else if (temporary) {
+        avatar.append(createMonogram(context.name2 || t('Assistant')));
+        name.textContent = context.name2 || t('Assistant');
     } else {
         name.textContent = '';
     }
+}
+
+/**
+ * A chat with no character or group behind it: SillyTavern's temporary chat with the assistant, or the
+ * welcome screen once you have written something on it. The bare welcome screen is not one.
+ */
+function isTemporaryChat() {
+    const chat = document.getElementById('chat');
+    if (!chat?.querySelector('.mes')) {
+        return false;
+    }
+    return !chat.querySelector('.welcomePanel') || !!chat.querySelector('.mes[is_user="true"]');
 }
 
 /** Teams' empty chat pane, shown while no chat is open */

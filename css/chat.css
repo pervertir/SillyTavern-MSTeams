@@ -307,6 +307,30 @@ body.ms-teams.hideChatAvatars #chat .mes {
     column-gap: 0;
 }
 
+/* With no picture beside your messages (or none at all), the counters SillyTavern keeps under it
+   (message number, reply time, tokens) still show when they are turned on */
+body.ms-teams:is(:not(.no-mesIDDisplay), :not(.no-timer), :not(.no-tokenCount)) #chat .mes[is_user="true"] .mesAvatarWrapper {
+    display: flex;
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: end;
+    width: auto;
+    min-width: 0;
+}
+
+body.ms-teams #chat .mes[is_user="true"] .mesAvatarWrapper .avatar {
+    display: none;
+}
+
+body.ms-teams.hideChatAvatars:is(:not(.no-mesIDDisplay), :not(.no-timer), :not(.no-tokenCount)) #chat .mes:not([is_user="true"]) {
+    grid-template-columns: auto minmax(0, max-content) minmax(48px, 1fr);
+    column-gap: 8px;
+}
+
+body.ms-teams.hideChatAvatars #chat .mes .mesAvatarWrapper {
+    width: auto;
+}
+
 body.ms-teams.hideChatAvatars #chat .mes[is_user="true"] {
     grid-template-columns: minmax(48px, 1fr) minmax(0, max-content);
 }
@@ -439,6 +463,30 @@ body.ms-teams #chat .mes .mes_reasoning_details {
     padding: 4px 8px;
 }
 
+/* the "Thought for …" line: a quiet Teams row, not SillyTavern's dark pill */
+body.ms-teams #chat .mes .mes_reasoning_header {
+    margin: 0;
+    padding: 2px 20px 2px 0;
+    border-radius: var(--mst-radius);
+    background: none;
+    color: var(--mst-fg-3);
+    font-size: var(--mst-text-sm);
+}
+
+body.ms-teams #chat .mes .mes_reasoning_header:hover {
+    color: var(--mst-brand-fg);
+}
+
+body.ms-teams #chat .mes .mes_reasoning_arrow {
+    color: inherit;
+}
+
+body.ms-teams #chat .mes .mes_reasoning {
+    margin-top: 4px;
+    padding: 4px 0 2px 10px;
+    border-left: 2px solid var(--mst-stroke);
+}
+
 body.ms-teams #chat .mes .mes_reasoning,
 body.ms-teams #chat .mes .mes_reasoning_header_title {
     font-size: var(--mst-text-sm);
@@ -509,7 +557,8 @@ body.ms-teams #chat .mes:not([data-media-display="list"]) .mes_media_list,
 body.ms-teams:not(.translate) #chat .mes .mes_translate,
 body.ms-teams:not(.sd) #chat .mes .sd_message_gen,
 body.ms-teams:not(.tts) #chat .mes .mes_narrate,
-body.ms-teams #chat .mes[is_system="true"] .mes_narrate {
+body.ms-teams #chat .mes[is_system="true"] .mes_narrate,
+body.ms-teams:is([data-generating="true"], [data-swiping="true"]) #chat .last_mes .mes_buttons {
     display: none;
 }
 
@@ -518,6 +567,18 @@ body.ms-teams #chat .mes .mes_edit_buttons {
     margin-left: auto;
     padding: 0;
     filter: none;
+}
+
+/* editing: when the name line has no room left, the edit buttons go to a line of their own
+   instead of covering the name */
+body.ms-teams #chat .mes .mes_block:has(.edit_textarea) .ch_name {
+    flex-wrap: wrap;
+    row-gap: 4px;
+}
+
+body.ms-teams #chat .mes .mes_block:has(.edit_textarea) .ch_name > .flex-container {
+    flex: 0 1 auto;
+    min-width: min-content;
 }
 
 body.ms-teams #chat .mes .mes_edit_buttons .menu_button {

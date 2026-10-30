@@ -166,3 +166,32 @@ body.ms-teams #dialogue_del_mes {
     gap: 8px;
     padding: 0 0 8px;
 }
+
+body.ms-teams #dialogue_del_mes_ok {
+    border-color: var(--mst-danger);
+    background: var(--mst-danger);
+    color: #ffffff;
+}
+
+body.ms-teams #dialogue_del_mes_ok:hover {
+    filter: brightness(0.92);
+}
+
+/* A slash command running from the box: pause/continue and stop as plain Teams icon buttons
+   (SillyTavern shows and hides them; only their look changes here) */
+body.ms-teams #form_sheld #rightSendForm > .stscript_btn > .fa-solid {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--mst-radius);
+    background: none;
+    color: var(--mst-brand-fg);
+    font-size: 14px;
+}
+
+body.ms-teams #form_sheld #rightSendForm > .stscript_btn.stscript_stop > .fa-solid {
+    color: var(--mst-danger);
+}
+
+body.ms-teams #form_sheld #rightSendForm > .stscript_btn:hover > .fa-solid {
+    background: var(--mst-subtle-hover);
+}

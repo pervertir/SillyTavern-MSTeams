@@ -515,8 +515,30 @@ body.ms-teams .drawer-content .menu_button:is(.redWarningBG, .red_button):is(.fa
 }
 
 /* People and Profiles scroll endlessly (apps.js grows the page), so their pagers go */
-body.ms-teams :is(#rm_print_characters_pagination, #persona_pagination_container) :is(.paginationjs-pages, .paginationjs-nav, .paginationjs-size-changer) {
+body.ms-teams :is(#rm_print_characters_pagination, #persona_pagination_container) :is(.paginationjs-pages, .paginationjs-nav:not(#bulkSelectedCount), .paginationjs-size-changer) {
     display: none !important;
+}
+
+/* bulk edit: how many are picked, beside its buttons */
+body.ms-teams #bulkSelectedCount {
+    align-self: center;
+    margin-right: 4px;
+    font-size: var(--mst-text-sm);
+    color: var(--mst-fg-3);
+}
+
+/* bulk edit and group member picking: a picked row takes the list's selected colour */
+body.ms-teams #rm_print_characters_block.group_overlay_mode_select .character_select {
+    background: none;
+}
+
+body.ms-teams #rm_print_characters_block.group_overlay_mode_select .character_select:hover {
+    background: var(--mst-subtle-hover);
+}
+
+body.ms-teams #rm_print_characters_block.group_overlay_mode_select .character_select.character_selected {
+    background: var(--mst-selected);
+    box-shadow: inset 3px 0 0 var(--mst-brand);
 }
 
 /* Profiles: a narrow list of profiles on the left, the open profile filling the rest */

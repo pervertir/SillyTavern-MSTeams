@@ -307,6 +307,21 @@
         display: none;
     }
 
+    /* ...but the counters under the picture stay when they are turned on */
+    body.ms-teams:not(.mst-in-channel):is(:not(.no-mesIDDisplay), :not(.no-timer), :not(.no-tokenCount)) #chat .mes:not([is_user="true"]) {
+        grid-template-columns: auto minmax(0, max-content) minmax(32px, 1fr);
+        column-gap: 6px;
+    }
+
+    body.ms-teams:not(.mst-in-channel):is(:not(.no-mesIDDisplay), :not(.no-timer), :not(.no-tokenCount)) #chat .mes:not([is_user="true"]) .mesAvatarWrapper {
+        display: flex;
+        width: auto;
+    }
+
+    body.ms-teams:not(.mst-in-channel) #chat .mes:not([is_user="true"]) .mesAvatarWrapper .avatar {
+        display: none;
+    }
+
     /* the message box: a rounded pill, as on Teams mobile */
     body.ms-teams #send_form {
         border-radius: 22px;

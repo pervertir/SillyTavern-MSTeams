@@ -862,6 +862,7 @@ function buildProfiles() {
         return;
     }
     header(drawer, 'Persona', [
+        toolButton('Usage stats', 'info', () => click('#PersonaManagement .user_stats_button')),
         toolButton('Back up', 'arrow-down', () => click('#personas_backup')),
         toolButton('Restore', 'arrow-up', () => click('#personas_restore')),
         toolButton('New profile', 'person-add', () => click('#create_dummy_persona'), true),

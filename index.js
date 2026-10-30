@@ -281,6 +281,21 @@ async function buildFrame() {
     const { eventSource, eventTypes } = SillyTavern.getContext();
     eventSource.on(eventTypes.CHAT_CHANGED, onChatChanged);
     eventSource.on(eventTypes.GROUP_UPDATED, refreshHeader);
+    // a temporary chat has no character and SillyTavern opens it without an event, so watch the messages
+    let pending = 0;
+    new MutationObserver(() => {
+        if (!isOn() || pending) {
+            return;
+        }
+        pending = requestAnimationFrame(() => {
+            pending = 0;
+            const wasEmpty = document.body.classList.contains('mst-no-chat');
+            refreshHeader();
+            if (wasEmpty && !document.body.classList.contains('mst-no-chat')) {
+                showChatOnPhone();
+            }
+        });
+    }).observe(document.getElementById('chat'), { childList: true });
     eventSource.on(eventTypes.CHARACTER_EDITED, refreshHeader);
     eventSource.on(eventTypes.CHARACTER_RENAMED, refreshHeader);
     eventSource.on(eventTypes.CHARACTER_RENAMED, refreshTitle);
