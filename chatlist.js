@@ -72,7 +72,7 @@ function openItemMenu(anchor, place) {
         favorite
             ? { label: 'Remove from favorites', icon: 'fa-solid fa-star', run: () => toggleFavorite(place) }
             : { label: 'Favorite', icon: 'fa-regular fa-star', run: () => toggleFavorite(place) },
-        { label: 'Delete chat', icon: 'fa-solid fa-trash-can', run: () => deleteChat(place) },
+        { label: 'Delete', icon: 'fa-solid fa-trash-can', run: () => deleteChat(place) },
     ], 'below-end');
 }
 
