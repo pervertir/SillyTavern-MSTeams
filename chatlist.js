@@ -72,7 +72,45 @@ function openItemMenu(anchor, place) {
         favorite
             ? { label: 'Remove from favorites', icon: 'fa-solid fa-star', run: () => toggleFavorite(place) }
             : { label: 'Favorite', icon: 'fa-regular fa-star', run: () => toggleFavorite(place) },
+        { label: 'Delete chat', icon: 'fa-solid fa-trash-can', run: () => deleteChat(place) },
     ], 'below-end');
+}
+
+/**
+ * Deletes a chat so its row leaves the list. An open chat is closed first: deleting the open one
+ * from Chat History makes SillyTavern start a new chat at once when it was the character's last.
+ */
+async function deleteChat(place) {
+    const context = SillyTavern.getContext();
+    const confirmed = await context.callGenericPopup(`<h3>${t('Delete this chat?')}</h3>`, context.POPUP_TYPE.CONFIRM);
+    if (confirmed !== context.POPUP_RESULT.AFFIRMATIVE) {
+        return;
+    }
+    const { closeCurrentChat, deleteCharacterChatByName } = await import('/script.js');
+    const open = place.group ? String(context.groupId) === String(place.group) : isCurrent(place);
+    if (open && context.getCurrentChatId() === place.fileId && !await closeCurrentChat()) {
+        return;
+    }
+    if (isFavorite(place)) {
+        toggleFavorite(place);
+    }
+    if (place.group) {
+        const { deleteGroupChatByName } = await import('/scripts/group-chats.js');
+        await deleteGroupChatByName(place.group, place.fileId);
+    } else {
+        await deleteCharacterChatByName(String(context.characters.findIndex(x => x.avatar === place.avatar)), place.fileId);
+    }
+    // back and forward must not lead to the deleted chat
+    for (let i = visited.length - 1; i >= 0; i--) {
+        if (visited[i].fileId === place.fileId) {
+            visited.splice(i, 1);
+            if (i <= visitIndex) {
+                visitIndex--;
+            }
+        }
+    }
+    onHistoryChange();
+    refreshChatList();
 }
 
 function moreButton() {
