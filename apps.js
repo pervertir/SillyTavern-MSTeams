@@ -344,15 +344,27 @@ function buildCalls() {
 /* OneDrive ------------------------------------------------------------------------------ */
 
 const WORLD_SELECT = '#world_editor_select';
-/** Word's own document icon, linked from Microsoft's icon CDN (the one Fluent UI apps use) */
-const WORD_ICON = 'https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/assets/brand-icons/product/svg/word_48x1.svg';
+/** File icons linked from Microsoft's icon CDN (the ones Fluent UI apps use) */
+const OFFICE_CDN = 'https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/assets';
+const WORD_ICON = `${OFFICE_CDN}/brand-icons/product/svg/word_48x1.svg`;
+/** The kinds of file a lorebook can pass for in My files; Word most often, as in a real OneDrive */
+const FILE_KINDS = [
+    { label: 'Word document', icon: WORD_ICON },
+    { label: 'Excel workbook', icon: `${OFFICE_CDN}/item-types/48/xlsx.svg` },
+    { label: 'Word document', icon: WORD_ICON },
+    { label: 'PowerPoint presentation', icon: `${OFFICE_CDN}/item-types/48/pptx.svg` },
+    { label: 'Word document', icon: WORD_ICON },
+    { label: 'PDF', icon: `${OFFICE_CDN}/item-types/48/pdf.svg` },
+    { label: 'Video', icon: `${OFFICE_CDN}/item-types/48/video.svg` },
+    { label: 'OneNote notebook', icon: `${OFFICE_CDN}/item-types/48/one.svg` },
+];
 
-function wordIcon(className = 'mst-doc-icon') {
+function wordIcon(className = 'mst-doc-icon', src = WORD_ICON) {
     const icon = el('span', className);
     const img = el('img');
     // a fixed size, so it can never show at full size without the theme's styles
     img.width = img.height = 48;
-    img.src = WORD_ICON;
+    img.src = src;
     img.alt = '';
     img.decoding = 'async';
     // the theme's own document icon when Microsoft's CDN can't be reached
@@ -369,7 +381,7 @@ function openLorebook(value) {
     }
 }
 
-/** The left column: every lorebook as a Word document, the open one highlighted. */
+/** The left column: every lorebook as a file (its name picks the kind), the open one highlighted. */
 function renderDocuments(list, title) {
     const select = /** @type {HTMLSelectElement} */ (document.querySelector(WORLD_SELECT));
     if (!select) {
@@ -378,9 +390,10 @@ function renderDocuments(list, title) {
     const items = [...select.options].filter(option => option.value !== '').map((option) => {
         const item = button('mst-doc');
         item.classList.toggle('mst-doc-active', option.selected);
-        const icon = wordIcon();
+        const kind = FILE_KINDS[hashName(option.textContent.trim()) % FILE_KINDS.length];
+        const icon = wordIcon('mst-doc-icon', kind.icon);
         const text = el('span', 'mst-doc-text');
-        text.append(el('span', 'mst-doc-name', option.textContent.trim()), el('span', 'mst-doc-kind', t('Word document')));
+        text.append(el('span', 'mst-doc-name', option.textContent.trim()), el('span', 'mst-doc-kind', t(kind.label)));
         item.append(icon, text);
         item.title = option.textContent.trim();
         item.addEventListener('click', () => openLorebook(option.value));

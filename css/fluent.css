@@ -198,7 +198,6 @@ body.ms-teams #CharListButtonAndHotSwaps,
 body.ms-teams #rm_button_bar,
 body.ms-teams #form_character_search_form,
 body.ms-teams #charListGridToggle,
-body.ms-teams #charListFixedTop .rm_tag_controls,
 body.ms-teams #rm_print_characters_block .ch_additional_info:not(.group_select_counter),
 body.ms-teams #rm_print_characters_block .tags_inline {
     display: none !important;

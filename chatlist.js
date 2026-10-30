@@ -13,7 +13,7 @@ const PINNED_KEY = 'pinnedChats';
 const COLLAPSED_KEY = 'mst-collapsed-sections';
 const COLLAPSED_TEAMS_KEY = 'mst-collapsed-teams';
 
-let getSettings = () => ({ recentMax: 50 });
+let getSettings = () => ({ recentMax: 50, chatListLines: 'message' });
 /** @type {Array<object>} */
 let entries = [];
 let filterText = '';
@@ -181,10 +181,16 @@ function buildItem(entry) {
         avatar.append(img, el('span', 'mst-presence'));
     }
 
+    // the setting picks what the two lines show; a group chat's name is already its channel
+    const lines = getSettings().chatListLines;
+    const title = lines === 'chat-title' && !entry.group ? entry.fileId : entry.name;
+    const detail = lines === 'chat' ? (entry.group ? entry.team : entry.fileId) : entry.preview;
+    item.dataset.mstPerson = entry.name;
+
     const top = el('span', 'mst-chat-top');
-    top.append(el('span', 'mst-chat-name', entry.name), el('span', 'mst-chat-time', entry.time));
+    top.append(el('span', 'mst-chat-name', title), el('span', 'mst-chat-time', entry.time));
     const text = el('span', 'mst-chat-text');
-    text.append(top, el('span', 'mst-chat-preview', entry.preview));
+    text.append(top, el('span', 'mst-chat-preview', detail));
 
     item.append(avatar, text, moreButton());
     return item;
@@ -277,7 +283,7 @@ function render() {
         body.append(el('div', 'mst-list-empty', needle ? t('No chats match your search') : t('No chats yet. Start one with the pen button above.')));
     }
     markCurrentChat();
-    monogramizeAll(body, '.mst-chat .mst-avatar img', img => img.closest('.mst-chat')?.querySelector('.mst-chat-name')?.textContent ?? '');
+    monogramizeAll(body, '.mst-chat .mst-avatar img', img => img.closest('.mst-chat')?.dataset.mstPerson ?? '');
 }
 
 /** Moves the highlight to the open chat without fetching the list again. */

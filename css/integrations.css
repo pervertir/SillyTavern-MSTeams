@@ -1,0 +1,322 @@
+/* Other extensions in Teams' clothes. Their own code and functions are untouched. */
+
+/* The gallery fills the chat pane, as the Shared tab's page */
+body.ms-teams #gallery {
+    position: fixed !important;
+    top: calc(var(--mst-titlebar-h) + 56px) !important;
+    left: calc(var(--mst-rail-w) + var(--mst-list-w)) !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    background: var(--mst-canvas);
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    color: var(--mst-fg);
+}
+
+body.ms-teams.mst-no-list #gallery {
+    left: var(--mst-rail-w) !important;
+}
+
+@media screen and (max-width: 1000px) {
+    body.ms-teams #gallery {
+        top: 0 !important;
+        left: 0 !important;
+        bottom: var(--mst-tabbar-h) !important;
+    }
+}
+
+/* Quick Replies: Teams' suggested replies, one row of chips above the box that never grows it */
+body.ms-teams #qr--bar {
+    order: -1;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 6px;
+    width: 100%;
+    margin: 0;
+    padding: 0 0 8px;
+    box-sizing: border-box;
+    border: none;
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    opacity: 1;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+body.ms-teams #qr--bar::-webkit-scrollbar {
+    display: none;
+}
+
+/* to the right while they fit, and every chip can still be scrolled to when they don't */
+body.ms-teams #qr--bar > :first-child {
+    margin-left: auto;
+}
+
+body.ms-teams #qr--bar .qr--buttons {
+    display: flex;
+    flex: none;
+    flex-wrap: nowrap;
+    gap: 6px;
+    width: auto;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+}
+
+body.ms-teams #qr--bar .qr--buttons .qr--button,
+body.ms-teams #qr--bar > #qr--popoutTrigger {
+    flex: none;
+    height: 28px;
+    min-height: 0;
+    margin: 0;
+    padding: 0 12px;
+    box-sizing: border-box;
+    border: 1px solid var(--mst-brand-fg);
+    border-radius: 14px;
+    background: var(--mst-canvas);
+    color: var(--mst-brand-fg);
+    font-family: var(--mst-font);
+    font-size: var(--mst-text-sm);
+    line-height: 26px;
+    white-space: nowrap;
+    box-shadow: none;
+    opacity: 1;
+    filter: none;
+    transition: background-color var(--mst-fast) var(--mst-ease);
+}
+
+body.ms-teams #qr--bar .qr--buttons .qr--button:hover,
+body.ms-teams #qr--bar > #qr--popoutTrigger:hover {
+    background: var(--mst-subtle-hover);
+}
+
+/* Chat Top Bar: Teams' pinned message strip under the chat header */
+body.ms-teams #extensionTopBar,
+body.ms-teams #extensionConnectionProfiles {
+    flex: none;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 4px;
+    width: auto;
+    height: 40px;
+    margin: 0;
+    padding: 0 12px;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 1px solid var(--mst-stroke-2);
+    border-left: 3px solid var(--mst-brand-fg);
+    border-radius: 0;
+    background: var(--mst-list);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    color: var(--mst-fg);
+    font-size: var(--mst-text-sm);
+}
+
+body.ms-teams.mst-no-chat #extensionTopBar,
+body.ms-teams.mst-no-chat #extensionConnectionProfiles {
+    display: none;
+}
+
+body.ms-teams #extensionTopBar .right_menu_button {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border-radius: var(--mst-radius);
+    color: var(--mst-fg-3);
+    font-size: 14px;
+    opacity: 1;
+    filter: none;
+}
+
+body.ms-teams #extensionTopBar .right_menu_button:hover,
+body.ms-teams #extensionTopBar .right_menu_button.active {
+    background: var(--mst-subtle-hover);
+    color: var(--mst-brand-fg);
+}
+
+body.ms-teams #extensionTopBar #extensionTopBarChatName {
+    flex: 1 1 0;
+    min-width: 0;
+    height: 28px;
+    margin: 0;
+    padding: 0 6px;
+    border: none;
+    background-color: transparent;
+    color: var(--mst-fg);
+    font-family: var(--mst-font);
+    font-size: var(--mst-text-sm);
+    font-weight: 600;
+    text-overflow: ellipsis;
+}
+
+body.ms-teams #extensionTopBar #extensionTopBarSearchInput {
+    flex: 0 1 180px;
+    min-width: 60px;
+    height: 28px;
+    margin: 0;
+}
+
+@media screen and (max-width: 1000px) {
+    body.ms-teams #extensionTopBar #extensionTopBarSearchInput {
+        display: none;
+    }
+}
+
+/* World Info Drawer: it replaces the World Info screen, so the Word view steps aside and its own
+   list and editor show in full under the app header */
+body.ms-teams.stwid-- #top-settings-holder #WorldInfo.drawer-content {
+    width: calc(100vw - var(--mst-rail-w));
+    max-width: none;
+    height: calc(100dvh - var(--mst-titlebar-h));
+    padding: 0;
+    overflow: hidden;
+    background: var(--mst-canvas);
+}
+
+body.ms-teams.stwid-- #WorldInfo :is(.mst-drive, .mst-ribbon, .mst-doc-blank) {
+    display: none;
+}
+
+body.ms-teams.stwid-- #WorldInfo .mst-app-header {
+    flex: none;
+    margin: 0;
+}
+
+body.ms-teams.stwid-- #WorldInfo > .stwid--body {
+    flex: 1 1 0;
+    min-height: 0;
+    gap: 0;
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--list {
+    gap: 8px;
+    padding: 12px;
+    box-sizing: border-box;
+    border-right: 1px solid var(--mst-stroke-2);
+    background: var(--mst-list);
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--list .stwid--books .stwid--book {
+    border-bottom: none;
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--list .stwid--books .stwid--book .stwid--head {
+    align-items: center;
+    min-height: 32px;
+    padding: 0 8px;
+    border-radius: var(--mst-radius);
+    background-color: var(--mst-list);
+    font-size: var(--mst-text);
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--list .stwid--books .stwid--book .stwid--entry {
+    margin-left: 12px;
+    padding: 4px 8px;
+    border-bottom: none;
+    border-radius: var(--mst-radius);
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--list .stwid--books .stwid--book .stwid--entry:hover {
+    background-color: var(--mst-hover);
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--list .stwid--books .stwid--book .stwid--entry.stwid--active {
+    background-color: var(--mst-subtle-pressed);
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--list .stwid--books .stwid--book .stwid--entry .stwid--body .stwid--key {
+    color: var(--mst-fg-3);
+    font-style: normal;
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--editor {
+    min-width: 0;
+    padding: 12px 16px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    background: var(--mst-canvas);
+}
+
+/* the editor shows everything, as a settings form rather than a Word page */
+body.ms-teams.stwid-- #WorldInfo .stwid--editor .world_entry textarea[name="comment"],
+body.ms-teams.stwid-- #WorldInfo .stwid--editor .world_entry .world_entry_edit textarea[name="content"] {
+    border: 1px solid var(--mst-stroke-2);
+    border-radius: var(--mst-radius);
+    background: var(--mst-input);
+    color: var(--mst-fg);
+    font-family: var(--mst-font);
+    font-size: var(--mst-text);
+    font-weight: 400;
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--editor .world_entry :is(.WIEnteryHeaderControls, .killSwitch, .inline-drawer-icon) {
+    opacity: 1;
+}
+
+@media screen and (max-width: 1000px) {
+    body.ms-teams.stwid-- #top-settings-holder #WorldInfo.drawer-content {
+        width: 100%;
+    }
+
+    body.ms-teams.stwid-- #WorldInfo > .stwid--body {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    body.ms-teams.stwid-- #WorldInfo .stwid--list {
+        flex: none;
+        width: 100%;
+        max-height: 40dvh;
+        border-right: none;
+        border-bottom: 1px solid var(--mst-stroke-2);
+    }
+}
+
+/* Tag and favorites filter above the people list, as Teams' filter chips */
+body.ms-teams #charListFixedTop .rm_tag_controls {
+    margin: 0 0 8px;
+}
+
+body.ms-teams #charListFixedTop .rm_tag_controls .tags {
+    gap: 4px;
+}
+
+body.ms-teams #charListFixedTop .rm_tag_controls .filterByFavorites.selected {
+    border-color: var(--mst-brand-fg);
+    background: var(--mst-subtle-pressed);
+    color: var(--mst-brand-fg);
+}
+
+/* a favorite shows a star, so it can be told apart in the unfiltered list too */
+body.ms-teams #rm_print_characters_block :is(.character_select, .group_select).is_fav .ch_name::after {
+    content: ' ★';
+    color: var(--mst-brand-fg);
+}
+
+@media screen and (max-width: 1000px) {
+    /* the editor scrolls with the page here, so it takes the height of what's in it */
+    body.ms-teams.stwid-- #WorldInfo .stwid--editor {
+        flex: none;
+        overflow: visible;
+    }
+
+    body.ms-teams.stwid-- #WorldInfo .stwid--editor :is(.world_entry, .world_entry_form, .inline-drawer) {
+        height: auto;
+    }
+}

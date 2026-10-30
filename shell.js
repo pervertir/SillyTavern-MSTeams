@@ -236,6 +236,16 @@ function openProfile() {
     }
 }
 
+/** Shared: the character's image gallery (SillyTavern's Gallery extension, when it's on). */
+function openGallery() {
+    const gallery = document.getElementById('show_gallery_wand_button');
+    if (gallery) {
+        gallery.click();
+    } else {
+        openProfile();
+    }
+}
+
 /** Menus that open from More (…) on the desktop rail */
 const MORE_APPS = PHONE_MORE_APPS.filter(({ id }) => ['backgrounds-button', 'persona-management-button', 'rightNavHolder'].includes(id));
 
@@ -349,7 +359,7 @@ function createHeader() {
     const tabs = el('nav', 'mst-tabs');
     const tab = el('span', 'mst-tab mst-tab-active', t('Chat'));
     const shared = button('mst-tab', t('Shared'));
-    shared.addEventListener('click', openProfile);
+    shared.addEventListener('click', openGallery);
     const add = fluentButton('mst-tab mst-tab-add', t('Add a tab'), 'add');
     add.addEventListener('click', () => toggleDrawer('extensions-settings-button'));
     tabs.append(tab, shared, add);

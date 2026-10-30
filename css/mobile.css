@@ -323,19 +323,16 @@
     }
 
     /* the message box: a rounded pill, as on Teams mobile */
-    body.ms-teams #send_form {
+    body.ms-teams #nonQRFormItems {
+        padding: 2px 4px 2px 14px;
         border-radius: 22px;
         border-color: var(--mst-stroke-2);
         background: var(--mst-list);
         box-shadow: none;
     }
 
-    body.ms-teams #send_form::after {
+    body.ms-teams #nonQRFormItems::after {
         display: none;
-    }
-
-    body.ms-teams #nonQRFormItems {
-        padding: 2px 4px 2px 14px;
     }
 }
 

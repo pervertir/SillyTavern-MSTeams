@@ -1330,16 +1330,16 @@ body.ms-teams #rm_extensions_block .extensions_block .inline-drawer > .inline-dr
 }
 
 /* Word view: an entry shows its heading, keywords and text; Entry settings (¶) shows the rest */
-body.ms-teams #WorldInfo:not(.mst-show-marks) .world_entry .WIEnteryHeaderControls,
-body.ms-teams #WorldInfo:not(.mst-show-marks) .world_entry_edit > :not(:first-child),
-body.ms-teams #WorldInfo:not(.mst-show-marks) .world_entry_edit > :first-child > :is([name="perEntryOverridesBlock"], .commentContainer),
-body.ms-teams #WorldInfo:not(.mst-show-marks) .world_entry_edit [name="contentAndCharFilterBlock"] > :not(:has(textarea[name="content"])),
-body.ms-teams #WorldInfo:not(.mst-show-marks) .world_entry_edit label:has(~ textarea[name="content"]),
-body.ms-teams #WorldInfo:not(.mst-show-marks) #WIEntryHeaderTitlesPC {
+body.ms-teams:not(.stwid--) #WorldInfo:not(.mst-show-marks) .world_entry .WIEnteryHeaderControls,
+body.ms-teams:not(.stwid--) #WorldInfo:not(.mst-show-marks) .world_entry_edit > :not(:first-child),
+body.ms-teams:not(.stwid--) #WorldInfo:not(.mst-show-marks) .world_entry_edit > :first-child > :is([name="perEntryOverridesBlock"], .commentContainer),
+body.ms-teams:not(.stwid--) #WorldInfo:not(.mst-show-marks) .world_entry_edit [name="contentAndCharFilterBlock"] > :not(:has(textarea[name="content"])),
+body.ms-teams:not(.stwid--) #WorldInfo:not(.mst-show-marks) .world_entry_edit label:has(~ textarea[name="content"]),
+body.ms-teams:not(.stwid--) #WorldInfo:not(.mst-show-marks) #WIEntryHeaderTitlesPC {
     display: none;
 }
 
-body.ms-teams #WorldInfo:not(.mst-show-marks) .world_entry_edit [name="keywordsAndLogicBlock"] {
+body.ms-teams:not(.stwid--) #WorldInfo:not(.mst-show-marks) .world_entry_edit [name="keywordsAndLogicBlock"] {
     opacity: 0.75;
 }
 

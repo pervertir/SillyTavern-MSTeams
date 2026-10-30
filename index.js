@@ -5,6 +5,7 @@ import { initApps, refreshCopilotGreeting } from './apps.js';
 import { initChatList, markCurrentChat, scheduleRefresh, travel } from './chatlist.js';
 import { applyCustomize, emptyCustomize, normalizeCustomize, openCustomize } from './customize.js';
 import { refreshTitle, setDisguise } from './disguise.js';
+import { registerExtensionSwitch } from './lib/theme-extensions.js';
 import { registerTheme, reloadPage } from './lib/theme-exclusive.js';
 import { initMonograms, monogramizeMessages } from './monograms.js';
 import { isOn, parkOwned, restoreOwned } from './own.js';
@@ -35,6 +36,11 @@ const defaultSettings = Object.freeze({
     presence: true,
     shortTimes: true,
     recentMax: 50,
+    /** A chat's two lines: message (name, last message), chat (name, chat name), chat-title (chat name, last message) */
+    chatListLines: 'message',
+    /** Extensions picked to turn off with the theme, and the ones it has turned off */
+    switchExtensions: [],
+    switchedExtensions: [],
     /** While the theme is on, SillyTavern's own UI theme preset and Custom CSS are paused */
     pauseUserTheme: true,
     /** Customize page: { version, tokens, flags, css }, layered on the appearance */
@@ -51,6 +57,12 @@ let built = false;
 let building = null;
 /** One theme at a time: set up in init() */
 let exclusive = { activated: () => {}, changed: () => {} };
+/** Extensions the person picked to turn off while the theme is on */
+const extensionSwitch = registerExtensionSwitch({
+    settings: getSettings,
+    isEnabled: () => !!getSettings().enabled,
+    reload: message => reloadPage(message),
+});
 
 function getSettings() {
     const { extensionSettings } = SillyTavern.getContext();
@@ -191,15 +203,21 @@ async function renderSettingsPanel() {
     appearance.value = settings.appearance;
     const recentMax = /** @type {HTMLInputElement} */ (document.getElementById('mst_recent_max'));
     recentMax.value = String(settings.recentMax);
+    const chatLines = /** @type {HTMLSelectElement} */ (document.getElementById('mst_chat_lines'));
+    chatLines.value = settings.chatListLines;
 
     const controls = [
         // turning the theme on turns the other themes off and reloads the page; off applies live
         checkbox('mst_enabled', 'enabled', () => {
             if (settings.enabled) {
                 exclusive.activated();
+                extensionSwitch.sync();
                 reloadWhenOn('Microsoft Teams is on.');
             } else {
                 exclusive.changed();
+                if (extensionSwitch.sync()) {
+                    reloadPage(SillyTavern.getContext().translate('Extensions updated.'));
+                }
             }
         }),
         checkbox('mst_pause_user_theme', 'pauseUserTheme', () => exclusive.changed()),
@@ -210,6 +228,7 @@ async function renderSettingsPanel() {
         checkbox('mst_presence', 'presence'),
         checkbox('mst_short_times', 'shortTimes', () => labelMessages()),
         [recentMax, 'recentMax', () => Math.min(500, Math.max(5, Number(recentMax.value) || defaultSettings.recentMax)), () => scheduleRefresh()],
+        [chatLines, 'chatListLines', () => chatLines.value, () => scheduleRefresh(0)],
     ];
     for (const [element, key, read, after] of controls) {
         element.addEventListener('input', () => {
@@ -220,6 +239,7 @@ async function renderSettingsPanel() {
         });
     }
     document.getElementById('mst_customize')?.addEventListener('click', () => customizeTheme());
+    await extensionSwitch.renderPicker(document.getElementById('mst_extension_switch'));
 }
 
 async function init() {
@@ -238,6 +258,9 @@ async function init() {
                 toggle.checked = false;
             }
             saveSettings();
+            if (extensionSwitch.sync()) {
+                reloadPage(SillyTavern.getContext().translate('Extensions updated.'));
+            }
         },
         pauseUserTheme: () => !!getSettings().pauseUserTheme,
     });

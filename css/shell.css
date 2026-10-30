@@ -355,6 +355,16 @@ body.ms-teams #top-settings-holder > .drawer.mst-more-only > .drawer-toggle {
     display: none;
 }
 
+/* Buttons other extensions add: pinned apps after the built-in ones, the whole cell clickable */
+body.ms-teams #top-settings-holder > .drawer:not([data-mst-icon]) {
+    order: 19;
+}
+
+body.ms-teams #top-settings-holder > .drawer:not([data-mst-icon]) .drawer-icon {
+    width: 100%;
+    height: 100%;
+}
+
 /* Apps sits at the bottom of the rail */
 body.ms-teams #extensions-settings-button {
     margin-top: auto;
@@ -447,8 +457,8 @@ body.ms-teams #top-settings-holder .mst-app-icon {
     transition: none;
 }
 
-/* Teams' Fluent icons in place of Font Awesome's */
-body.ms-teams #top-settings-holder .drawer-icon::before,
+/* Teams' Fluent icons in place of Font Awesome's (other extensions' buttons keep their own glyph) */
+body.ms-teams #top-settings-holder > [data-mst-icon] .drawer-icon::before,
 body.ms-teams #top-settings-holder .mst-app-icon::before {
     content: '';
     display: block;

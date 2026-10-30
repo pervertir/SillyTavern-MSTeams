@@ -49,6 +49,15 @@
                 <input id="mst_recent_max" class="text_pole" type="number" min="5" max="500" step="5" />
             </div>
 
+            <div class="mst-setting-row">
+                <label for="mst_chat_lines">Chats in the list show</label>
+                <select id="mst_chat_lines" class="text_pole">
+                    <option value="message">Character name and last message</option>
+                    <option value="chat">Character name and chat name</option>
+                    <option value="chat-title">Chat name and last message</option>
+                </select>
+            </div>
+
             <label class="checkbox_label" for="mst_pause_user_theme">
                 <input id="mst_pause_user_theme" type="checkbox" />
                 <span>Pause my Custom CSS and UI theme while this theme is on</span>
@@ -60,6 +69,8 @@
                     <span>Customize theme…</span>
                 </div>
             </div>
+
+            <div id="mst_extension_switch"></div>
 
             <small class="mst-note">Turning this theme on turns off other theme extensions (they come back if you turn them on again). The background image is hidden while the theme is on.</small>
         </div>
