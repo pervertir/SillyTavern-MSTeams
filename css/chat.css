@@ -498,6 +498,21 @@ body.ms-teams #chat .mes .extraMesButtons > div:hover {
     color: var(--mst-brand-fg);
 }
 
+/* SillyTavern shows some message buttons only when they apply (a checkpoint, a hidden message,
+   media, the extension turned on); the display set above would show them on every message */
+body.ms-teams #chat .mes[bookmark_link=''] .mes_bookmark,
+body.ms-teams #chat .mes:not([bookmark_link='']) .mes_create_bookmark,
+body.ms-teams #chat .mes[is_system="true"] .mes_hide,
+body.ms-teams #chat .mes[is_system="false"] .mes_unhide,
+body.ms-teams #chat .mes:not([data-media-display="gallery"]) .mes_media_gallery,
+body.ms-teams #chat .mes:not([data-media-display="list"]) .mes_media_list,
+body.ms-teams:not(.translate) #chat .mes .mes_translate,
+body.ms-teams:not(.sd) #chat .mes .sd_message_gen,
+body.ms-teams:not(.tts) #chat .mes .mes_narrate,
+body.ms-teams #chat .mes[is_system="true"] .mes_narrate {
+    display: none;
+}
+
 body.ms-teams #chat .mes .mes_edit_buttons {
     gap: 4px;
     margin-left: auto;
