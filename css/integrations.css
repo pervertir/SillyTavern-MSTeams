@@ -320,3 +320,14 @@ body.ms-teams #rm_print_characters_block :is(.character_select, .group_select).i
         height: auto;
     }
 }
+
+/* Quick Replies' popout button stays reachable at the row's end instead of lying over the chips */
+body.ms-teams #qr--bar > #qr--popoutTrigger {
+    position: sticky;
+    right: 0;
+    top: auto;
+    order: 99;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+}
