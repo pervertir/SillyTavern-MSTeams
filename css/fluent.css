@@ -27,7 +27,7 @@ body.ms-teams dialog.popup .menu_button:is(.fa-solid, .fa-regular, :has(> i:only
 
 body.ms-teams .drawer-content :is(.menu_button.redWarningBG, .menu_button.red_button) {
     border-color: transparent;
-    background: transparent;
+    background: transparent !important;
     color: var(--mst-danger);
 }
 
