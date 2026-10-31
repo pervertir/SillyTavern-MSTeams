@@ -1,0 +1,149 @@
+/* Where popular extensions' pieces sit in this theme: Quick Persona, Typing Indicator, Inject Manager,
+   Guided Generations, Message Summarize, WTracker and floating panels (Objective, Notebook).
+   Their menus and message buttons already land in the theme's own wand menu and message bar. */
+
+/* Quick Persona: a small picture among the message box's buttons */
+body.ms-teams #leftSendForm > #quickPersona {
+    flex: none;
+    width: 24px;
+    height: 24px;
+    margin: auto 4px;
+    align-self: center;
+}
+
+body.ms-teams #quickPersona #quickPersonaImg {
+    display: block;
+    border: none;
+    box-shadow: none;
+}
+
+body.ms-teams #quickPersonaCaret {
+    display: none;
+}
+
+body.ms-teams #quickPersonaMenu {
+    background: var(--mst-raised);
+    border: 1px solid var(--mst-stroke);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+}
+
+body.ms-teams .quickPersonaMenuImg.selected {
+    outline-color: var(--mst-brand);
+}
+
+/* Inject Manager: a small chip in the chat's corner */
+body.ms-teams #chat .injectsElement {
+    gap: 4px;
+    margin: 4px 8px;
+    padding: 2px 8px;
+    background: var(--mst-raised);
+    border: 1px solid var(--mst-stroke);
+    border-radius: 999px;
+    color: var(--mst-fg-3);
+    font-size: 12px;
+    opacity: 1;
+}
+
+body.ms-teams #chat .injectsElement:hover {
+    color: var(--mst-fg);
+}
+
+/* Guided Generations: quiet icon buttons instead of outlined boxes */
+body.ms-teams #gg-action-button-container {
+    box-sizing: border-box;
+    align-items: center;
+    padding: 2px 4px;
+}
+
+body.ms-teams .gg-action-button,
+body.ms-teams .gg-menu-button {
+    box-sizing: border-box;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 6px;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    color: var(--mst-fg-3);
+    font-size: 14px;
+}
+
+body.ms-teams .gg-action-button:hover,
+body.ms-teams .gg-menu-button:hover {
+    background: var(--mst-subtle-hover);
+    color: var(--mst-fg);
+}
+
+body.ms-teams .gg-tools-menu {
+    background: var(--mst-raised);
+    border: 1px solid var(--mst-stroke);
+    border-radius: 8px;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+}
+
+body.ms-teams .gg-tools-menu > .interactable:hover,
+body.ms-teams .gg-tools-menu .list-group-item:hover {
+    background: var(--mst-subtle-hover);
+    color: var(--mst-fg);
+}
+
+/* Message Summarize: a quiet note under the message, keeping the colour that tells its kind */
+body.ms-teams #chat .qvink_memory_display {
+    margin-top: 4px;
+    padding-left: 8px;
+    border-left: 2px solid var(--mst-stroke);
+    font-size: 0.86em;
+    font-style: normal;
+    line-height: 1.35;
+}
+
+body.ms-teams {
+    --qm-default: var(--mst-fg-3);
+}
+
+/* WTracker: a card at the head of the message */
+body.ms-teams #chat .mes_wtracker {
+    margin: 4px 0;
+    padding: 6px 10px;
+    background: var(--mst-bubble-in);
+    border: 1px solid var(--mst-stroke);
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+body.ms-teams #chat .mes_wtracker .wtracker-controls > div {
+    color: var(--mst-fg-3);
+}
+
+/* Floating panels: the theme's own window look, below the theme's menus */
+body.ms-teams #movingDivs > .draggable {
+    background: var(--mst-raised);
+    border: 1px solid var(--mst-stroke);
+    border-radius: 8px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
+    color: var(--mst-fg);
+    /* room for the panel's move and close buttons above its content */
+    padding-top: 34px;
+}
+
+/* Typing Indicator: Teams' small line just above the message box */
+body.ms-teams #chat .typing_indicator {
+    bottom: 0;
+    margin: 4px 16px 2px;
+    color: var(--mst-fg-3);
+    font-size: 12px;
+    text-shadow: none;
+    opacity: 1;
+}
+
+body.ms-teams #chat .typing_indicator .svg_dots {
+    margin: 0 6px 0 0;
+    transform: scale(0.7);
+    transform-origin: left center;
+    width: 22px;
+    fill: var(--mst-brand);
+}
