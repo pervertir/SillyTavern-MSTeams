@@ -56,6 +56,26 @@ body.ms-teams #gg-action-button-container {
     padding: 2px 4px;
 }
 
+/* It moves Quick Replies into this row: they scroll inside the room between its buttons */
+body.ms-teams #gg-qr-container {
+    flex: 1 1 0;
+    min-width: 0;
+    margin-inline: 4px;
+    overflow: hidden;
+}
+
+body.ms-teams #gg-qr-container > #qr--bar {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding-block: 0;
+}
+
+body.ms-teams #gg-qr-container #qr--popoutTrigger {
+    background: var(--mst-raised);
+}
+
 body.ms-teams .gg-action-button,
 body.ms-teams .gg-menu-button {
     box-sizing: border-box;
@@ -88,6 +108,33 @@ body.ms-teams .gg-tools-menu {
 body.ms-teams .gg-tools-menu > .interactable:hover,
 body.ms-teams .gg-tools-menu .list-group-item:hover {
     background: var(--mst-subtle-hover);
+    color: var(--mst-fg);
+}
+
+/* Prompt Inspector adds its row twice */
+body.ms-teams #inspectNextPromptButton ~ #inspectNextPromptButton {
+    display: none;
+}
+
+/* Notebook: opens at the top right, clear of the theme's title bar, until it is dragged */
+body.ms-teams #notebookPanel {
+    left: auto;
+    right: 16px;
+    top: 72px;
+    width: min(420px, calc(100vw - 32px));
+    max-height: calc(100dvh - 160px);
+    background: var(--mst-raised);
+    color: var(--mst-fg);
+}
+
+body.ms-teams #notebookPanel .react-tabs__tab {
+    color: var(--mst-fg-3);
+    background: transparent;
+}
+
+body.ms-teams #notebookPanel .react-tabs__tab--selected {
+    background: var(--mst-subtle-hover);
+    border-color: var(--mst-stroke);
     color: var(--mst-fg);
 }
 
