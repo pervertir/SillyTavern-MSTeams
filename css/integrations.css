@@ -14,7 +14,7 @@ body.ms-teams #gallery {
     margin: 0;
     border: none;
     border-radius: 0;
-    background: var(--mst-canvas);
+    background: var(--mst-canvas) !important;
     box-shadow: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -37,7 +37,7 @@ body.ms-teams.mst-no-list #gallery {
 body.ms-teams #qr--bar {
     order: -1;
     flex-wrap: nowrap;
-    justify-content: flex-start;
+    justify-content: safe flex-end;
     gap: 6px;
     width: 100%;
     margin: 0;
@@ -54,11 +54,6 @@ body.ms-teams #qr--bar {
 
 body.ms-teams #qr--bar::-webkit-scrollbar {
     display: none;
-}
-
-/* to the right while they fit, and every chip can still be scrolled to when they don't */
-body.ms-teams #qr--bar > :first-child {
-    margin-left: auto;
 }
 
 body.ms-teams #qr--bar .qr--buttons {
@@ -86,7 +81,6 @@ body.ms-teams #qr--bar > #qr--popoutTrigger {
     border-radius: 14px;
     background: var(--mst-canvas);
     color: var(--mst-brand-fg);
-    font-family: var(--mst-font);
     font-size: var(--mst-text-sm);
     line-height: 26px;
     white-space: nowrap;
@@ -330,4 +324,35 @@ body.ms-teams #qr--bar > #qr--popoutTrigger {
     z-index: 1;
     display: flex;
     align-items: center;
+}
+
+/* the focus line belongs to the box now, not the form that also holds the chips */
+body.ms-teams #send_form:has(#send_textarea:focus-visible) {
+    outline: none;
+}
+
+body.ms-teams #qr--bar .qr--buttons .qr--button {
+    font-family: var(--mst-font);
+}
+
+/* Every Text Line Editor is a whole-screen tool, so it takes the screen like the other full apps */
+body.ms-teams #top-settings-holder #etle--panel.drawer-content {
+    --mst-panel-w: calc(100vw - var(--mst-rail-w));
+    --mst-panel-max: calc(100vw - var(--mst-rail-w));
+    padding: 0;
+    background: var(--mst-canvas);
+    box-shadow: none;
+}
+
+/* Character / Tag Manager's black section bars */
+body.ms-teams .stcm_accordion_section .accordionToggle {
+    border: 1px solid var(--mst-stroke-2);
+    border-radius: var(--mst-radius);
+    background: var(--mst-list);
+    color: var(--mst-fg);
+    font-family: var(--mst-font);
+}
+
+body.ms-teams .stcm_accordion_section .accordionToggle:hover {
+    background: var(--mst-hover);
 }

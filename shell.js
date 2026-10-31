@@ -236,14 +236,45 @@ function openProfile() {
     }
 }
 
-/** Shared: the character's image gallery (SillyTavern's Gallery extension, when it's on). */
+/** Shared: the character's image gallery (SillyTavern's Gallery extension, when it's on), as a tab. */
 function openGallery() {
     const gallery = document.getElementById('show_gallery_wand_button');
+    if (document.getElementById('gallery')) {
+        return;
+    }
     if (gallery) {
         gallery.click();
     } else {
         openProfile();
     }
+}
+
+function closeGallery() {
+    /** @type {HTMLElement} */ (document.querySelector('#gallery .dragClose'))?.click();
+}
+
+/** The header's tabs follow the gallery, however it was opened or closed. */
+function trackGallery(chatTab, sharedTab) {
+    const holder = document.getElementById('movingDivs');
+    if (!holder) {
+        return;
+    }
+    new MutationObserver(() => {
+        if (!isOn()) {
+            return;
+        }
+        const open = !!document.getElementById('gallery');
+        chatTab.classList.toggle('mst-tab-active', !open);
+        sharedTab.classList.toggle('mst-tab-active', open);
+        // SillyTavern's first-use tip lands right over these tabs and names its folders
+        for (const toast of document.querySelectorAll('#toast-container .toast')) {
+            if (open && toast.textContent.includes('user/images')) {
+                toast.remove();
+            }
+        }
+    }).observe(holder, { childList: true });
+    const { eventSource, eventTypes } = SillyTavern.getContext();
+    eventSource.on(eventTypes.CHAT_CHANGED, closeGallery);
 }
 
 /** Menus that open from More (…) on the desktop rail */
@@ -263,6 +294,17 @@ function toggleMoreMenu() {
                 }
             },
         }));
+    // buttons other extensions added to the bar; the click goes to the icon, where some of them listen
+    for (const drawer of document.querySelectorAll('#top-settings-holder > .drawer:not([data-mst-icon])')) {
+        const icon = /** @type {HTMLElement} */ (drawer.querySelector('.drawer-icon'));
+        if (icon) {
+            items.push({
+                label: icon.title || drawer.id,
+                icon: [...icon.classList].filter(name => /^fa-(?!fw$)/.test(name)).join(' '),
+                run: () => icon.click(),
+            });
+        }
+    }
     toggleFlyout(app, items, 'beside');
 }
 
@@ -357,9 +399,11 @@ function createHeader() {
     who.addEventListener('click', openProfile);
 
     const tabs = el('nav', 'mst-tabs');
-    const tab = el('span', 'mst-tab mst-tab-active', t('Chat'));
+    const tab = button('mst-tab mst-tab-active', t('Chat'));
+    tab.addEventListener('click', closeGallery);
     const shared = button('mst-tab', t('Shared'));
     shared.addEventListener('click', openGallery);
+    trackGallery(tab, shared);
     const add = fluentButton('mst-tab mst-tab-add', t('Add a tab'), 'add');
     add.addEventListener('click', () => toggleDrawer('extensions-settings-button'));
     tabs.append(tab, shared, add);
