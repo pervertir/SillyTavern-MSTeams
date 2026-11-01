@@ -2,14 +2,18 @@
 
 A SillyTavern extension that makes the whole app look and work like Microsoft Teams: the title bar with search, the app rail down the left, the Chat list, the chat header, Teams message bubbles and the compose box. It comes in light and dark, and switches to Teams mobile on phones.
 
-![Desktop, light](.github/desktop-light.jpg)
+![chat light](.github/screenshots/chat-light.webp)
 
-![Desktop, dark](.github/desktop-dark.jpg)
+![chat dark](.github/screenshots/chat-dark.webp)
+
+![tour](.github/screenshots/clip-tour.webp)
 
 <p>
-  <img src=".github/phone-list.jpg" width="260" alt="Phone: the chat list with the app bar">
-  <img src=".github/phone-chat.jpg" width="260" alt="Phone: an open chat">
+  <img src=".github/screenshots/phone-home.webp" width="240" alt="phone home">
+  <img src=".github/screenshots/phone-chat.webp" width="240" alt="phone chat">
 </p>
+
+Every feature, with pictures: **[UI_SCREENSHOTS.md](UI_SCREENSHOTS.md)**.
 
 ## What it changes
 
