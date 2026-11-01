@@ -452,6 +452,17 @@ body.ms-teams #chat .mes .mes_text pre code {
     background: none;
 }
 
+/* SillyTavern's code colors are for dark backgrounds */
+body.ms-teams:not(.mst-dark) #chat .mes .mes_text pre code.hljs {
+    color: var(--mst-fg);
+}
+body.ms-teams:not(.mst-dark) #chat .mes .mes_text pre :is(.hljs-keyword, .hljs-selector-tag, .hljs-literal, .hljs-doctag) { color: #0f6cbd; }
+body.ms-teams:not(.mst-dark) #chat .mes .mes_text pre :is(.hljs-string, .hljs-regexp, .hljs-addition) { color: #a4262c; }
+body.ms-teams:not(.mst-dark) #chat .mes .mes_text pre :is(.hljs-number, .hljs-attr, .hljs-attribute, .hljs-variable, .hljs-symbol) { color: #8a3707; }
+body.ms-teams:not(.mst-dark) #chat .mes .mes_text pre :is(.hljs-title, .hljs-function, .hljs-section, .hljs-name) { color: #5b5fc7; }
+body.ms-teams:not(.mst-dark) #chat .mes .mes_text pre :is(.hljs-comment, .hljs-quote, .hljs-meta) { color: var(--mst-fg-3); }
+body.ms-teams:not(.mst-dark) #chat .mes .mes_text pre :is(.hljs-built_in, .hljs-type, .hljs-class) { color: #0e700e; }
+
 body.ms-teams #chat .mes .mes_text img {
     border-radius: var(--mst-radius);
 }

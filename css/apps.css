@@ -1196,6 +1196,20 @@ body.ms-teams #rm_extensions_block .extensions_block .inline-drawer > .inline-dr
         display: none !important;
     }
 
+    /* no conversations column on a phone, so Copilot takes the whole width */
+    body.ms-teams #top-settings-holder #user-settings-block.drawer-content {
+        --mst-pad-l: 12px;
+        padding-left: 12px;
+    }
+
+    body.ms-teams .mst-copilot-cards {
+        grid-template-columns: 1fr;
+    }
+
+    body.ms-teams #user-settings-block .mst-copilot-dock {
+        margin: 16px -12px 0;
+    }
+
     body.ms-teams #top-settings-holder :is(#rm_api_block, #AdvancedFormatting, #rm_extensions_block, #WorldInfo).drawer-content {
         --mst-pad-l: 12px;
         padding-left: 12px;
