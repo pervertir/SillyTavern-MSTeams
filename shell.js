@@ -1,6 +1,7 @@
 // The Teams frame around SillyTavern: the title bar with search, the app rail built from
 // SillyTavern's own menu buttons, and the chat header above the messages.
 
+import { canUseNicknames, nameFor, openNicknames } from './lib/chat-nicknames.js';
 import { canGoBack, canGoForward, filterChatList, travel } from './chatlist.js';
 import { closeFlyout, toggleFlyout } from './flyout.js';
 import { createMonogram, isPlaceholder, monogramize, paintMonogram } from './monograms.js';
@@ -418,6 +419,7 @@ function createHeader() {
         { label: 'New chat', icon: 'fa-regular fa-pen-to-square', run: () => clickOption('option_start_new_chat') },
         { label: 'Chat history', icon: 'fa-solid fa-clock-rotate-left', run: () => clickOption('option_select_chat') },
         { label: 'View profile', icon: 'fa-regular fa-id-card', run: openProfile },
+        ...(canUseNicknames() ? [{ label: 'Nicknames', icon: 'fa-solid fa-tag', run: () => openNicknames() }] : []),
         {
             label: 'Close chat', icon: 'fa-solid fa-xmark', run: () => {
                 clickOption('option_close_chat');
@@ -461,7 +463,7 @@ export function refreshHeader() {
         img.width = img.height = 32;
         img.src = context.getThumbnailUrl('avatar', character.avatar);
         avatar.append(img, el('span', 'mst-presence'));
-        name.textContent = character.name;
+        name.textContent = nameFor(character.avatar, character.name);
         monogramize(img, character.name);
     } else if (temporary) {
         avatar.append(createMonogram(context.name2 || t('Assistant')));

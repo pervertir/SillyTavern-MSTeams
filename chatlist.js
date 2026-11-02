@@ -1,6 +1,7 @@
 // The Teams chat list: SillyTavern's recent chats (the same list as its welcome screen) as
 // Favorites and Chats, group chats as teams with their channels, and back/forward between chats.
 
+import { nameFor } from './lib/chat-nicknames.js';
 import { createMonogram, monogramizeAll } from './monograms.js';
 import { toggleFlyout } from './flyout.js';
 import { formatListTime } from './times.js';
@@ -183,7 +184,7 @@ function buildItem(entry) {
 
     // the setting picks what the two lines show; a group chat's name is already its channel
     const lines = getSettings().chatListLines;
-    const title = lines === 'chat-title' && !entry.group ? entry.fileId : entry.name;
+    const title = lines === 'chat-title' && !entry.group ? entry.fileId : entry.group ? entry.name : nameFor(entry.avatar, entry.name, entry.fileId);
     const detail = lines === 'chat' ? (entry.group ? entry.team : entry.fileId) : entry.preview;
     item.dataset.mstPerson = entry.name;
 

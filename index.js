@@ -1,8 +1,9 @@
 // Microsoft Teams theme: toggles the scoped styles in style.css, builds the Teams frame
 // (title bar, app rail, chat list, chat header) and exposes a small settings panel.
 
+import { registerNicknames } from './lib/chat-nicknames.js';
 import { initApps, refreshCopilotGreeting } from './apps.js';
-import { initChatList, markCurrentChat, scheduleRefresh, travel } from './chatlist.js';
+import { initChatList, markCurrentChat, scheduleRefresh, travel, refreshChatList } from './chatlist.js';
 import { applyCustomize, emptyCustomize, normalizeCustomize, openCustomize } from './customize.js';
 import { refreshTitle, setDisguise } from './disguise.js';
 import { registerExtensionSwitch } from './lib/theme-extensions.js';
@@ -288,6 +289,13 @@ function build() {
 
 async function buildFrame() {
     initShell({ toggleRail, setTheme, customize: customizeTheme });
+    registerNicknames({
+        isOn: () => document.body.classList.contains('ms-teams'),
+        changed: () => {
+            refreshHeader();
+            refreshChatList();
+        },
+    });
     initApps();
     const listLoaded = initChatList({ settings: getSettings, opened: showChatOnPhone, historyChanged: refreshNavigation, customize: customizeTheme });
     applySettings();
