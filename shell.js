@@ -306,6 +306,10 @@ function toggleMoreMenu() {
             });
         }
     }
+    // its own launcher hangs off SillyTavern's Characters button
+    if (document.querySelector('#charlib-launcher-dropdown')) {
+        items.push({ label: 'Character Library', icon: 'fa-solid fa-photo-film', run: () => /** @type {HTMLElement|null} */ (document.querySelector('#charlib-launcher-dropdown [data-action="library"]'))?.click() });
+    }
     toggleFlyout(app, items, 'beside');
 }
 
