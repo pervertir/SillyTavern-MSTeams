@@ -76,6 +76,14 @@ Backgrounds, Persona and Characters.
 
 ![app characters](.github/screenshots/app-characters.webp)
 
+## Nicknames
+
+Set one for this chat, this group or everywhere, for any character or for you; the closest wins. It shows everywhere but the character editor, and the AI gets it too. Chats keep real names, so clearing one puts them back.
+
+![nickname chat](.github/screenshots/nickname-chat.webp)
+
+![nickname editor](.github/screenshots/nickname-editor.webp)
+
 ## Shortcuts and Customize
 
 ![keyboard shortcuts](.github/screenshots/keyboard-shortcuts.webp)
