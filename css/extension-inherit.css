@@ -1,5 +1,5 @@
 /* What third-party extensions need beyond SillyTavern's --SmartTheme* colors, which each theme
-   already sets. Shared by the Discord, iMessage, Microsoft Teams and Yodayo themes; each copies
+   already sets. Shared by the Discord, iMessage, Microsoft Teams, Yahoo Messenger and Yodayo themes; each copies
    this file unchanged. Selectors stay at zero specificity where they can, so an extension's own
    rules and the theme's own controls always win. */
 
@@ -7,6 +7,7 @@
    light theme white and black trade places and every pairing keeps its contrast. */
 body.imessage:not(.imsg-dark),
 body.ms-teams:not(.mst-dark),
+body.yahoo-messenger:not(.ym-dark),
 body.discord-theme.dsc-light {
     --black30a: rgba(255, 255, 255, 0.3);
     --black50a: rgba(255, 255, 255, 0.5);
