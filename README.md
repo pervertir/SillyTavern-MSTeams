@@ -44,7 +44,7 @@ Every feature, with pictures: **[UI_SCREENSHOTS.md](UI_SCREENSHOTS.md)**.
 - **Chat list.** Laid out like Teams: **Favorites** (always at the top; add or remove a chat or channel from its … button or right-click menu, and it uses SillyTavern's own pinned chats), **Chats** with your recent one-on-one chats, and **Teams and channels**, where each group chat is a team with a square monogram and each of its chats is a channel under it. Teams collapse and remember it. The pen button starts a new chat.
 - **Chat header.** The character's picture and name, which open their card, Teams' Chat, Shared and + tabs, and the video, call and … buttons: video starts a new chat, call opens the chat history, and … has those plus View profile and Close chat.
 - **Messages.** Everyone else's messages sit on the left with their picture, name and time. Yours sit on the right in Teams lavender. Times read the Teams way: `10:42 AM`, `Yesterday 10:42 AM` or `10/21 3:15 PM`. Message actions appear as a toolbar when you hover a message, and swipes become a small pager under the last reply.
-- **Compose box.** "Type a message" with Teams' emoji (extensions menu) and + (chat options) buttons and the send arrow on the right.
+- **Compose box.** "Type a message" with Teams' paperclip (extensions menu) and + (chat options) buttons and the send arrow on the right. With the Emoji Picker extension, its button becomes Teams' emoji face.
 - **Monograms.** Anyone without a picture of their own (SillyTavern's default character or persona picture) gets a Teams monogram of their initials, in the chat list, chat header, messages, People and Profiles.
 - **Controls.** Buttons, fields, checkboxes, sliders, menus, dialogs and toasts follow Fluent 2, and SillyTavern's Font Awesome icons in menus, dialogs and message actions are swapped for Fluent-style ones.
 - **Phones.** Like Teams mobile: one pane at a time, five tabs along the bottom (AI Config, API, Chat, Response Format and More, with World Info, User Settings, Backgrounds, Persona, Characters and Extensions under More), your picture at the top of the chat list, a long press for a chat's menu, and a rounded message box.
@@ -80,7 +80,7 @@ Every part of the look can be changed from **Customize** (the menus call it Cust
 | Text | The font (Segoe UI, system, a few common ones, or any font you name) and every text size |
 | Shape | The shape of pictures (circle, rounded square or square) and corner rounding for buttons, cards, panels, tiles and message bubbles |
 | Spacing | Density (compact, default or roomy), title bar, app rail, chat list and header sizes, chat margins, space between messages, bubble padding |
-| Layout | Show or hide the app launcher, back and forward, search, your picture, Favorites, Teams and channels, chat previews, the Chat and Shared tabs, the video and call buttons, and the message box's emoji and + buttons |
+| Layout | Show or hide the app launcher, back and forward, search, your picture, Favorites, Teams and channels, chat previews, the Chat and Shared tabs, the video and call buttons, and the message box's paperclip and + buttons |
 | Messages | Bubble colors, action and quote colors, text size, line height, picture size, bubble width, and hiding pictures, names, times or the reply pager |
 | Chat Background | The theme's own, a color, a gradient (two colors and an angle), or a picture from a web address with how much it's faded |
 | Motion | Full, reduced or no animation, and transition speeds |

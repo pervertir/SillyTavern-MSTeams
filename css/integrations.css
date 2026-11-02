@@ -263,6 +263,112 @@ body.ms-teams.stwid-- #WorldInfo .stwid--editor .world_entry :is(.WIEnteryHeader
     opacity: 1;
 }
 
+/* World Info Drawer makes the form's first block a wrapping column of fixed height, so tall keywords
+   or a short window sent Content off into a thin second column. It stays one column now, and the
+   editor scrolls when the form doesn't fit */
+body.ms-teams.stwid-- #WorldInfo .stwid--editor > .world_entry,
+body.ms-teams.stwid-- #WorldInfo .stwid--editor .world_entry_form {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+    height: auto;
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--editor .world_entry_form > .inline-drawer {
+    flex: 1 0 auto;
+    height: auto;
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--editor .inline-drawer-content,
+body.ms-teams.stwid-- #WorldInfo .stwid--editor .inline-drawer-content > .world_entry_edit {
+    flex: 1 0 auto;
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--editor .inline-drawer-content > .world_entry_edit > :first-child {
+    flex: 1 0 auto;
+    flex-flow: column nowrap;
+    align-items: stretch;
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--editor [name="contentAndCharFilterBlock"] {
+    flex: 1 0 auto !important;
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--editor .world_entry .world_entry_edit textarea[name="content"] {
+    min-height: 160px;
+}
+
+/* Every field sits right under its own label, on one line with its neighbours: the row of titles
+   above the header can't line up with fields of changing width, so SillyTavern's per-field labels
+   take over from it */
+body.ms-teams.stwid-- #WorldInfo .stwid--editor #WIEntryHeaderTitlesPC {
+    display: none;
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--editor .WIEntryHeaderTitleMobile {
+    display: block;
+    margin: 0 0 4px;
+    color: var(--mst-fg-3);
+    font-size: var(--mst-text-sm);
+    line-height: 16px;
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--editor .inline-drawer-header,
+body.ms-teams.stwid-- #WorldInfo .stwid--editor .inline-drawer-header .alignitemscenter,
+body.ms-teams.stwid-- #WorldInfo .stwid--editor .WIEnteryHeaderControls,
+body.ms-teams.stwid-- #WorldInfo .stwid--editor :is([name="keywordsAndLogicBlock"], [name="perEntryOverridesBlock"]) {
+    align-items: flex-end;
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--editor .WIEnteryHeaderControls {
+    flex-wrap: nowrap;
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--editor .world_entry :is(input.text_pole, select.text_pole) {
+    box-sizing: border-box;
+    height: 32px;
+    min-height: 32px;
+    margin: 0;
+}
+
+/* these two and the keywords grow with what's typed, so they only start at the same height */
+body.ms-teams.stwid-- #WorldInfo .stwid--editor .world_entry textarea:is([name="comment"], [name="key"], [name="keysecondary"]) {
+    box-sizing: border-box;
+    min-height: 32px;
+    margin: 0;
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--editor .world_entry .select2-selection--multiple {
+    min-height: 32px;
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--editor .inline-drawer-header :is(.killSwitch, .menu_button) {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    margin: 0;
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--editor .world_entry_edit small {
+    margin: 0 0 4px;
+    line-height: 16px;
+    text-align: left;
+}
+
+/* the rows under Content: a checkbox beside some labels must not push their field down */
+body.ms-teams.stwid-- #WorldInfo .stwid--editor .world_entry_edit > .flex-container > * > .justifySpaceBetween {
+    align-items: center;
+    height: 20px;
+    margin: 0 0 4px !important;
+}
+
+body.ms-teams.stwid-- #WorldInfo .stwid--editor .world_entry_edit > .flex-container > * > .justifySpaceBetween :is(small, label) {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 @media screen and (max-width: 1000px) {
     body.ms-teams.stwid-- #top-settings-holder #WorldInfo.drawer-content {
         width: 100%;

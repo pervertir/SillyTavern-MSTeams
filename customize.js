@@ -104,7 +104,7 @@ const SECTIONS = [
             { flag: 'hide-previews', label: 'Hide message previews in the chat list', type: 'check' },
             { flag: 'hide-tabs', label: 'Hide the Chat and Shared tabs', type: 'check' },
             { flag: 'hide-calls', label: 'Hide the video and call buttons', type: 'check' },
-            { flag: 'hide-emoji', label: 'Hide the emoji button in the message box (extensions menu)', type: 'check' },
+            { flag: 'hide-emoji', label: 'Hide the paperclip button in the message box (extensions menu)', type: 'check' },
             { flag: 'hide-plus', label: 'Hide the + button in the message box (chat options)', type: 'check' },
         ],
     },

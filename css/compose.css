@@ -125,9 +125,11 @@ body.ms-teams #leftSendForm > div:hover {
 }
 
 /* Teams' compose icons on SillyTavern's buttons: + (actions and apps) for the options menu,
-   the emoji face for the extensions menu, and Teams' send arrow */
+   the paperclip for the extensions menu, the emoji face for the Emoji Picker extension's button,
+   and Teams' send arrow */
 body.ms-teams #options_button::before,
 body.ms-teams #extensionsMenuButton::before,
+body.ms-teams #addEmojiButton::before,
 body.ms-teams #send_but::before,
 body.ms-teams #mes_stop i::before {
     content: '';
@@ -140,12 +142,17 @@ body.ms-teams #mes_stop i::before {
 }
 
 body.ms-teams #options_button { --mst-glyph: var(--mst-icon-plus-circle); }
-body.ms-teams #extensionsMenuButton { --mst-glyph: var(--mst-icon-emoji); }
+body.ms-teams #extensionsMenuButton { --mst-glyph: var(--mst-icon-attach); }
+body.ms-teams #addEmojiButton { --mst-glyph: var(--mst-icon-emoji); }
 body.ms-teams #send_but { --mst-glyph: var(--mst-icon-send); }
 body.ms-teams #mes_stop { --mst-glyph: var(--mst-icon-stop); }
 
 body.ms-teams #extensionsMenuButton {
     order: -1;
+}
+
+body.ms-teams #addEmojiButton {
+    order: -2;
 }
 
 /* Send: Teams' purple arrow */
